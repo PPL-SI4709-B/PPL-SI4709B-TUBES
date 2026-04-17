@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: laravel_app
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "
+      if [ ! -f .env ]; then cp .env.example .env; fi;
+      sed -i 's/DB_HOST=.*/DB_HOST=db/' .env;
+      sed -i 's/DB_DATABASE=.*/DB_DATABASE=PPLSI4709B_db/' .env;
+      sed -i 's/DB_USERNAME=.*/DB_USERNAME=PPLSI4709B_db/' .env;
+      sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=KELOMPOK_B/' .env;
+      composer install --ignore-platform-req=ext-zip;
+      php artisan key:generate;
+      sleep 5;
+      php artisan migrate || true;
+      php artisan serve --host=0.0.0.0 --port=8000
+      "
+
+  db:
+    image: mysql:8.0
+    container_name: PPLSI4709B_db
+    environment:
+      MYSQL_DATABASE: PPLSI4709B_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: PPLSI4709B_db
+      MYSQL_PASSWORD: KELOMPOK_B
+    ports:
+      - "3308:3306"
