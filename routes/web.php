@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,10 +10,11 @@ use App\Http\Controllers\AuthController;
 |--------------------------------------------------------------------------
 */
 
-// Require Login for Root (Dummy Middleware Check could go here, for now simple redirect)
-// Use simple closure to emulate auth middleware since we are using dummy session auth
 Route::get('/', function () {
-    if (session()->has('is_logged_in')) {
+    if (Auth::check()) {
+        if (Auth::user()->role === 'dinas') {
+            return redirect()->route('dinas.dashboard');
+        }
         return redirect()->route('umkm.dashboard');
     }
     return redirect()->route('login');
@@ -24,9 +26,12 @@ Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dinas routes
-Route::get('/dinas/dashboard', function () {
-    return view('dinas.dashboard');
-})->name('dinas.dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/dinas/dashboard', function () {
+        if (Auth::user()->role !== 'dinas') abort(403);
+        return view('dinas.dashboard');
+    })->name('dinas.dashboard');
+});
 
 // UMKM Auth / Register flow
 Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
@@ -40,15 +45,15 @@ Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
     Route::post('/step-3', [AuthController::class, 'processRegisterStep3'])->name('step-3.post');
 });
 
-// UMKM General Routes (Dummy Protected)
-Route::prefix('umkm')->group(function () {
+// UMKM General Routes
+Route::middleware('auth')->prefix('umkm')->group(function () {
     Route::get('/dashboard', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        if (Auth::user()->role !== 'umkm') abort(403);
         return view('umkm.dashboard');
     })->name('umkm.dashboard');
 
     Route::get('/event', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        if (Auth::user()->role !== 'umkm') abort(403);
         return view('umkm.event');
     })->name('umkm.event');
 });

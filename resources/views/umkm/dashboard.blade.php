@@ -64,12 +64,12 @@
         <div style="width: 1px; height: 32px; background-color: var(--color-border);"></div>
         <div class="user-profile">
             <div class="user-info">
-                <div class="user-name">Budi Santoso</div>
+                <div class="user-name">{{ Auth::user()->name }}</div>
                 <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
             </div>
             <div class="user-avatar" style="background-color: transparent;">
                 <!-- mock user photo from image 4 -->
-                <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=ef4444&color=fff&rounded=true" alt="Budi" style="border-radius: 50%;">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
             </div>
         </div>
     </div>
