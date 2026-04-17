@@ -41,15 +41,14 @@ Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
 });
 
 // UMKM General Routes (Dummy Protected)
-Route::middleware(function ($request, $next) {
-    if (!session()->has('is_logged_in')) return redirect()->route('login');
-    return $next($request);
-})->group(function () {
-    Route::get('/umkm/dashboard', function () {
+Route::prefix('umkm')->group(function () {
+    Route::get('/dashboard', function () {
+        if (!session()->has('is_logged_in')) return redirect()->route('login');
         return view('umkm.dashboard');
     })->name('umkm.dashboard');
 
-    Route::get('/umkm/event', function () {
+    Route::get('/event', function () {
+        if (!session()->has('is_logged_in')) return redirect()->route('login');
         return view('umkm.event');
     })->name('umkm.event');
 });
