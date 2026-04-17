@@ -68,6 +68,38 @@ You MUST:
 
 ---
 
+## Existing Code Context (Audit Result)
+
+> Dibaca dari kondisi project saat ini. Wajib diperhatikan sebelum implement PBI apapun.
+
+### Auth & Role — BELUM ADA (semua dummy)
+- `AuthController` pakai `Session::put('is_logged_in', true)` — BUKAN `Auth::attempt()`
+- Tidak ada kolom `role` di tabel `users`
+- Tidak ada middleware, tidak ada policies, tidak ada gates
+- Route protection pakai inline `if (!session()->has('is_logged_in'))` — bukan middleware
+
+### Tabrakan yang Harus Diperbaiki di PBI #16
+
+| # | Masalah | Lokasi | Fix |
+|---|---------|--------|-----|
+| 1 | Login selalu redirect ke `umkm.dashboard`, Petugas ikut ke sana | `AuthController@processLogin` | Role-based redirect setelah `Auth::attempt()` |
+| 2 | Root `/` tidak tahu role, selalu arahkan ke UMKM | `routes/web.php` baris root | Cek `Auth::user()->role` |
+| 3 | Register step-3 hardcode email `newuser@umkm.local`, data tidak masuk DB | `AuthController@processRegisterStep3` | Simpan ke DB, pakai `Auth::login()` |
+| 4 | Register step 1–3 tidak ada validasi sama sekali | Semua `processRegisterStep*` | Tambah `$request->validate()` |
+| 5 | Dashboard views hardcode nama user ("Budi Santoso", "Siti Rahayu") | `umkm/dashboard.blade.php`, `dinas/dashboard.blade.php` | Ganti dengan `Auth::user()->name` |
+
+### Existing Views yang Bisa Dipakai Ulang
+- `components/stepper.blade.php` — props `current` (1–3), gunakan di register flow
+- `components/help-banner.blade.php` — reusable info banner
+- `layouts/app.blade.php` — layout dashboard (sidebar + header)
+- `layouts/auth.blade.php` — layout halaman auth
+
+### Existing Routes
+- Prefix `/umkm/` dan `/dinas/` sudah ada — lanjutkan konvensi ini
+- Nama route: `umkm.dashboard`, `dinas.dashboard`, `umkm.register.step-1` dst
+
+---
+
 ## Final Rule
 
 - Do exactly what PBI says
