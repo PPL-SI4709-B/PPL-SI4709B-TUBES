@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProgramController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dinas/dashboard', function () {
     return view('dinas.dashboard');
 })->name('dinas.dashboard');
+
+Route::prefix('dinas')->name('dinas.')->group(function () {
+    Route::resource('program', ProgramController::class)->except(['show']);
+});
 
 // UMKM Auth / Register flow
 Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
