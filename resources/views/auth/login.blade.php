@@ -42,7 +42,7 @@
             </div>
             <div class="relative">
                 <input type="password" name="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;" required>
-                <span class="absolute text-light" style="right: 12px; top: 12px; cursor: pointer;">
+                <span class="absolute text-light" style="right: 12px; top: 12px; cursor: pointer;" onclick="togglePassword(this)">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </span>
             </div>
