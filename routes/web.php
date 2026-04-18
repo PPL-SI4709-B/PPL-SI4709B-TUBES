@@ -31,3 +31,5 @@ Route::get('/umkm/dashboard', function () {
 Route::get('/umkm/event', function () {
     return view('umkm.event');
 })->name('umkm.event');
+
+Route::post('/umkm/pengajuan', [App\Http\Controllers\PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
