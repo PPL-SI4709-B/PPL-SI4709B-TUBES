@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,9 +48,6 @@ Route::prefix('umkm')->group(function () {
         return view('umkm.dashboard');
     })->name('umkm.dashboard');
 
-    Route::get('/event', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
-        return view('umkm.event');
-    })->name('umkm.event');
+    Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
 });
 
