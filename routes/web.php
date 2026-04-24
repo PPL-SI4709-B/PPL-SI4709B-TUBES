@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ReportReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,15 @@ Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dinas routes
-Route::get('/dinas/dashboard', function () {
-    return view('dinas.dashboard');
-})->name('dinas.dashboard');
+Route::prefix('dinas')->name('dinas.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dinas.dashboard');
+    })->name('dashboard');
+
+    Route::get('/report', [ReportReviewController::class, 'index'])->name('report.index');
+    Route::get('/report/{id}', [ReportReviewController::class, 'show'])->name('report.show');
+    Route::put('/report/{id}', [ReportReviewController::class, 'update'])->name('report.update');
+});
 
 // UMKM Auth / Register flow
 Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
