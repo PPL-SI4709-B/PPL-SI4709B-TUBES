@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('program_name')->default('Pendampingan Akses Layanan Pembiayaan');
             $table->text('kebutuhan_usaha');
+            $table->string('dokumen_pendukung')->nullable();
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->timestamps();
         });

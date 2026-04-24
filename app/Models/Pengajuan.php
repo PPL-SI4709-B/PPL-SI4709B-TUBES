@@ -10,6 +10,7 @@ class Pengajuan extends Model
         'user_id',
         'program_name',
         'kebutuhan_usaha',
+        'dokumen_pendukung',
         'status',
     ];
 
