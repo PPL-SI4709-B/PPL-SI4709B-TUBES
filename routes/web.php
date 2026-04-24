@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\PengajuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/dinas/dashboard', function () {
 
 Route::prefix('dinas')->name('dinas.')->group(function () {
     Route::resource('program', ProgramController::class)->except(['show']);
+    Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+    Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::put('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+    Route::put('pengajuan/{pengajuan}/reject', [PengajuanController::class, 'reject'])->name('pengajuan.reject');
 });
 
 // UMKM Auth / Register flow
