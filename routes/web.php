@@ -72,10 +72,7 @@ Route::prefix('umkm')->group(function () {
     })->name('umkm.dashboard');
 
     Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
+
+    Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
 });
 
-    Route::get('/event', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
-        return view('umkm.event');
-    })->name('umkm.event');
-});
