@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ScaleController;
@@ -20,7 +22,9 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
-
+Route::resource('category', CategoryController::class)->except(['show']);
+Route::resource('region', RegionController::class)->except(['show']);
+Route::resource('scale', ScaleController::class)->except(['show']);
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post');
@@ -32,9 +36,11 @@ Route::get('/dinas/dashboard', function () {
 })->name('dinas.dashboard');
 
 Route::prefix('dinas')->name('dinas.')->group(function () {
-    Route::resource('category', CategoryController::class)->except(['show']);
-    Route::resource('region', RegionController::class)->except(['show']);
-    Route::resource('scale', ScaleController::class)->except(['show']);
+    Route::resource('program', ProgramController::class)->except(['show']);
+    Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+    Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::put('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+    Route::put('pengajuan/{pengajuan}/reject', [PengajuanController::class, 'reject'])->name('pengajuan.reject');
 });
 
 // UMKM Auth / Register flow
