@@ -10,35 +10,10 @@
         <p class="text-sm text-muted m-0">Lengkapi data usaha Anda untuk melanjutkan pendaftaran.</p>
     </div>
 
-    <!-- Stepper -->
-    <div class="stepper-wrap mb-10">
-        <!-- Connecting Line -->
-        <div class="stepper-line">
-             <div style="height: 100%; width: 50%; background-color: var(--color-brand);"></div>
-        </div>
-        
-        <!-- Step 1: Completed -->
-        <div class="step-item">
-            <div class="step-circle done">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <div class="step-label done">AKUN</div>
-        </div>
-        
-        <!-- Step 2: Active -->
-        <div class="step-item">
-            <div class="step-circle active">2</div>
-            <div class="step-label active">DATA USAHA</div>
-        </div>
-        
-        <!-- Step 3: Inactive -->
-        <div class="step-item">
-            <div class="step-circle inactive">3</div>
-            <div class="step-label inactive">KONFIRMASI</div>
-        </div>
-    </div>
+    <x-stepper current="2" />
 
-    <form action="#" method="POST" class="flex-col gap-5">
+    <form action="{{ route('umkm.register.step-2.post') }}" method="POST" class="flex-col gap-5">
+        @csrf
         
         <!-- Nama Usaha -->
         <div class="flex-col gap-2">
@@ -93,8 +68,8 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center mt-4">
-            <button type="button" class="btn btn-clear text-brand font-semibold">Kembali</button>
-            <button type="button" class="btn btn-brand">
+            <a href="{{ route('umkm.register.step-1') }}" class="btn btn-clear text-brand font-semibold inline-flex items-center justify-center">Kembali</a>
+            <button type="submit" class="btn btn-brand">
                 Lanjut
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
@@ -103,15 +78,5 @@
     </form>
 </div>
 
-<!-- Help Banner -->
-<div class="help-banner">
-    <div class="help-banner-line"></div>
-    <div class="text-brand mt-1">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-    </div>
-    <div>
-        <h4 class="text-sm font-bold text-dark mb-1">Butuh bantuan pendaftaran?</h4>
-        <p class="text-xs text-main m-0 leading-relaxed">Gunakan panduan pendaftaran atau hubungi WhatsApp Customer Service di 0812-XXXX-XXXX untuk bantuan langsung.</p>
-    </div>
-</div>
+<x-help-banner />
 @endsection

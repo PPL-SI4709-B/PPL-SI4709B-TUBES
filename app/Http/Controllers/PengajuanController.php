@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Pengajuan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
+    public function index()
+    {
+        $pengajuans = Pengajuan::with(['user', 'program'])->latest()->paginate(10);
+
+        return view('dinas.pengajuan.index', compact('pengajuans'));
+    }
+
+    public function show(Pengajuan $pengajuan)
+    {
+        $pengajuan->load(['user', 'program']);
+
+        return view('dinas.pengajuan.show', compact('pengajuan'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -22,8 +35,7 @@ class PengajuanController extends Controller
         }
 
         Pengajuan::create([
-            // Use dummy user ID if not logged in properly with Auth::attempt yet based on project state
-            'user_id' => Auth::check() ? Auth::id() : 1, 
+            'user_id' => Auth::check() ? Auth::id() : 1,
             'program_name' => 'Pendampingan Akses Layanan Pembiayaan',
             'kebutuhan_usaha' => $request->kebutuhan_usaha,
             'dokumen_pendukung' => $dokumenPath,
@@ -31,5 +43,21 @@ class PengajuanController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Pengajuan berhasil dikirim.');
+    }
+
+    public function approve(Pengajuan $pengajuan)
+    {
+        $pengajuan->update(['status' => 'approved']);
+
+        return redirect()->route('dinas.pengajuan.index')
+            ->with('success', 'Pengajuan berhasil disetujui.');
+    }
+
+    public function reject(Pengajuan $pengajuan)
+    {
+        $pengajuan->update(['status' => 'rejected']);
+
+        return redirect()->route('dinas.pengajuan.index')
+            ->with('success', 'Pengajuan berhasil ditolak.');
     }
 }
