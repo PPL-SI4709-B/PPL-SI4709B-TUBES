@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\ScaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +22,9 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
-
+Route::resource('category', CategoryController::class)->except(['show']);
+Route::resource('region', RegionController::class)->except(['show']);
+Route::resource('scale', ScaleController::class)->except(['show']);
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post');
@@ -42,10 +47,10 @@ Route::prefix('dinas')->name('dinas.')->group(function () {
 Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
     Route::get('/step-1', function () { return view('umkm.register.step-1'); })->name('step-1');
     Route::post('/step-1', [AuthController::class, 'processRegisterStep1'])->name('step-1.post');
-    
+
     Route::get('/step-2', function () { return view('umkm.register.step-2'); })->name('step-2');
     Route::post('/step-2', [AuthController::class, 'processRegisterStep2'])->name('step-2.post');
-    
+
     Route::get('/step-3', function () { return view('umkm.register.step-3'); })->name('step-3');
     Route::post('/step-3', [AuthController::class, 'processRegisterStep3'])->name('step-3.post');
 });
@@ -62,4 +67,3 @@ Route::prefix('umkm')->group(function () {
         return view('umkm.event');
     })->name('umkm.event');
 });
-
