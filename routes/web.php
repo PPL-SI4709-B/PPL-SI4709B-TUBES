@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PengajuanController;
@@ -32,9 +34,15 @@ Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dinas routes
-Route::get('/dinas/dashboard', function () {
-    return view('dinas.dashboard');
-})->name('dinas.dashboard');
+Route::prefix('dinas')->name('dinas.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dinas.dashboard');
+    })->name('dashboard');
+
+    Route::get('/report', [ReportReviewController::class, 'index'])->name('report.index');
+    Route::get('/report/{id}', [ReportReviewController::class, 'show'])->name('report.show');
+    Route::put('/report/{id}', [ReportReviewController::class, 'update'])->name('report.update');
+});
 
 Route::prefix('dinas')->name('dinas.')->group(function () {
     Route::resource('program', ProgramController::class)->except(['show']);
