@@ -18,14 +18,14 @@
         <!-- Nama Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">NAMA USAHA</label>
-            <input type="text" class="input-field" placeholder="Masukkan nama usaha Anda">
+            <input type="text" name="business_name" class="input-field" placeholder="Masukkan nama usaha Anda">
         </div>
 
         <!-- Sektor Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">SEKTOR USAHA</label>
             <div class="relative">
-                <select class="input-field text-muted" style="appearance: none; padding-right: 40px;">
+                <select name="business_sector" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
                     <option>Pilih Sektor Usaha</option>
                     <option>Kuliner</option>
                     <option>Perdagangan</option>
@@ -41,20 +41,20 @@
         <!-- Alamat Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">ALAMAT USAHA</label>
-            <textarea class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;"></textarea>
+            <textarea name="business_address" class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;"></textarea>
         </div>
 
         <!-- NIB -->
         <div class="flex-col gap-2">
             <label class="input-label">NIB (Opsional)</label>
-            <input type="text" class="input-field" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
+            <input type="text" name="nib" class="input-field" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
         </div>
         
         <!-- Omzet Tahunan -->
         <div class="flex-col gap-2 mb-2">
             <label class="input-label">OMZET TAHUNAN</label>
             <div class="relative">
-                <select class="input-field text-muted" style="appearance: none; padding-right: 40px;">
+                <select name="revenue" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
                     <option>Pilih Omzet Tahunan</option>
                     <option>&lt; Rp 300 Juta</option>
                     <option>Rp 300 Juta - Rp 2 Miliar</option>

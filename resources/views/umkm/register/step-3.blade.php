@@ -77,7 +77,7 @@
         <!-- Confimation Checkbox Banner -->
         <div class="flex items-start gap-4 p-4 mt-2" style="background-color: #eff6ff; border-radius: var(--radius-md);">
             <label class="custom-checkbox bg-white" style="border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-top: 2px;">
-                <input type="checkbox">
+                <input type="checkbox" name="assurance" value="1">
             </label>
             <label class="text-sm text-dark font-medium leading-snug cursor-pointer">
                 Saya menyatakan bahwa data yang saya isi adalah benar dan dapat dipertanggungjawabkan.
