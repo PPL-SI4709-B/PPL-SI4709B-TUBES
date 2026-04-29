@@ -28,15 +28,15 @@
                 <div class="flex-col gap-3">
                     <div>
                         <div class="text-xs text-muted mb-1">Nama Lengkap</div>
-                        <div class="text-sm font-semibold text-dark">Budi Santoso</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep1['name'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Email</div>
-                        <div class="text-sm font-semibold text-dark">budi.santoso@email.com</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep1['email'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Nomor HP</div>
-                        <div class="text-sm font-semibold text-dark">081234567890</div>
+                        <div class="text-sm font-semibold text-dark">{{ !empty($registerStep1['phone']) ? $registerStep1['phone'] : '-' }}</div>
                     </div>
                 </div>
             </div>
@@ -52,23 +52,30 @@
                 <div class="flex-col gap-3">
                     <div>
                         <div class="text-xs text-muted mb-1">Nama Usaha</div>
-                        <div class="text-sm font-semibold text-dark">Warung Sejahtera</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep2['business_name'] ?? '-' }}</div>
                     </div>
                     <div>
-                        <div class="text-xs text-muted mb-1">Sektor Usaha</div>
-                        <div class="text-sm font-semibold text-dark">Perdagangan</div>
+                        <div class="text-xs text-muted mb-1">Kategori Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedCategory->name ?? '-' }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Wilayah Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedRegion->name ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Alamat Usaha</div>
-                        <div class="text-sm font-semibold text-dark" style="line-height: 1.4;">Jl. Merdeka No. 123, Bandung</div>
+                        <div class="text-sm font-semibold text-dark" style="line-height: 1.4;">{{ $registerStep2['business_address'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">NIB</div>
-                        <div class="text-sm font-semibold text-dark">1234567890123 <span class="text-muted font-medium">(Opsional)</span></div>
+                        <div class="text-sm font-semibold text-dark">
+                            {{ !empty($registerStep2['nib']) ? $registerStep2['nib'] : '-' }}
+                            <span class="text-muted font-medium">(Opsional)</span>
+                        </div>
                     </div>
                     <div>
-                        <div class="text-xs text-muted mb-1">Omzet Tahunan</div>
-                        <div class="text-sm font-semibold text-dark">&lt; Rp 300 Juta</div>
+                        <div class="text-xs text-muted mb-1">Skala Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedScale->name ?? '-' }}</div>
                     </div>
                 </div>
             </div>
