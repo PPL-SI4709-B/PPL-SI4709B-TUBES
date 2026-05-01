@@ -76,3 +76,8 @@ Route::prefix('umkm')->group(function () {
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
 });
 
+<<<<<<< HEAD
+=======
+Route::get('/umkm/pengajuan', [App\Http\Controllers\PengajuanController::class, 'index'])->name('umkm.pengajuan.index');
+Route::post('/umkm/pengajuan', [App\Http\Controllers\PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
+>>>>>>> 3d0bc7c (PBI-15 Pengajuan Program Pembinaan - Melihat riwayat dan status pengajuan program)
