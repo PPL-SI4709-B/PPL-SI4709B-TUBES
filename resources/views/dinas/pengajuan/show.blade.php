@@ -109,23 +109,37 @@
         </div>
 
         @if ($pengajuan->status === 'pending')
-            <div class="flex gap-3">
-                <form action="{{ route('dinas.pengajuan.approve', $pengajuan) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="btn btn-primary" onclick="return confirm('Setujui pengajuan ini?')">
-                        Setujui
-                    </button>
-                </form>
-                <form action="{{ route('dinas.pengajuan.reject', $pengajuan) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" style="background-color: var(--color-danger); color: white; padding: var(--space-2) var(--space-4); border-radius: var(--radius-md); border: none; cursor: pointer; font-size: var(--text-sm); font-weight: 500;" onclick="return confirm('Tolak pengajuan ini?')">
-                        Tolak
-                    </button>
-                </form>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label for="notes" style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Catatan (opsional)</label>
+                    <textarea id="notes" name="notes" rows="3" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); resize: vertical;" placeholder="Tulis catatan untuk UMKM..."></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <form action="{{ route('dinas.pengajuan.approve', $pengajuan) }}" method="POST" id="form-approve">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="notes" id="notes-approve">
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('notes-approve').value = document.getElementById('notes').value; return confirm('Setujui pengajuan ini?')">
+                            Setujui
+                        </button>
+                    </form>
+                    <form action="{{ route('dinas.pengajuan.reject', $pengajuan) }}" method="POST" id="form-reject">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="notes" id="notes-reject">
+                        <button type="submit" style="background-color: var(--color-danger); color: white; padding: var(--space-2) var(--space-4); border-radius: var(--radius-md); border: none; cursor: pointer; font-size: var(--text-sm); font-weight: 500;" onclick="document.getElementById('notes-reject').value = document.getElementById('notes').value; return confirm('Tolak pengajuan ini?')">
+                            Tolak
+                        </button>
+                    </form>
+                </div>
             </div>
         @else
+            @if ($pengajuan->notes)
+                <div style="margin-bottom: var(--space-4);">
+                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Catatan Petugas</div>
+                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-border);">{{ $pengajuan->notes }}</div>
+                </div>
+            @endif
             <div style="font-size: var(--text-sm); color: var(--color-text-muted);">Pengajuan ini sudah diproses.</div>
         @endif
     </div>

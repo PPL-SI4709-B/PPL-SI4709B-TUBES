@@ -13,6 +13,7 @@ class Pengajuan extends Model
         'user_id',
         'program_id',
         'status',
+        'notes',
     ];
 
     public function user()

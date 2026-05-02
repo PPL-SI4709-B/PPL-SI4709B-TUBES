@@ -21,17 +21,31 @@ class PengajuanController extends Controller
         return view('dinas.pengajuan.show', compact('pengajuan'));
     }
 
-    public function approve(Pengajuan $pengajuan)
+    public function approve(Request $request, Pengajuan $pengajuan)
     {
-        $pengajuan->update(['status' => 'approved']);
+        $request->validate([
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $pengajuan->update([
+            'status' => 'approved',
+            'notes'  => $request->notes,
+        ]);
 
         return redirect()->route('dinas.pengajuan.index')
             ->with('success', 'Pengajuan berhasil disetujui.');
     }
 
-    public function reject(Pengajuan $pengajuan)
+    public function reject(Request $request, Pengajuan $pengajuan)
     {
-        $pengajuan->update(['status' => 'rejected']);
+        $request->validate([
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $pengajuan->update([
+            'status' => 'rejected',
+            'notes'  => $request->notes,
+        ]);
 
         return redirect()->route('dinas.pengajuan.index')
             ->with('success', 'Pengajuan berhasil ditolak.');
