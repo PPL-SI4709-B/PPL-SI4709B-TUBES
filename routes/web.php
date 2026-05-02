@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\EventController;
@@ -17,10 +19,11 @@ use App\Http\Controllers\ScaleController;
 |--------------------------------------------------------------------------
 */
 
-// Require Login for Root (Dummy Middleware Check could go here, for now simple redirect)
-// Use simple closure to emulate auth middleware since we are using dummy session auth
 Route::get('/', function () {
-    if (session()->has('is_logged_in')) {
+    if (Auth::check()) {
+        if (Auth::user()->role === 'dinas') {
+            return redirect()->route('dinas.dashboard');
+        }
         return redirect()->route('umkm.dashboard');
     }
     return redirect()->route('login');
@@ -57,27 +60,22 @@ Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
     Route::get('/step-1', function () { return view('umkm.register.step-1'); })->name('step-1');
     Route::post('/step-1', [AuthController::class, 'processRegisterStep1'])->name('step-1.post');
 
-    Route::get('/step-2', function () { return view('umkm.register.step-2'); })->name('step-2');
+    Route::get('/step-2', [AuthController::class, 'showRegisterStep2'])->name('step-2');
     Route::post('/step-2', [AuthController::class, 'processRegisterStep2'])->name('step-2.post');
 
-    Route::get('/step-3', function () { return view('umkm.register.step-3'); })->name('step-3');
+    Route::get('/step-3', [AuthController::class, 'showRegisterStep3'])->name('step-3');
     Route::post('/step-3', [AuthController::class, 'processRegisterStep3'])->name('step-3.post');
 });
 
-// UMKM General Routes (Dummy Protected)
-Route::prefix('umkm')->group(function () {
+// UMKM General Routes
+Route::middleware('auth')->prefix('umkm')->group(function () {
     Route::get('/dashboard', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        if (Auth::user()->role !== 'umkm') abort(403);
         return view('umkm.dashboard');
     })->name('umkm.dashboard');
 
     Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
 
+    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('umkm.pengajuan.index');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
 });
-
-<<<<<<< HEAD
-=======
-Route::get('/umkm/pengajuan', [App\Http\Controllers\PengajuanController::class, 'index'])->name('umkm.pengajuan.index');
-Route::post('/umkm/pengajuan', [App\Http\Controllers\PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
->>>>>>> 3d0bc7c (PBI-15 Pengajuan Program Pembinaan - Melihat riwayat dan status pengajuan program)

@@ -80,11 +80,11 @@
         <div style="width: 1px; height: 32px; background-color: var(--color-border);"></div>
         <div class="user-profile">
             <div class="user-info">
-                <div class="user-name">Siti Rahayu</div>
+                <div class="user-name">{{ Auth::user()->name }}</div>
                 <div class="user-role">PETUGAS DINAS</div>
             </div>
             <div class="user-avatar">
-                <img src="https://ui-avatars.com/api/?name=Siti+Rahayu&background=2563eb&color=fff" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="Avatar">
             </div>
         </div>
     </div>
