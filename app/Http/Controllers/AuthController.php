@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Region;
+use App\Models\Scale;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -45,17 +48,60 @@ class AuthController extends Controller
         return redirect()->route('umkm.register.step-2');
     }
 
+    public function showRegisterStep2()
+    {
+        $categories = Category::orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
+        $scales = Scale::orderBy('name')->get();
+        $registerStep2 = Session::get('register_step2', []);
+
+        return view('umkm.register.step-2', compact('categories', 'regions', 'scales', 'registerStep2'));
+    }
+
     public function processRegisterStep2(Request $request)
     {
         $validated = $request->validate([
             'business_name' => 'required|string|max:255',
-            'business_sector' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'region_id' => 'required|exists:regions,id',
             'business_address' => 'required|string',
             'nib' => 'nullable|string',
-            'revenue' => 'required|string'
+            'scale_id' => 'required|exists:scales,id',
         ]);
         Session::put('register_step2', $validated);
         return redirect()->route('umkm.register.step-3');
+    }
+
+    public function showRegisterStep3()
+    {
+        $registerStep1 = Session::get('register_step1', []);
+        $registerStep2 = Session::get('register_step2', []);
+
+        if (empty($registerStep1)) {
+            return redirect()->route('umkm.register.step-1')->with('error', 'Silakan isi data diri terlebih dahulu.');
+        }
+
+        if (empty($registerStep2)) {
+            return redirect()->route('umkm.register.step-2')->with('error', 'Silakan isi data usaha terlebih dahulu.');
+        }
+
+        $selectedCategory = !empty($registerStep2['category_id'])
+            ? Category::find($registerStep2['category_id'])
+            : null;
+        $selectedRegion = !empty($registerStep2['region_id'])
+            ? Region::find($registerStep2['region_id'])
+            : null;
+        $selectedScale = !empty($registerStep2['scale_id'])
+            ? Scale::find($registerStep2['scale_id'])
+            : null;
+
+        return view('umkm.register.step-3', compact(
+            'registerStep1',
+            'registerStep2',
+            'selectedCategory',
+            'selectedRegion',
+            'selectedScale'
+        ));
     }
 
     public function processRegisterStep3(Request $request)
@@ -65,9 +111,14 @@ class AuthController extends Controller
         ]);
 
         $step1 = Session::get('register_step1');
+        $step2 = Session::get('register_step2');
         
         if (!$step1) {
             return redirect()->route('umkm.register.step-1')->with('error', 'Silakan isi data diri terlebih dahulu.');
+        }
+
+        if (!$step2) {
+            return redirect()->route('umkm.register.step-2')->with('error', 'Silakan isi data usaha terlebih dahulu.');
         }
 
         $user = User::create([
