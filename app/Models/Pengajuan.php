@@ -16,6 +16,7 @@ class Pengajuan extends Model
         'kebutuhan_usaha',
         'dokumen_pendukung',
         'status',
+        'notes',
     ];
 
     public function user()
