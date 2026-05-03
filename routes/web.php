@@ -76,5 +76,6 @@ Route::middleware('auth')->prefix('umkm')->group(function () {
 
     Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
 
+    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('umkm.pengajuan.index');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
 });
