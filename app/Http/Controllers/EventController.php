@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Event;
 
 class EventController extends Controller
 {
     public function index()
     {
-        // Dummy Auth Check
-        if (!session()->has('is_logged_in')) {
-            return redirect()->route('login');
-        }
+        $events = Event::where('status', 'active')
+            ->orderBy('event_date')
+            ->get();
 
-        return view('umkm.event');
+        return view('umkm.event', compact('events'));
+    }
+
+    public function show(Event $event)
+    {
+        return view('umkm.eventdetail', compact('event'));
     }
 }

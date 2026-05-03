@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UmkmProfile;
 use App\Models\Category;
 use App\Models\Region;
 use App\Models\Scale;
@@ -122,17 +123,28 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $step1['name'],
-            'email' => $step1['email'],
+            'name'     => $step1['name'],
+            'email'    => $step1['email'],
             'password' => Hash::make($step1['password']),
-            'role' => 'umkm'
+            'role'     => 'umkm',
         ]);
-        
+
+        UmkmProfile::create([
+            'user_id'          => $user->id,
+            'business_name'    => $step2['business_name'],
+            'phone'            => $step1['phone'] ?? null,
+            'nib'              => $step2['nib'] ?? null,
+            'business_address' => $step2['business_address'],
+            'category_id'      => $step2['category_id'],
+            'region_id'        => $step2['region_id'],
+            'scale_id'         => $step2['scale_id'],
+        ]);
+
         Auth::login($user);
-        
+
         Session::forget('register_step1');
         Session::forget('register_step2');
-        
+
         return redirect()->route('umkm.dashboard')->with('success', 'Pendaftaran berhasil!');
     }
     
