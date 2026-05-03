@@ -5,29 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Program extends Model
+class Event extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'description',
+        'location',
+        'event_date',
         'quota',
-        'start_date',
-        'end_date',
+        'type',
         'status',
     ];
 
     protected function casts(): array
     {
         return [
-            'start_date' => 'date',
-            'end_date'   => 'date',
+            'event_date' => 'datetime',
         ];
-    }
-
-    public function pengajuans()
-    {
-        return $this->hasMany(Pengajuan::class);
     }
 }

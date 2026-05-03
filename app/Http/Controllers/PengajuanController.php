@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,10 +23,22 @@ class PengajuanController extends Controller
         return view('dinas.pengajuan.show', compact('pengajuan'));
     }
 
+    public function umkmIndex()
+    {
+        $programs = Program::where('status', 'active')->orderBy('name')->get();
+        $pengajuans = Pengajuan::with('program')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('umkm.pengajuan.index', compact('pengajuans', 'programs'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'kebutuhan_usaha' => 'required|string',
+            'program_id'        => 'required|exists:programs,id',
+            'kebutuhan_usaha'   => 'required|string',
             'dokumen_pendukung' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
         ]);
 
@@ -35,11 +48,11 @@ class PengajuanController extends Controller
         }
 
         Pengajuan::create([
-            'user_id' => Auth::check() ? Auth::id() : 1,
-            'program_name' => 'Pendampingan Akses Layanan Pembiayaan',
-            'kebutuhan_usaha' => $request->kebutuhan_usaha,
+            'user_id'           => Auth::id(),
+            'program_id'        => $request->program_id,
+            'kebutuhan_usaha'   => $request->kebutuhan_usaha,
             'dokumen_pendukung' => $dokumenPath,
-            'status' => 'pending',
+            'status'            => 'pending',
         ]);
 
         return redirect()->back()->with('success', 'Pengajuan berhasil dikirim.');

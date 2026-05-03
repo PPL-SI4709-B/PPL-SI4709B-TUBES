@@ -1,41 +1,57 @@
 <?php
 
-use App\Models\User;
 use App\Models\Pengajuan;
+use App\Models\Program;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
-
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-it('dapat mengirim pengajuan program pendampingan beserta dokumen (PBI #14)', function () {
+uses(RefreshDatabase::class);
+
+it('UMKM dapat mengirim pengajuan program beserta dokumen (PBI #13 #14)', function () {
     Storage::fake('public');
 
-    // 1. Setup user dummy (karena tabel migration butuh user_id)
-    $user = User::factory()->create();
+    $user    = User::factory()->create(['role' => 'umkm']);
+    $program = Program::factory()->create(['status' => 'active']);
+    $file    = UploadedFile::fake()->create('dokumen.pdf', 500, 'application/pdf');
 
-    $file = UploadedFile::fake()->create('dokumen.pdf', 1000, 'application/pdf');
-
-    // 2. Simulasi form submit
     $response = $this->actingAs($user)->post(route('umkm.pengajuan.store'), [
-        'kebutuhan_usaha' => 'Butuh pinjaman modal untuk beli mesin produksi baru',
+        'program_id'        => $program->id,
+        'kebutuhan_usaha'   => 'Butuh modal untuk beli mesin produksi',
         'dokumen_pendukung' => $file,
     ]);
 
-    // 3. Verifikasi
     $response->assertRedirect();
-    $response->assertSessionHas('success', 'Pengajuan berhasil dikirim.');
+    $response->assertSessionHas('success');
 
-    // 4. Pastikan data masuk DB
     $this->assertDatabaseHas('pengajuans', [
-        'user_id' => $user->id,
-        'kebutuhan_usaha' => 'Butuh pinjaman modal untuk beli mesin produksi baru',
-        'program_name' => 'Pendampingan Akses Layanan Pembiayaan',
-        'status' => 'pending',
+        'user_id'         => $user->id,
+        'program_id'      => $program->id,
+        'kebutuhan_usaha' => 'Butuh modal untuk beli mesin produksi',
+        'status'          => 'pending',
     ]);
 
     $pengajuan = Pengajuan::first();
     expect($pengajuan->dokumen_pendukung)->not->toBeNull();
     Storage::disk('public')->assertExists($pengajuan->dokumen_pendukung);
+});
+
+it('UMKM tidak dapat mengakses halaman pengajuan tanpa login', function () {
+    $response = $this->get(route('umkm.pengajuan.index'));
+    $response->assertRedirect(route('login'));
+});
+
+it('Dinas tidak dapat mengakses halaman UMKM', function () {
+    $dinas = User::factory()->create(['role' => 'dinas']);
+
+    $response = $this->actingAs($dinas)->get(route('umkm.pengajuan.index'));
+    $response->assertForbidden();
+});
+
+it('UMKM tidak dapat mengakses halaman dinas', function () {
+    $umkm = User::factory()->create(['role' => 'umkm']);
+
+    $response = $this->actingAs($umkm)->get(route('dinas.dashboard'));
+    $response->assertForbidden();
 });
