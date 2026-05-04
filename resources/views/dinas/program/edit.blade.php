@@ -66,6 +66,18 @@
             <div class="flex flex-col gap-5">
 
                 <div>
+                    <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Jenis Program <span style="color: var(--color-danger);">*</span></label>
+                    <select name="jenis"
+                        style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('jenis') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm); background-color: white;">
+                        <option value="pembinaan" {{ old('jenis', $program->jenis) === 'pembinaan' ? 'selected' : '' }}>Pembinaan</option>
+                        <option value="pendanaan" {{ old('jenis', $program->jenis) === 'pendanaan' ? 'selected' : '' }}>Pendanaan</option>
+                    </select>
+                    @error('jenis')
+                        <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div>
                     <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Nama Program <span style="color: var(--color-danger);">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $program->name) }}"
                         style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('name') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm);">
