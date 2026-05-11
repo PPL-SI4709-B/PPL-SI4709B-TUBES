@@ -47,27 +47,27 @@
                 @endif
             </div>
             <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Kebutuhan Usaha</div>
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-border); white-space: pre-line;">{{ $pengajuan->kebutuhan_usaha }}</div>
+            </div>
+            @if ($pengajuan->dokumen_pendukung)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Dokumen Pendukung</div>
+                <div style="margin-top: 4px;">
+                    <a href="{{ Storage::url($pengajuan->dokumen_pendukung) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary); text-decoration: underline;">
+                        Lihat Dokumen ↗
+                    </a>
+                </div>
+            </div>
+            @endif
+            <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Pengajuan</div>
                 <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $pengajuan->created_at->format('d M Y, H:i') }}</div>
             </div>
             <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Status</div>
-                @php
-                    $statusColor = match($pengajuan->status) {
-                        'approved' => ['bg' => 'var(--color-success-bg)', 'text' => 'var(--color-success)'],
-                        'rejected' => ['bg' => '#fef2f2', 'text' => 'var(--color-danger)'],
-                        default    => ['bg' => '#fffbeb', 'text' => '#b45309'],
-                    };
-                    $statusLabel = match($pengajuan->status) {
-                        'approved' => 'Disetujui',
-                        'rejected' => 'Ditolak',
-                        default    => 'Pending',
-                    };
-                @endphp
                 <div style="margin-top: 4px;">
-                    <span class="badge" style="background-color: {{ $statusColor['bg'] }}; color: {{ $statusColor['text'] }};">
-                        {{ $statusLabel }}
-                    </span>
+                    <x-status-badge :status="$pengajuan->status" />
                 </div>
             </div>
         </div>

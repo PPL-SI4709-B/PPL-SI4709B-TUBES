@@ -38,7 +38,6 @@
         <div class="flex-col gap-2">
             <div class="flex justify-between items-center">
                 <label class="input-label">PASSWORD</label>
-                <a href="#" class="text-xs font-semibold link-brand" style="text-decoration: underline;">Lupa Password?</a>
             </div>
             <div class="relative">
                 <input type="password" name="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;" required>

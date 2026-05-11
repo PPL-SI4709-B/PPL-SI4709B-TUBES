@@ -48,8 +48,9 @@
     </div>
 
     @if(Auth::user()->profile_status !== 'verified')
-        <div style="background-color: #fefce8; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: var(--text-sm); color: #92400e;">
-            <strong>Akun belum diverifikasi.</strong> Anda belum dapat mengajukan program. Tunggu petugas dinas memverifikasi akun Anda.
+        <div style="background-color: #fefce8; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: var(--text-sm); color: #92400e; display: flex; justify-content: space-between; align-items: center;">
+            <span><strong>Akun belum diverifikasi.</strong> Anda belum dapat mengajukan program. Pastikan profil usaha sudah lengkap.</span>
+            <a href="{{ route('umkm.profile.show') }}" style="font-weight: 600; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">Cek Profil →</a>
         </div>
     @endif
 

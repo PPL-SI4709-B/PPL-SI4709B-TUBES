@@ -26,6 +26,12 @@
 @section('content')
 <div class="flex flex-col gap-6" style="max-width: 64rem; margin: 0 auto;">
 
+    @if(session('success'))
+        <div style="background-color: var(--color-success-bg); border-left: 4px solid var(--color-success); padding: 1.25rem 1.5rem; border-radius: var(--radius-md); color: #166534; font-size: 0.875rem; font-weight: 500;">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if(Auth::user()->profile_status === 'pending')
         <div class="card p-0" style="background-color: #fefce8; border-color: transparent;">
             <div class="flex items-center justify-between" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-warning);">
@@ -35,16 +41,24 @@
                     </div>
                     <div>
                         <h3 class="text-base font-bold" style="color: #854d0e;">Profil Anda belum diverifikasi</h3>
-                        <p class="text-sm" style="color: #a16207;">Tunggu petugas memverifikasi akun Anda untuk dapat mengajukan program.</p>
+                        <p class="text-sm" style="color: #a16207;">Tunggu petugas Dinas memverifikasi akun Anda. Pastikan profil usaha sudah lengkap.</p>
                     </div>
                 </div>
+                <a href="{{ route('umkm.profile.show') }}" style="font-size: var(--text-sm); font-weight: 600; color: #854d0e; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">
+                    Cek Profil →
+                </a>
             </div>
         </div>
     @elseif(Auth::user()->profile_status === 'rejected')
         <div class="card p-0" style="background-color: #fef2f2; border-color: transparent;">
-            <div style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-danger);">
-                <h3 class="text-base font-bold" style="color: #991b1b;">Verifikasi ditolak</h3>
-                <p class="text-sm" style="color: #b91c1c;">Hubungi petugas dinas untuk informasi lebih lanjut.</p>
+            <div style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-danger); display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h3 class="text-base font-bold" style="color: #991b1b;">Verifikasi ditolak</h3>
+                    <p class="text-sm" style="color: #b91c1c;">Profil Anda ditolak oleh petugas Dinas. Perbarui data profil dan hubungi petugas.</p>
+                </div>
+                <a href="{{ route('umkm.profile.edit') }}" style="font-size: var(--text-sm); font-weight: 600; color: #991b1b; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">
+                    Edit Profil →
+                </a>
             </div>
         </div>
     @endif
@@ -97,25 +111,11 @@
                 </thead>
                 <tbody>
                     @forelse ($recentPengajuans as $pengajuan)
-                        @php
-                            $colors = match($pengajuan->status) {
-                                'approved' => ['bg' => '#d1fae5', 'text' => '#059669'],
-                                'rejected' => ['bg' => '#fee2e2', 'text' => '#dc2626'],
-                                default    => ['bg' => '#fef3c7', 'text' => '#d97706'],
-                            };
-                            $label = match($pengajuan->status) {
-                                'approved' => 'Disetujui',
-                                'rejected' => 'Ditolak',
-                                default    => 'Menunggu',
-                            };
-                        @endphp
                         <tr>
                             <td class="font-bold text-gray-900">{{ $pengajuan->program?->name ?? '-' }}</td>
                             <td class="text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
                             <td style="text-align: right;">
-                                <span style="display:inline-flex; align-items:center; background-color: {{ $colors['bg'] }}; color: {{ $colors['text'] }}; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
-                                    {{ $label }}
-                                </span>
+                                <x-status-badge :status="$pengajuan->status" />
                             </td>
                         </tr>
                     @empty
@@ -146,25 +146,11 @@
                 </thead>
                 <tbody>
                     @forelse ($recentReports as $report)
-                        @php
-                            $colors = match($report->status) {
-                                'approved' => ['bg' => '#d1fae5', 'text' => '#059669'],
-                                'rejected' => ['bg' => '#fee2e2', 'text' => '#dc2626'],
-                                default    => ['bg' => '#fef3c7', 'text' => '#d97706'],
-                            };
-                            $label = match($report->status) {
-                                'approved' => 'Disetujui',
-                                'rejected' => 'Ditolak',
-                                default    => 'Menunggu',
-                            };
-                        @endphp
                         <tr>
                             <td class="font-bold text-gray-900">{{ $report->judul }}</td>
                             <td class="text-gray-600">{{ $report->created_at->format('d M Y') }}</td>
                             <td style="text-align: right;">
-                                <span style="display:inline-flex; align-items:center; background-color: {{ $colors['bg'] }}; color: {{ $colors['text'] }}; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
-                                    {{ $label }}
-                                </span>
+                                <x-status-badge :status="$report->status" />
                             </td>
                         </tr>
                     @empty
