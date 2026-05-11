@@ -70,19 +70,7 @@
                             {{ $report->created_at->format('d M Y') }}
                         </td>
                         <td>
-                            @if ($report->status === 'approved')
-                                <span style="display:inline-flex; align-items:center; background-color: var(--color-success-bg); color: var(--color-success); font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                    Disetujui
-                                </span>
-                            @elseif ($report->status === 'rejected')
-                                <span style="display:inline-flex; align-items:center; background-color: #fef2f2; color: #dc2626; font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                    Ditolak
-                                </span>
-                            @else
-                                <span style="display:inline-flex; align-items:center; background-color: #fefce8; color: #d97706; font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                    Menunggu
-                                </span>
-                            @endif
+                            <x-status-badge :status="$report->status" />
                         </td>
                         <td>
                             @if ($report->catatan_petugas)
