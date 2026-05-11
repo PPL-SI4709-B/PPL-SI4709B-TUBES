@@ -74,8 +74,7 @@ Route::prefix('umkm')->group(function () {
     Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
 });
 
-    Route::get('/event', function () {
+Route::get('/event', function () {
         if (!session()->has('is_logged_in')) return redirect()->route('login');
         return view('umkm.event');
-    })->name('umkm.event');
-});
+})->name('umkm.event');

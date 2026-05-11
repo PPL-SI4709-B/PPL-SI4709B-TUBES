@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('reports', function (Blueprint $table) {
-            $table->string('status')->default('pending');
-        });
+        if (Schema::hasTable('reports')) {
+            Schema::table('reports', function (Blueprint $table) {
+                $table->string('status')->default('pending');
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('reports', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        if (Schema::hasTable('reports')) {
+            Schema::table('reports', function (Blueprint $table) {
+                $table->dropColumn('status');
+            });
+        }
     }
 };

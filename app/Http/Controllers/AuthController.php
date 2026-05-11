@@ -24,6 +24,9 @@ class AuthController extends Controller
             Session::put('is_logged_in', true);
             Session::put('user_email', $email);
             
+            if (str_contains($email, 'dinas')) {
+                return redirect()->route('dinas.pengajuan.index');
+            }
             return redirect()->route('umkm.dashboard');
         }
         
