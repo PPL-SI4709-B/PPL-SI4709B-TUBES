@@ -83,10 +83,11 @@
 
         <!-- Confimation Checkbox Banner -->
         <div class="flex items-start gap-4 p-4 mt-2" style="background-color: #eff6ff; border-radius: var(--radius-md);">
-            <label class="custom-checkbox bg-white" style="border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-top: 2px;">
-                <input type="checkbox" name="assurance" value="1">
+            <label class="custom-checkbox" style="margin-top: 2px;">
+                <input type="checkbox" id="assurance" name="assurance" value="1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <label class="text-sm text-dark font-medium leading-snug cursor-pointer">
+            <label for="assurance" class="text-sm text-dark font-medium leading-snug cursor-pointer">
                 Saya menyatakan bahwa data yang saya isi adalah benar dan dapat dipertanggungjawabkan.
             </label>
         </div>

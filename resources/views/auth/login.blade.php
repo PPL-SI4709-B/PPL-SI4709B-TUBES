@@ -50,12 +50,12 @@
         <!-- Checkbox / Remember -->
         <div class="flex items-start gap-3 mt-2 mb-4">
             <label class="custom-checkbox">
-                <input type="checkbox" name="remember" checked>
+                <input type="checkbox" id="remember" name="remember" checked>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <div class="text-sm text-main" style="line-height: 1.5; padding-top: 1px;">
+            <label for="remember" class="text-sm text-main" style="line-height: 1.5; padding-top: 1px; cursor: pointer;">
                 Ingat Saya
-            </div>
+            </label>
         </div>
 
         <!-- Action Button -->
