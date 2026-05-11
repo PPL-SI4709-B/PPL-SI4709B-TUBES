@@ -25,9 +25,10 @@ class PengajuanController extends Controller
 
     public function umkmIndex()
     {
-        $programs = Program::where('status', 'active')->orderBy('name')->get();
-        $programsPendanaan = $programs->where('jenis', 'pendanaan');
-        $programsPembinaan = $programs->where('jenis', 'pembinaan');
+        $programsPendanaan = Program::where('status', 'active')
+            ->where('jenis', 'pendanaan')
+            ->orderBy('name')
+            ->get();
 
         $pengajuans = Pengajuan::with('program')
             ->where('user_id', Auth::id())
@@ -36,9 +37,7 @@ class PengajuanController extends Controller
 
         return view('umkm.pengajuan.index', compact(
             'pengajuans',
-            'programs',
-            'programsPendanaan',
-            'programsPembinaan'
+            'programsPendanaan'
         ));
     }
 

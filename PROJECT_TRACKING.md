@@ -24,9 +24,9 @@ You MUST:
 | #7 | Verify UMKM | Bagas | VerificationController |
 | #8 | Review Report | Bagas | ReportReviewController |
 | #9 | Report Status | Bagas | Add status field |
-| #10 | Profile | Avan | UmkmController + View |
-| #11 | Event | Avan | EventController |
-| #12 | Event Detail | Avan | View only |
+| #10 | Profile | Andra | UmkmController + View |
+| #11 | Event | Andra | EventController |
+| #12 | Event Detail | Andra | View only |
 | #13 | Pengajuan | Davi | Pengajuan Model, Migration, Controller |
 | #14 | Upload Doc | Davi | Add file upload |
 | #15 | Status View | Davi | View index |

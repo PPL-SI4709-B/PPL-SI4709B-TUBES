@@ -3,7 +3,7 @@
 @section('title', 'Tambah Wilayah - Portal UMKM')
 
 @section('sidebar')
-@include('dinas.region._sidebar')
+<x-dinas-sidebar active="master-data" />
 @endsection
 
 @section('header')
@@ -11,11 +11,11 @@
     <div class="page-title">Tambah Wilayah</div>
     <div class="user-profile">
         <div class="user-info">
-            <div class="user-name">Petugas Dinas</div>
+            <div class="user-name">{{ Auth::user()->name }}</div>
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name=Petugas+Dinas&background=2563eb&color=fff" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>

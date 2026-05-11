@@ -11,6 +11,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\ScaleController;
+use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UmkmController;
 use App\Http\Controllers\VerificationController;
 
@@ -67,6 +68,7 @@ Route::middleware(['auth', 'role:umkm'])->group(function () {
 Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dinas'])->name('dashboard');
 
+    Route::get('master-data', [MasterDataController::class, 'index'])->name('master-data');
     Route::resource('program', ProgramController::class)->except(['show']);
     Route::resource('category', CategoryController::class)->except(['show']);
     Route::resource('region', RegionController::class)->except(['show']);
