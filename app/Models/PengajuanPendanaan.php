@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class PengajuanPendanaan extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'jumlah_pengajuan',
+        'tujuan_pendanaan',
+        'deskripsi_kebutuhan',
+        'dokumen_pendukung',
+        'status',
+        'catatan',
+        'submitted_at',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'submitted_at'    => 'datetime',
+            'jumlah_pengajuan' => 'decimal:2',
+        ];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get human-readable status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'diajukan'             => 'Diajukan',
+            'menunggu_verifikasi'  => 'Menunggu Verifikasi',
+            'diproses'             => 'Diproses',
+            'disetujui'            => 'Disetujui',
+            'ditolak'              => 'Ditolak',
+            default                => ucfirst($this->status),
+        };
+    }
+}

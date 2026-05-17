@@ -30,12 +30,15 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
+        $totalPendanaan = $user->pengajuanPendanaans()->count();
+
         return view('umkm.dashboard', compact(
             'totalPengajuan',
             'totalLaporan',
             'pengajuanStatus',
             'recentPengajuans',
-            'recentReports'
+            'recentReports',
+            'totalPendanaan'
         ));
     }
 

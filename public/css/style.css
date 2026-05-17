@@ -391,3 +391,29 @@ input, select, textarea {
     background-color: #fee2e2;
     color: #dc2626;
 }
+
+/* PBI-22: Pendanaan status badge variants */
+.badge-pendanaan-diajukan {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-pendanaan-menunggu {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.badge-pendanaan-diproses {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+.badge-pendanaan-disetujui {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.badge-pendanaan-ditolak {
+    background-color: #fee2e2;
+    color: #dc2626;
+}

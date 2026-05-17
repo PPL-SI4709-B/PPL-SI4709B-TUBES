@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\ScaleController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UmkmController;
+use App\Http\Controllers\PengajuanPendanaanController;
 use App\Http\Controllers\VerificationController;
 
 // Root
@@ -52,6 +53,12 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
 
     Route::get('/pengajuan', [PengajuanController::class, 'umkmIndex'])->name('pengajuan.index');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
+
+    // PBI-22: Pengajuan Pendanaan UMKM
+    Route::get('/pendanaan', [PengajuanPendanaanController::class, 'index'])->name('pendanaan.index');
+    Route::get('/pendanaan/create', [PengajuanPendanaanController::class, 'create'])->name('pendanaan.create');
+    Route::post('/pendanaan', [PengajuanPendanaanController::class, 'store'])->name('pendanaan.store');
+    Route::get('/pendanaan/{pengajuanPendanaan}', [PengajuanPendanaanController::class, 'show'])->name('pendanaan.show');
 
     Route::get('/event', [EventController::class, 'index'])->name('event');
     Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
