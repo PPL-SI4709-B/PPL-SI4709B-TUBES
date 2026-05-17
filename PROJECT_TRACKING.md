@@ -105,3 +105,72 @@ You MUST:
 - Do exactly what PBI says
 - Do not add features outside scope
 - Keep code simple
+
+---
+
+# Sprint 2 Table
+
+| PBI | Feature | Owner | Files |
+|-----|---------|-------|-------|
+| #22 | Formulir Pengajuan Pendanaan UMKM | Dzaki | PengajuanPendanaanController, Migration, Form View |
+| #23 | Kelola Master Data Sumber Pendanaan | Dzaki | FundingSource Model, Migration, Controller |
+| #24 | Verifikasi & Persetujuan Pengajuan Pendanaan | Dzaki | ApprovalController, Status Update |
+| #25 | Dashboard Monitoring Lanjutan Dinas | Andika | DashboardController, Statistik View |
+| #26 | Laporan Rekap & Export Data UMKM | Andika | Export Service, ReportController |
+| #27 | Dashboard UMKM & Ringkasan Aktivitas | Andika | Dashboard View Update |
+| #28 | CRUD Event dan Pelatihan oleh Dinas | Bagas | EventController, Migration, CRUD View |
+| #29 | Pendaftaran Event oleh UMKM | Bagas | EventRegistrationController, Registration Logic |
+| #30 | Evaluasi Laporan Perkembangan Usaha | Bagas | EvaluationController, Evaluation Form |
+| #31 | Riwayat Kegiatan Event UMKM | Avan | History View, Participation Query |
+| #32 | Feedback & Review Event oleh UMKM | Avan | FeedbackController, Review Form |
+| #33 | Halaman Informasi & Panduan Penggunaan Sistem | Avan | Static Page View |
+| #34 | Form Laporan Perkembangan Usaha Berkala | Davi | ReportController, Quarterly Form |
+| #35 | Grafik Perkembangan Omzet UMKM | Davi | Chart Integration, Dashboard Widget |
+| #36 | Draft Laporan Perkembangan Usaha | Davi | Draft Save Logic |
+| #37 | CRUD Materi Edukasi oleh Dinas | Fatih | EdukasiController, Migration, CRUD View |
+| #38 | Akses & Unduh Materi Edukasi oleh UMKM | Fatih | Download Logic, Material View |
+| #39 | Notifikasi In-App untuk Petugas Dinas | Fatih | Notification Service |
+| #40 | Halaman Notifikasi & Riwayat Status UMKM | Althaf | NotificationController, History View |
+| #41 | Timeline Perubahan Status Pengajuan Pendanaan | Althaf | Timeline Component |
+| #42 | Halaman FAQ & Bantuan Penggunaan Sistem | Althaf | FAQ Page, Help View |
+
+---
+
+# Sprint 2 Priority (Strict Order)
+
+1. #22 Form Pengajuan Pendanaan
+2. #28 CRUD Event
+3. #29 Pendaftaran Event
+4. #34 Laporan Berkala
+5. #25 Dashboard Monitoring
+6. #39 Notifikasi In-App
+
+---
+
+# Sprint 2 Progress Tracking
+
+| PBI | Feature | Owner | Status | Notes |
+|-----|---------|-------|--------|-------|
+| #22 | Form Pengajuan Pendanaan | Dzaki | ⬜ Not Started | |
+| #23 | Master Data Sumber Pendanaan | Dzaki | ⬜ Not Started | |
+| #24 | Approval Pendanaan | Dzaki | ⬜ Not Started | |
+| #25 | Dashboard Monitoring Dinas | Andika | ⬜ Not Started | |
+| #26 | Export Rekap Data UMKM | Andika | ⬜ Not Started | |
+| #27 | Dashboard Aktivitas UMKM | Andika | ⬜ Not Started | |
+| #28 | CRUD Event & Pelatihan | Bagas | ⬜ Not Started | |
+| #29 | Pendaftaran Event UMKM | Bagas | ⬜ Not Started | |
+| #30 | Evaluasi Laporan Usaha | Bagas | ⬜ Not Started | |
+| #31 | Riwayat Event UMKM | Avan | ⬜ Not Started | |
+| #32 | Feedback & Review Event | Avan | ⬜ Not Started | |
+| #33 | Panduan Penggunaan Sistem | Avan | ⬜ Not Started | |
+| #34 | Form Laporan Berkala | Davi | ⬜ Not Started | |
+| #35 | Grafik Omzet UMKM | Davi | ⬜ Not Started | |
+| #36 | Draft Laporan | Davi | ⬜ Not Started | |
+| #37 | CRUD Materi Edukasi | Fatih | ⬜ Not Started | |
+| #38 | Akses & Download Materi | Fatih | ⬜ Not Started | |
+| #39 | Notifikasi In-App | Fatih | ⬜ Not Started | |
+| #40 | Notifikasi & Riwayat Status | Althaf | ⬜ Not Started | |
+| #41 | Timeline Status Pengajuan | Althaf | ⬜ Not Started | |
+| #42 | FAQ & Bantuan Sistem | Althaf | ⬜ Not Started | |
+
+---

@@ -46,6 +46,7 @@ Route::prefix('dinas')->name('dinas.')->group(function () {
 
 Route::prefix('dinas')->name('dinas.')->group(function () {
     Route::resource('program', ProgramController::class)->except(['show']);
+    Route::resource('event', EventController::class)->except(['show']);
     Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
     Route::put('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
@@ -71,10 +72,10 @@ Route::prefix('umkm')->group(function () {
         return view('umkm.dashboard');
     })->name('umkm.dashboard');
 
-    Route::get('/event', [EventController::class, 'index'])->name('umkm.event');
+    Route::get('/event', [EventController::class, 'umkmIndex'])->name('umkm.event');
 });
 
 Route::get('/event', function () {
         if (!session()->has('is_logged_in')) return redirect()->route('login');
-        return view('umkm.event');
-})->name('umkm.event');
+        return redirect()->route('umkm.event');
+})->name('event');
