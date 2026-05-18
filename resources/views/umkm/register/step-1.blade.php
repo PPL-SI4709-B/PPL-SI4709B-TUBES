@@ -18,13 +18,19 @@
         <!-- Nama Lengkap Pemilik -->
         <div class="flex-col gap-2">
             <label class="input-label">NAMA LENGKAP PEMILIK</label>
-            <input type="text" name="name" class="input-field" placeholder="Sesuai KTP">
+            <input type="text" name="name" class="input-field" placeholder="Sesuai KTP" value="{{ old('name') }}">
+            @error('name')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Email -->
         <div class="flex-col gap-2">
             <label class="input-label">EMAIL</label>
-            <input type="email" name="email" class="input-field" placeholder="contoh@email.com">
+            <input type="email" name="email" class="input-field" placeholder="contoh@email.com" value="{{ old('email') }}">
+            @error('email')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- No HP -->
@@ -32,8 +38,11 @@
             <label class="input-label">NO. HP/WHATSAPP</label>
             <div class="flex">
                 <div class="input-prefix">+62</div>
-                <input type="tel" name="phone" class="input-field input-with-prefix" placeholder="8123456xxx">
+                <input type="tel" name="phone" class="input-field input-with-prefix" placeholder="8123456xxx" value="{{ old('phone') }}">
             </div>
+            @error('phone')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Password Row -->
@@ -58,6 +67,9 @@
                     </div>
                     <div class="text-xs text-muted" style="font-style: italic;">Kekuatan: Sedang</div>
                 </div>
+                @error('password')
+                    <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Confirm Password Field -->

@@ -25,12 +25,27 @@ class ReportController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'income' => 'required|numeric|min:0',
+            'expense' => 'required|numeric|min:0',
+            'catatan_usaha' => 'nullable|string',
+            'report_date' => 'required|date',
+            'period' => 'required|string',
+            'due_date' => 'required|date',
         ]);
+
+        $profit = $validated['income'] - $validated['expense'];
 
         Report::create([
             'user_id' => Auth::id(),
             'judul' => $validated['judul'],
             'deskripsi' => $validated['deskripsi'],
+            'income' => $validated['income'],
+            'expense' => $validated['expense'],
+            'profit' => $profit,
+            'catatan_usaha' => $validated['catatan_usaha'],
+            'report_date' => $validated['report_date'],
+            'period' => $validated['period'],
+            'due_date' => $validated['due_date'],
             'status' => 'pending',
         ]);
 

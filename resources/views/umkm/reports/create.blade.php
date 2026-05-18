@@ -100,6 +100,92 @@
                 @enderror
             </div>
 
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label for="period" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                        Periode Laporan <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input
+                        id="period"
+                        type="month"
+                        name="period"
+                        value="{{ old('period', date('Y-m')) }}"
+                        style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('period') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit;"
+                    >
+                    @error('period')
+                        <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="report_date" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                        Tanggal Laporan <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input
+                        id="report_date"
+                        type="date"
+                        name="report_date"
+                        value="{{ old('report_date', date('Y-m-d')) }}"
+                        style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('report_date') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit;"
+                    >
+                    @error('report_date')
+                        <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div>
+                <label for="due_date" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                    Batas Waktu (Deadline) Laporan <span style="color: #dc2626;">*</span>
+                </label>
+                <input
+                    id="due_date"
+                    type="date"
+                    name="due_date"
+                    value="{{ old('due_date', date('Y-m-t')) }}"
+                    style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('due_date') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit;"
+                >
+                @error('due_date')
+                    <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label for="income" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                        Pemasukan (Rp) <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input
+                        id="income"
+                        type="number"
+                        name="income"
+                        value="{{ old('income') }}"
+                        min="0"
+                        placeholder="0"
+                        style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('income') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit;"
+                    >
+                    @error('income')
+                        <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="expense" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                        Pengeluaran (Rp) <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input
+                        id="expense"
+                        type="number"
+                        name="expense"
+                        value="{{ old('expense') }}"
+                        min="0"
+                        placeholder="0"
+                        style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('expense') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit;"
+                    >
+                    @error('expense')
+                        <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <div>
                 <label for="deskripsi" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
                     Deskripsi Perkembangan Usaha <span style="color: #dc2626;">*</span>
@@ -107,11 +193,27 @@
                 <textarea
                     id="deskripsi"
                     name="deskripsi"
-                    rows="6"
-                    placeholder="Jelaskan perkembangan usaha Anda pada periode ini, termasuk pencapaian, kendala, dan rencana ke depan..."
+                    rows="4"
+                    placeholder="Jelaskan perkembangan usaha Anda pada periode ini..."
                     style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('deskripsi') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit; resize: vertical;"
                 >{{ old('deskripsi') }}</textarea>
                 @error('deskripsi')
+                    <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="catatan_usaha" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                    Catatan Usaha
+                </label>
+                <textarea
+                    id="catatan_usaha"
+                    name="catatan_usaha"
+                    rows="3"
+                    placeholder="Tuliskan catatan tambahan mengenai operasional, kendala, dll..."
+                    style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('catatan_usaha') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit; resize: vertical;"
+                >{{ old('catatan_usaha') }}</textarea>
+                @error('catatan_usaha')
                     <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
                 @enderror
             </div>

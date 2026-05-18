@@ -96,8 +96,8 @@
             <table class="table" style="margin-top: -1px;">
                 <thead>
                     <tr>
-                        <th style="padding-top: var(--space-4);">JUDUL LAPORAN</th>
-                        <th style="padding-top: var(--space-4);">TANGGAL</th>
+                        <th style="padding-top: var(--space-4);">JUDUL & PERIODE</th>
+                        <th style="padding-top: var(--space-4);">KEUANGAN</th>
                         <th style="padding-top: var(--space-4);">STATUS</th>
                         <th style="padding-top: var(--space-4);">CATATAN DINAS</th>
                     </tr>
@@ -107,10 +107,11 @@
                     <tr>
                         <td>
                             <div class="font-bold text-gray-900">{{ $report->judul }}</div>
-                            <div class="text-xs text-gray-500 mt-1" style="max-width: 24rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $report->deskripsi }}</div>
+                            <div class="text-xs text-gray-500 mt-1">Periode: {{ $report->period ? \Carbon\Carbon::parse($report->period)->translatedFormat('F Y') : '-' }}</div>
                         </td>
                         <td class="text-gray-600" style="white-space: nowrap;">
-                            {{ $report->created_at->format('d M Y') }}
+                            <div class="text-sm">Laba: <span class="font-bold {{ $report->profit >= 0 ? 'text-green-600' : 'text-red-600' }}">Rp {{ number_format($report->profit, 0, ',', '.') }}</span></div>
+                            <div class="text-xs text-gray-500 mt-1">Tgl Laporan: {{ $report->report_date ? $report->report_date->format('d M Y') : '-' }}</div>
                         </td>
                         <td>
                             @if ($report->status === 'approved')

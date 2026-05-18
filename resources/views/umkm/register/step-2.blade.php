@@ -19,6 +19,9 @@
         <div class="flex-col gap-2">
             <label class="input-label">NAMA USAHA</label>
             <input type="text" name="business_name" class="input-field" value="{{ old('business_name', $registerStep2['business_name'] ?? '') }}" placeholder="Masukkan nama usaha Anda">
+            @error('business_name')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Kategori Usaha -->
@@ -37,6 +40,9 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </span>
             </div>
+            @error('category_id')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Wilayah Usaha -->
@@ -55,18 +61,27 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </span>
             </div>
+            @error('region_id')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Alamat Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">ALAMAT USAHA</label>
             <textarea name="business_address" class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;">{{ old('business_address', $registerStep2['business_address'] ?? '') }}</textarea>
+            @error('business_address')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- NIB -->
         <div class="flex-col gap-2">
             <label class="input-label">NIB (Opsional)</label>
             <input type="text" name="nib" class="input-field" value="{{ old('nib', $registerStep2['nib'] ?? '') }}" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
+            @error('nib')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
         
         <!-- Skala Usaha -->
@@ -85,6 +100,9 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </span>
             </div>
+            @error('scale_id')
+                <div style="color: #ef4444; font-size: 12px; margin-top: -4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Action Buttons -->

@@ -12,14 +12,12 @@ services:
     command: >
       sh -c "
       if [ ! -f .env ]; then cp .env.example .env; fi;
-      sed -i 's/DB_HOST=.*/DB_HOST=db/' .env;
-      sed -i 's/DB_DATABASE=.*/DB_DATABASE=PPLSI4709B_db/' .env;
-      sed -i 's/DB_USERNAME=.*/DB_USERNAME=PPLSI4709B_db/' .env;
-      sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=KELOMPOK_B/' .env;
-      composer install --ignore-platform-req=ext-zip;
       php artisan key:generate;
-      sleep 5;
-      php artisan migrate || true;
+      echo 'Waiting for database...';
+      sleep 15;
+      echo 'Running migrations...';
+      php artisan migrate --force || echo 'Migration failed, but moving on...';
+      echo 'Starting server...';
       php artisan serve --host=0.0.0.0 --port=8000
       "
 

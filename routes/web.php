@@ -61,6 +61,11 @@ Route::middleware(['auth', 'role:umkm'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    
+    // Materi Edukasi
+    Route::get('/materi-edukasi', [\App\Http\Controllers\MateriEdukasiUmkmController::class, 'index'])->name('materi-edukasi.index');
+    Route::get('/materi-edukasi/{materiEdukasi}', [\App\Http\Controllers\MateriEdukasiUmkmController::class, 'show'])->name('materi-edukasi.show');
+    Route::get('/materi-edukasi/{materiEdukasi}/download', [\App\Http\Controllers\MateriEdukasiUmkmController::class, 'download'])->name('materi-edukasi.download');
 });
 
 // ─── Dinas Routes ─────────────────────────────────────────────────────────────
