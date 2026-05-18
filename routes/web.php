@@ -14,6 +14,7 @@ use App\Http\Controllers\ScaleController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UmkmController;
 use App\Http\Controllers\PengajuanPendanaanController;
+use App\Http\Controllers\SumberPendanaanController;
 use App\Http\Controllers\VerificationController;
 
 // Root
@@ -80,6 +81,7 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::resource('category', CategoryController::class)->except(['show']);
     Route::resource('region', RegionController::class)->except(['show']);
     Route::resource('scale', ScaleController::class)->except(['show']);
+    Route::resource('sumber-pendanaan', SumberPendanaanController::class)->except(['show']);
 
     Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');

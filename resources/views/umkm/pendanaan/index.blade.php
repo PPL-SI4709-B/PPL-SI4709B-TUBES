@@ -67,6 +67,7 @@
                 <thead>
                     <tr class="border-b border-gray-200 text-xs font-bold text-gray-500 tracking-wider">
                         <th class="pb-3">TANGGAL</th>
+                        <th class="pb-3">SUMBER PENDANAAN</th>
                         <th class="pb-3 text-right">JUMLAH</th>
                         <th class="pb-3">TUJUAN</th>
                         <th class="pb-3 text-center">STATUS</th>
@@ -77,6 +78,7 @@
                     @forelse($pengajuans as $item)
                         <tr class="hover:bg-gray-50">
                             <td class="py-4 text-gray-600">{{ $item->submitted_at ? $item->submitted_at->format('d M Y') : $item->created_at->format('d M Y') }}</td>
+                            <td class="py-4 font-bold text-gray-900">{{ $item->sumberPendanaan->nama_program ?? '-' }}</td>
                             <td class="py-4 text-gray-900 text-right" style="white-space: nowrap;">Rp {{ number_format($item->jumlah_pengajuan, 0, ',', '.') }}</td>
                             <td class="py-4 text-gray-600">{{ Str::limit($item->tujuan_pendanaan, 30) }}</td>
                             <td class="py-4 text-center">
@@ -88,7 +90,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-12 text-center">
+                            <td colspan="6" class="py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div style="background-color: var(--color-bg, #f1f5f9); padding: 1rem; border-radius: 50%; color: var(--color-text-muted); margin-bottom: 1rem;">
                                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>

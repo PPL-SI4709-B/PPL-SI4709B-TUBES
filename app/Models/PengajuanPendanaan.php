@@ -11,6 +11,7 @@ class PengajuanPendanaan extends Model
 
     protected $fillable = [
         'user_id',
+        'sumber_pendanaan_id',
         'jumlah_pengajuan',
         'tujuan_pendanaan',
         'deskripsi_kebutuhan',
@@ -31,6 +32,11 @@ class PengajuanPendanaan extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function sumberPendanaan()
+    {
+        return $this->belongsTo(SumberPendanaan::class);
     }
 
     /**

@@ -49,6 +49,31 @@
         <form action="{{ route('umkm.pendanaan.store') }}" method="POST" enctype="multipart/form-data" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
             @csrf
 
+            @if($sumberPendanaans->isEmpty())
+                <div style="background-color: #fefce8; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.875rem; color: #92400e;">
+                    <strong>Belum ada skema pendanaan aktif.</strong> Silakan hubungi Dinas untuk informasi lebih lanjut.
+                </div>
+            @endif
+
+            <div>
+                <label for="sumber_pendanaan_id" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                    Sumber Pendanaan <span style="color: #dc2626;">*</span>
+                </label>
+                <select id="sumber_pendanaan_id" name="sumber_pendanaan_id" required
+                    style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('sumber_pendanaan_id') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit; background-color: white;">
+                    <option value="">&mdash; Pilih Sumber Pendanaan &mdash;</option>
+                    @foreach($sumberPendanaans as $sumber)
+                        <option value="{{ $sumber->id }}" {{ old('sumber_pendanaan_id') == $sumber->id ? 'selected' : '' }}
+                            data-batas="{{ $sumber->batas_maksimal }}">
+                            {{ $sumber->nama_program }} - {{ $sumber->mitra_penyalur }} (Maks. Rp {{ number_format($sumber->batas_maksimal, 0, ',', '.') }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('sumber_pendanaan_id')
+                    <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div>
                 <label for="jumlah_pengajuan" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
                     Jumlah Pengajuan (Rp) <span style="color: #dc2626;">*</span>
@@ -99,7 +124,7 @@
 
             <div style="display: flex; gap: 0.75rem; justify-content: flex-end; padding-top: 0.5rem; border-top: 1px solid var(--color-border);">
                 <a href="{{ route('umkm.pendanaan.index') }}" class="btn" style="background-color: var(--color-border); color: var(--color-text); border-radius: var(--radius-md);">Batal</a>
-                <button type="submit" class="btn" style="background-color: #16a34a; color: white; border-radius: var(--radius-md);">Kirim Pengajuan</button>
+                <button type="submit" class="btn" {{ $sumberPendanaans->isEmpty() ? 'disabled' : '' }} style="background-color: #16a34a; color: white; border-radius: var(--radius-md); {{ $sumberPendanaans->isEmpty() ? 'opacity: 0.6; cursor: not-allowed;' : '' }}">Kirim Pengajuan</button>
             </div>
         </form>
     </div>

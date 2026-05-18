@@ -55,6 +55,17 @@
                 <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px;">{{ $pengajuanPendanaan->submitted_at ? $pengajuanPendanaan->submitted_at->format('d M Y, H:i') : $pengajuanPendanaan->created_at->format('d M Y, H:i') }}</div>
             </div>
             <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Sumber Pendanaan</div>
+                @if($pengajuanPendanaan->sumberPendanaan)
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px; font-weight: 600;">{{ $pengajuanPendanaan->sumberPendanaan->nama_program }}</div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px;">
+                    Mitra: {{ $pengajuanPendanaan->sumberPendanaan->mitra_penyalur }} &middot; Batas Maksimal: Rp {{ number_format($pengajuanPendanaan->sumberPendanaan->batas_maksimal, 0, ',', '.') }}
+                </div>
+                @else
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px;">-</div>
+                @endif
+            </div>
+            <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Jumlah Pengajuan</div>
                 <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px; font-weight: 700;">Rp {{ number_format($pengajuanPendanaan->jumlah_pengajuan, 0, ',', '.') }}</div>
             </div>
