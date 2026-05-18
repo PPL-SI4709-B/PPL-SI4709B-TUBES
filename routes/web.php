@@ -78,4 +78,8 @@ Route::middleware('auth')->prefix('umkm')->group(function () {
 
     Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('umkm.pengajuan.index');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('umkm.pengajuan.store');
+    
+    Route::get('/laporan-berkala', [App\Http\Controllers\LaporanBerkalaController::class, 'index'])->name('umkm.laporan_berkala.index');
+    Route::get('/laporan-berkala/create', [App\Http\Controllers\LaporanBerkalaController::class, 'create'])->name('umkm.laporan_berkala.create');
+    Route::post('/laporan-berkala', [App\Http\Controllers\LaporanBerkalaController::class, 'store'])->name('umkm.laporan_berkala.store');
 });
