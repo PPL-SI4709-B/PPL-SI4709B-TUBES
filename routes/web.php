@@ -53,6 +53,7 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
 
     Route::get('/event', [EventController::class, 'index'])->name('event');
+    Route::get('/event/history', [EventController::class, 'history'])->name('event.history');
     Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
 });
 
