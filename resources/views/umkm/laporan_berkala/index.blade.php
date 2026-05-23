@@ -72,6 +72,15 @@
             </div>
         @endif
 
+        @if(count($chartLabels) > 0)
+        <div class="bg-white shadow sm:rounded-md p-6 mb-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Grafik Perkembangan Omzet</h3>
+            <div class="relative w-full" style="height: 300px;">
+                <canvas id="omzetChart"></canvas>
+            </div>
+        </div>
+        @endif
+
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900">Daftar Laporan Anda</h3>
@@ -82,7 +91,7 @@
             </a>
         </div>
 
-        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <div class="bg-white shadow overflow-hidden sm:rounded-md mt-6">
             <ul class="divide-y divide-gray-200">
                 @forelse ($laporans as $laporan)
                     <li>
@@ -133,4 +142,61 @@
             </ul>
         </div>
     </div>
+
+    @if(count($chartLabels) > 0)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('omzetChart').getContext('2d');
+            const chartData = @json($chartData);
+            const chartLabels = @json($chartLabels);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Omzet Usaha (Rp)',
+                        data: chartData,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: 'rgb(59, 130, 246)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Rp ' + new Intl.NumberFormat('id-ID').format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endif
 @endsection

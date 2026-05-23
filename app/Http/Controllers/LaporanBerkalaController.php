@@ -17,7 +17,19 @@ class LaporanBerkalaController extends Controller
             ->orderBy('kuartal', 'desc')
             ->get();
             
-        return view('umkm.laporan_berkala.index', compact('laporans'));
+        $chartDataRaw = LaporanBerkala::where('user_id', Auth::id())
+            ->orderBy('tahun', 'asc')
+            ->orderBy('kuartal', 'asc')
+            ->get();
+            
+        $chartLabels = [];
+        $chartData = [];
+        foreach ($chartDataRaw as $laporan) {
+            $chartLabels[] = "{$laporan->kuartal} {$laporan->tahun}";
+            $chartData[] = $laporan->omzet;
+        }
+            
+        return view('umkm.laporan_berkala.index', compact('laporans', 'chartLabels', 'chartData'));
     }
 
     public function create()
