@@ -73,7 +73,12 @@ class EventController extends Controller
         }
 
         $events = Event::whereIn('status', ['published', 'completed'])->latest()->get();
+        
+        // Get registered event IDs for dummy user
+        $email = session()->get('user_email');
+        $user = \App\Models\User::where('email', $email)->first();
+        $registeredEventIds = $user ? $user->registeredEvents()->pluck('events.id')->toArray() : [];
 
-        return view('umkm.event', compact('events'));
+        return view('umkm.event', compact('events', 'registeredEventIds'));
     }
 }

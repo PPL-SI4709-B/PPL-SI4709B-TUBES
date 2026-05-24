@@ -17,4 +17,11 @@ class Event extends Model
         'quota',
         'status',
     ];
+
+    public function registrants()
+    {
+        return $this->belongsToMany(User::class, 'event_registrations')
+                    ->withPivot('status')
+                    ->withTimestamps();
+    }
 }

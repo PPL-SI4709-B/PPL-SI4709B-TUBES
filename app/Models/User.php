@@ -17,6 +17,13 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function registeredEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_registrations')
+                    ->withPivot('status')
+                    ->withTimestamps();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

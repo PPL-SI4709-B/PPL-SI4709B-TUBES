@@ -77,6 +77,18 @@
 @section('content')
 <div class="flex flex-col gap-6" style="max-width: 64rem; margin: 0 auto; padding-top: 0;">
 
+    @if(session('success'))
+    <div style="background-color: #dcfce7; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #bbf7d0; font-weight: 600;">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #fecaca; font-weight: 600;">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <!-- Tabs -->
     <div style="display: flex; gap: var(--space-6); border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-6);">
         <div style="padding-bottom: var(--space-3); border-bottom: 2px solid var(--color-primary); color: var(--color-primary); font-weight: 700; font-size: 0.875rem; cursor: pointer;">Event Tersedia</div>
@@ -112,185 +124,82 @@
 
     <!-- Event Cards Grid -->
     <div class="grid grid-cols-2 gap-6 mt-2">
-        
-        <!-- Card 1 -->
+        @forelse($events as $event)
         <div class="card p-0 overflow-hidden relative shadow-sm" style="display: flex; flex-direction: column;">
             <!-- Header Image -->
             <div style="height: 180px; position: relative; background: #0b1a30; overflow: hidden;">
-                <!-- Abstract mock texture -->
                 <div style="position:absolute; inset:0; background: linear-gradient(135deg, rgba(14,165,233,0.3) 0%, rgba(2,132,199,0.1) 100%);"></div>
-                <div style="position:absolute; inset:0; opacity:0.2;">
-                    <!-- Some mock dots for map -->
-                </div>
                 
                 <div class="absolute" style="top: 1rem; left: 1rem;">
-                    <span style="background-color: #dcfce7; color: #166534; padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em;">PELATIHAN</span>
+                    <span style="background-color: #dcfce7; color: #166534; padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em;">{{ strtoupper($event->status) }}</span>
                 </div>
             </div>
             
             <!-- Body -->
             <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Pelatihan Digital Marketing Tingkat Lanjut</h3>
-                <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">Pelajari strategi optimasi SEO, Meta Ads, dan Content Marketing secara mendalam untuk meningkatkan omzet penjualan.</p>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $event->title }}</h3>
+                <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">{{ $event->description }}</p>
                 
                 <div class="flex flex-col gap-2 mb-6">
                     <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15 Nov 2024
+                        {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
                     </div>
                     <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Balai Desa Soreang, Bandung
+                        {{ $event->location }}
                     </div>
                 </div>
+
+                @php
+                    $registeredCount = $event->registrants()->count();
+                    $percentage = ($event->quota > 0) ? min(100, ($registeredCount / $event->quota) * 100) : 0;
+                    $isFull = $registeredCount >= $event->quota;
+                    $isRegistered = in_array($event->id, $registeredEventIds);
+                @endphp
 
                 <div class="mb-5">
                     <div class="flex justify-between items-end mb-1">
                         <span class="text-xs font-bold text-gray-500 uppercase tracking-wide" style="font-size: 0.65rem;">KETERSEDIAAN KUOTA</span>
-                        <span class="text-xs font-bold text-gray-900">45 / 50 <span class="text-gray-400 font-medium">Peserta</span></span>
+                        @if($isFull)
+                            <span class="text-xs font-bold text-red-600" style="color: #dc2626;">Penuh</span>
+                        @else
+                            <span class="text-xs font-bold text-gray-900">{{ $registeredCount }} / {{ $event->quota }} <span class="text-gray-400 font-medium">Peserta</span></span>
+                        @endif
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 90%;"></div>
+                        <div class="progress-bar-fill" style="width: {{ $percentage }}%; @if($isFull) background-color: #dc2626; @endif"></div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary w-full" style="justify-content: center; padding: 0.75rem;">Daftar Sekarang</button>
+                @if($isRegistered)
+                    <button class="btn btn-outline w-full" style="justify-content: center; padding: 0.75rem; background-color: #dcfce7; border-color: #bbf7d0; color: #166534; cursor: default;" disabled>Sudah Terdaftar</button>
+                @elseif($isFull)
+                    <button class="btn btn-outline w-full" style="justify-content: center; padding: 0.75rem; background-color: #f1f5f9; border-color: #e2e8f0; color: #64748b; cursor: not-allowed;" disabled>Penuh</button>
+                @else
+                    <form action="{{ route('umkm.event.register', $event->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary w-full" style="justify-content: center; padding: 0.75rem;">Daftar Sekarang</button>
+                    </form>
+                @endif
             </div>
         </div>
-
-        <!-- Card 2 -->
-        <div class="card p-0 overflow-hidden relative shadow-sm" style="display: flex; flex-direction: column;">
-            <!-- Header Image -->
-            <div style="height: 180px; position: relative; background: #64748b; overflow: hidden;">
-                <div class="absolute" style="top: 1rem; left: 1rem;">
-                    <span style="background-color: #f1f5f9; color: #475569; padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em;">SEMINAR</span>
-                </div>
+        @empty
+        <div class="col-span-2 py-12 text-center">
+            <div class="text-gray-400 mb-2">
+                <svg style="margin: 0 auto;" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </div>
-            
-            <!-- Body -->
-            <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Seminar Akses Permodalan UMKM</h3>
-                <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">Sosialisasi kemudahan akses KUR dan bantuan modal usaha dari lembaga perbankan resmi untuk skala mikro.</p>
-                
-                <div class="flex flex-col gap-2 mb-6">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        20 Nov 2024
-                    </div>
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Aula Dinas Koperasi, Soreang
-                    </div>
-                </div>
-
-                <div class="mb-5">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide" style="font-size: 0.65rem;">KETERSEDIAAN KUOTA</span>
-                        <span class="text-xs font-bold text-red-600" style="color: #dc2626;">Penuh</span>
-                    </div>
-                    <div class="progress-bar-bg" style="background-color: var(--color-border);">
-                        <div class="progress-bar-fill" style="width: 100%; background-color: var(--color-border);"></div>
-                    </div>
-                </div>
-
-                <button class="btn btn-outline w-full" style="justify-content: center; padding: 0.75rem; background-color: #f1f5f9; border-color: #e2e8f0; color: #64748b; cursor: not-allowed;">Penuh</button>
-            </div>
+            <p class="text-gray-500 font-medium">Belum ada event tersedia saat ini.</p>
         </div>
-
-        <!-- Card 3 -->
-        <div class="card p-0 overflow-hidden relative shadow-sm" style="display: flex; flex-direction: column;">
-            <!-- Header Image -->
-            <div style="height: 180px; position: relative; background: #1e293b; overflow: hidden;">
-                <div class="absolute" style="top: 1rem; left: 1rem;">
-                    <span style="background-color: #ffedd5; color: #c2410c; padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em;">WORKSHOP</span>
-                </div>
-            </div>
-            
-            <!-- Body -->
-            <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Workshop Packaging Kreatif</h3>
-                <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">Tingkatkan nilai jual produk dengan kemasan yang estetik, ramah lingkungan, dan sesuai standar keamanan pangan.</p>
-                
-                <div class="flex flex-col gap-2 mb-6">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        05 Dec 2024
-                    </div>
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Gedung Sabilulungan
-                    </div>
-                </div>
-
-                <div class="mb-5">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide" style="font-size: 0.65rem;">KETERSEDIAAN KUOTA</span>
-                        <span class="text-xs font-bold text-gray-900">12 / 30 <span class="text-gray-400 font-medium">Peserta</span></span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 40%;"></div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary w-full" style="justify-content: center; padding: 0.75rem;">Daftar Sekarang</button>
-            </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="card p-0 overflow-hidden relative shadow-sm" style="display: flex; flex-direction: column;">
-            <!-- Header Image -->
-            <div style="height: 180px; position: relative; background: #0f172a; overflow: hidden;">
-                <div class="absolute" style="top: 1rem; left: 1rem;">
-                    <span style="background-color: #f3e8ff; color: #7e22ce; padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em;">PAMERAN</span>
-                </div>
-            </div>
-            
-            <!-- Body -->
-            <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Pameran Produk Unggulan Daerah</h3>
-                <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">Kesempatan memamerkan produk terbaik Anda di hadapan ribuan pengunjung dan calon investor berskala nasional.</p>
-                
-                <div class="flex flex-col gap-2 mb-6">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        12 Dec 2024
-                    </div>
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Lapangan Upakarti, Kab. Bandung
-                    </div>
-                </div>
-
-                <div class="mb-5">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide" style="font-size: 0.65rem;">KETERSEDIAAN KUOTA</span>
-                        <span class="text-xs font-bold text-gray-900">25 / 40 <span class="text-gray-400 font-medium">Peserta</span></span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 62.5%;"></div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary w-full" style="justify-content: center; padding: 0.75rem;">Daftar Sekarang</button>
-            </div>
-        </div>
-
+        @endforelse
     </div>
 
     <!-- Pagination -->
-    <div class="flex justify-center items-center gap-2 mt-6 mb-8">
-        <button class="w-8 h-8 rounded flex items-center justify-center bg-gray-100 text-gray-400">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        <button class="w-8 h-8 rounded flex items-center justify-center bg-primary text-white font-semibold">1</button>
-        <button class="w-8 h-8 rounded flex items-center justify-center text-gray-700 font-semibold hover:bg-gray-100">2</button>
-        <button class="w-8 h-8 rounded flex items-center justify-center text-gray-700 font-semibold hover:bg-gray-100">3</button>
-        <span class="text-gray-400">...</span>
-        <button class="w-8 h-8 rounded flex items-center justify-center text-gray-700 font-semibold hover:bg-gray-100">12</button>
-        <button class="w-8 h-8 rounded flex items-center justify-center bg-gray-100 text-gray-600">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
+    @if($events instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    <div class="mt-6">
+        {{ $events->links() }}
     </div>
+    @endif
 
     <div class="text-center text-xs text-gray-400 font-medium pb-8 border-t border-border pt-6 mx-8">
         &copy; 2024 Pemerintah Kabupaten Bandung. Semua Hak Dilindungi.

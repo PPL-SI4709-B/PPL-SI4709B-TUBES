@@ -10,6 +10,7 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ScaleController;
+use App\Http\Controllers\EventRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,5 +78,8 @@ Route::prefix('umkm')->group(function () {
 
 Route::get('/event', function () {
         if (!session()->has('is_logged_in')) return redirect()->route('login');
+        return redirect()->route('umkm.event');
+})->name('event');
+;
         return redirect()->route('umkm.event');
 })->name('event');
