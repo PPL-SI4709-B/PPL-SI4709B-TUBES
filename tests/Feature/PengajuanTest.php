@@ -12,8 +12,8 @@ uses(RefreshDatabase::class);
 it('UMKM dapat mengirim pengajuan program beserta dokumen (PBI #13 #14)', function () {
     Storage::fake('public');
 
-    $user    = User::factory()->create(['role' => 'umkm']);
-    $program = Program::factory()->create(['status' => 'active']);
+    $user    = User::factory()->create(['role' => 'umkm', 'profile_status' => 'verified']);
+    $program = Program::factory()->create(['status' => 'active', 'jenis' => 'pembinaan']);
     $file    = UploadedFile::fake()->create('dokumen.pdf', 500, 'application/pdf');
 
     $response = $this->actingAs($user)->post(route('umkm.pengajuan.store'), [

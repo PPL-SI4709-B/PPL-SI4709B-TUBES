@@ -24,9 +24,9 @@ You MUST:
 | #7 | Verify UMKM | Bagas | VerificationController |
 | #8 | Review Report | Bagas | ReportReviewController |
 | #9 | Report Status | Bagas | Add status field |
-| #10 | Profile | Avan | UmkmController + View |
-| #11 | Event | Avan | EventController |
-| #12 | Event Detail | Avan | View only |
+| #10 | Profile | Andra | UmkmController + View |
+| #11 | Event | Andra | EventController |
+| #12 | Event Detail | Andra | View only |
 | #13 | Pengajuan | Davi | Pengajuan Model, Migration, Controller |
 | #14 | Upload Doc | Davi | Add file upload |
 | #15 | Status View | Davi | View index |
@@ -54,12 +54,12 @@ You MUST:
 
 | PBI | Feature | Owner | Status | Notes |
 |-----|---------|-------|--------|-------|
-| #16 | Register | Fatih | ⬜ Not Started | |
-| #10 | Profil UMKM | Avan | ⬜ Not Started | |
-| #7 | Verifikasi UMKM | Bagas | ⬜ Not Started | |
-| #13 | Pengajuan | Davi | ⬜ Not Started | |
-| #5 | Approval | Andika | ⬜ Not Started | |
-| #15 | Status Pengajuan | Davi | ⬜ Not Started | |
+| #16 | Register | Fatih | ✅ Done | AuthController fully implemented |
+| #10 | Profil UMKM | Avan | ✅ Done | UmkmController & views complete |
+| #7 | Verifikasi UMKM | Bagas | ✅ Done | VerificationController complete |
+| #13 | Pengajuan | Davi | ✅ Done | PengajuanController store method complete |
+| #5 | Approval | Andika | ✅ Done | PengajuanController approve/reject methods complete |
+| #15 | Status Pengajuan | Davi | ✅ Done | UMKM index view for Pengajuan complete |
 
 **Legend:**
 - ⬜ Not Started
@@ -72,21 +72,18 @@ You MUST:
 
 > Dibaca dari kondisi project saat ini. Wajib diperhatikan sebelum implement PBI apapun.
 
-### Auth & Role — BELUM ADA (semua dummy)
-- `AuthController` pakai `Session::put('is_logged_in', true)` — BUKAN `Auth::attempt()`
-- Tidak ada kolom `role` di tabel `users`
-- Tidak ada middleware, tidak ada policies, tidak ada gates
-- Route protection pakai inline `if (!session()->has('is_logged_in'))` — bukan middleware
+### Auth & Role — TELAH DIIMPLEMENTASI
+- `AuthController` menggunakan `Auth::attempt()`.
+- Kolom `role` sudah ada di tabel `users`.
+- Middleware `auth`, `guest`, dan role-based access (`role:umkm`, `role:dinas`) telah diterapkan pada routes.
+- Route protection menggunakan middleware Laravel bawaan dan custom.
 
-### Tabrakan yang Harus Diperbaiki di PBI #16
-
-| # | Masalah | Lokasi | Fix |
-|---|---------|--------|-----|
-| 1 | Login selalu redirect ke `umkm.dashboard`, Petugas ikut ke sana | `AuthController@processLogin` | Role-based redirect setelah `Auth::attempt()` |
-| 2 | Root `/` tidak tahu role, selalu arahkan ke UMKM | `routes/web.php` baris root | Cek `Auth::user()->role` |
-| 3 | Register step-3 hardcode email `newuser@umkm.local`, data tidak masuk DB | `AuthController@processRegisterStep3` | Simpan ke DB, pakai `Auth::login()` |
-| 4 | Register step 1–3 tidak ada validasi sama sekali | Semua `processRegisterStep*` | Tambah `$request->validate()` |
-| 5 | Dashboard views hardcode nama user ("Budi Santoso", "Siti Rahayu") | `umkm/dashboard.blade.php`, `dinas/dashboard.blade.php` | Ganti dengan `Auth::user()->name` |
+### PBI #16 - Auth & Register — SELESAI
+Seluruh isu login dan registrasi telah diselesaikan:
+- Login menggunakan role-based redirect.
+- Root `/` mengarahkan berdasarkan `Auth::user()->role`.
+- Data registrasi (Step 1-3) divalidasi dengan `$request->validate()` dan disimpan ke database (tabel `users` dan `umkm_profiles`).
+- Dashboard dan halaman lain mengambil data dinamis dari session user yang login.
 
 ### Existing Views yang Bisa Dipakai Ulang
 - `components/stepper.blade.php` — props `current` (1–3), gunakan di register flow
@@ -104,4 +101,3 @@ You MUST:
 
 - Do exactly what PBI says
 - Do not add features outside scope
-- Keep code simple

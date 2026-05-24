@@ -25,22 +25,35 @@ class PengajuanController extends Controller
 
     public function umkmIndex()
     {
-        $programs = Program::where('status', 'active')->orderBy('name')->get();
+        $programsPendanaan = Program::where('status', 'active')
+            ->where('jenis', 'pendanaan')
+            ->orderBy('name')
+            ->get();
+
         $pengajuans = Pengajuan::with('program')
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        return view('umkm.pengajuan.index', compact('pengajuans', 'programs'));
+        return view('umkm.pengajuan.index', compact(
+            'pengajuans',
+            'programsPendanaan'
+        ));
     }
 
     public function store(Request $request)
     {
+        if (Auth::user()->profile_status !== 'verified') {
+            return redirect()->back()->with('error', 'Akun Anda belum diverifikasi. Tunggu petugas memverifikasi akun Anda.');
+        }
+
         $request->validate([
             'program_id'        => 'required|exists:programs,id',
             'kebutuhan_usaha'   => 'required|string',
             'dokumen_pendukung' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
         ]);
+
+        $program = Program::findOrFail($request->program_id);
 
         $dokumenPath = null;
         if ($request->hasFile('dokumen_pendukung')) {
@@ -50,6 +63,7 @@ class PengajuanController extends Controller
         Pengajuan::create([
             'user_id'           => Auth::id(),
             'program_id'        => $request->program_id,
+            'jenis'             => $program->jenis,
             'kebutuhan_usaha'   => $request->kebutuhan_usaha,
             'dokumen_pendukung' => $dokumenPath,
             'status'            => 'pending',

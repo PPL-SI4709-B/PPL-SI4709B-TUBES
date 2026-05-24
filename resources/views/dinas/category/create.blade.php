@@ -3,7 +3,7 @@
 @section('title', 'Tambah Kategori Usaha - Portal UMKM')
 
 @section('sidebar')
-@include('dinas.category._sidebar')
+<x-dinas-sidebar active="master-data" />
 @endsection
 
 @section('header')
@@ -11,11 +11,11 @@
     <div class="page-title">Tambah Kategori Usaha</div>
     <div class="user-profile">
         <div class="user-info">
-            <div class="user-name">Petugas Dinas</div>
+            <div class="user-name">{{ Auth::user()->name }}</div>
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name=Petugas+Dinas&background=2563eb&color=fff" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>
@@ -25,7 +25,7 @@
 <div class="flex flex-col gap-6" style="max-width: 640px;">
 
     <div class="flex items-center gap-2" style="font-size: var(--text-sm); color: var(--color-text-muted);">
-        <a href="{{ route('dinas.category.index') }}" style="color: var(--color-primary); font-weight: 600;">Kategori Usaha</a>
+        <a href="{{ route('dinas.master-data') }}" style="color: var(--color-primary); font-weight: 600;">Kategori Usaha</a>
         <span>/</span>
         <span>Tambah</span>
     </div>
@@ -57,7 +57,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     Simpan
                 </button>
-                <a href="{{ route('dinas.category.index') }}" class="btn" style="background-color: white; border: 1px solid var(--color-border); color: var(--color-text-main);" id="btn-batal">Batal</a>
+                <a href="{{ route('dinas.master-data') }}" class="btn" style="background-color: white; border: 1px solid var(--color-border); color: var(--color-text-main);" id="btn-batal">Batal</a>
             </div>
         </form>
     </div>

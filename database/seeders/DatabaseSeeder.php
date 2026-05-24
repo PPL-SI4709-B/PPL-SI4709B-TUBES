@@ -15,11 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(ReferenceDataSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::firstOrCreate(['email' => 'test@example.com'], [
+            'name'           => 'Test User',
+            'password'       => bcrypt('password'),
+            'role'           => 'umkm',
+            'profile_status' => 'verified',
+        ]);
+
+        User::firstOrCreate(['email' => 'dinas@example.com'], [
+            'name'           => 'Petugas Dinas',
+            'password'       => bcrypt('password'),
+            'role'           => 'dinas',
+            'profile_status' => 'verified',
         ]);
     }
 }

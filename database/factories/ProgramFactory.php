@@ -14,6 +14,7 @@ class ProgramFactory extends Factory
     {
         return [
             'name'        => fake()->sentence(3),
+            'jenis'       => fake()->randomElement(['pendanaan', 'pembinaan']),
             'description' => fake()->paragraph(),
             'quota'       => fake()->numberBetween(10, 100),
             'start_date'  => now(),

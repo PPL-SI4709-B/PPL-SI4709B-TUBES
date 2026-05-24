@@ -41,7 +41,7 @@ class CategoryController extends Controller
 
         Category::create($request->only('name', 'description'));
 
-        return redirect()->route('dinas.category.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Kategori usaha berhasil ditambahkan.');
     }
 
@@ -70,7 +70,7 @@ class CategoryController extends Controller
 
         $category->update($request->only('name', 'description'));
 
-        return redirect()->route('dinas.category.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Kategori usaha berhasil diperbarui.');
     }
 
@@ -81,7 +81,7 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return redirect()->route('dinas.category.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Kategori usaha berhasil dihapus.');
     }
 }

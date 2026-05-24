@@ -3,43 +3,7 @@
 @section('title', 'Detail Pengajuan')
 
 @section('sidebar')
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <div class="brand-title">PORTAL UMKM</div>
-        <div class="brand-subtitle">Kabupaten Bandung</div>
-    </div>
-
-    <nav class="nav-menu">
-        <a href="{{ route('dinas.dashboard') }}" class="nav-item">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            </span>
-            Beranda
-        </a>
-        <a href="{{ route('dinas.program.index') }}" class="nav-item">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-            </span>
-            Kelola Program
-        </a>
-        <a href="{{ route('dinas.pengajuan.index') }}" class="nav-item active">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-            </span>
-            Approval Pengajuan
-        </a>
-    </nav>
-
-    <div class="sidebar-bottom">
-        <a href="#" class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Keluar
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-    </div>
-</aside>
+<x-dinas-sidebar active="pengajuan" />
 @endsection
 
 @section('header')
@@ -83,27 +47,27 @@
                 @endif
             </div>
             <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Kebutuhan Usaha</div>
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-border); white-space: pre-line;">{{ $pengajuan->kebutuhan_usaha }}</div>
+            </div>
+            @if ($pengajuan->dokumen_pendukung)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Dokumen Pendukung</div>
+                <div style="margin-top: 4px;">
+                    <a href="{{ Storage::url($pengajuan->dokumen_pendukung) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary); text-decoration: underline;">
+                        Lihat Dokumen ↗
+                    </a>
+                </div>
+            </div>
+            @endif
+            <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Pengajuan</div>
                 <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $pengajuan->created_at->format('d M Y, H:i') }}</div>
             </div>
             <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Status</div>
-                @php
-                    $statusColor = match($pengajuan->status) {
-                        'approved' => ['bg' => 'var(--color-success-bg)', 'text' => 'var(--color-success)'],
-                        'rejected' => ['bg' => '#fef2f2', 'text' => 'var(--color-danger)'],
-                        default    => ['bg' => '#fffbeb', 'text' => '#b45309'],
-                    };
-                    $statusLabel = match($pengajuan->status) {
-                        'approved' => 'Disetujui',
-                        'rejected' => 'Ditolak',
-                        default    => 'Pending',
-                    };
-                @endphp
                 <div style="margin-top: 4px;">
-                    <span class="badge" style="background-color: {{ $statusColor['bg'] }}; color: {{ $statusColor['text'] }};">
-                        {{ $statusLabel }}
-                    </span>
+                    <x-status-badge :status="$pengajuan->status" />
                 </div>
             </div>
         </div>
