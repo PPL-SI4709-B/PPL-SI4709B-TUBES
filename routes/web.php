@@ -15,6 +15,7 @@ use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UmkmController;
 use App\Http\Controllers\PengajuanPendanaanController;
 use App\Http\Controllers\SumberPendanaanController;
+use App\Http\Controllers\DinasPendanaanVerifikasiController;
 use App\Http\Controllers\VerificationController;
 
 // Root
@@ -82,6 +83,14 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::resource('region', RegionController::class)->except(['show']);
     Route::resource('scale', ScaleController::class)->except(['show']);
     Route::resource('sumber-pendanaan', SumberPendanaanController::class)->except(['show']);
+    Route::get('pendanaan-verifikasi', [DinasPendanaanVerifikasiController::class, 'index'])
+        ->name('pendanaan-verifikasi.index');
+    Route::get('pendanaan-verifikasi/{pengajuanPendanaan}', [DinasPendanaanVerifikasiController::class, 'show'])
+        ->name('pendanaan-verifikasi.show');
+    Route::put('pendanaan-verifikasi/{pengajuanPendanaan}/approve', [DinasPendanaanVerifikasiController::class, 'approve'])
+        ->name('pendanaan-verifikasi.approve');
+    Route::put('pendanaan-verifikasi/{pengajuanPendanaan}/reject', [DinasPendanaanVerifikasiController::class, 'reject'])
+        ->name('pendanaan-verifikasi.reject');
 
     Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');

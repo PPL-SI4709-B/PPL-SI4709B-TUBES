@@ -18,6 +18,8 @@ class PengajuanPendanaan extends Model
         'dokumen_pendukung',
         'status',
         'catatan',
+        'reviewed_by',
+        'reviewed_at',
         'submitted_at',
     ];
 
@@ -25,6 +27,7 @@ class PengajuanPendanaan extends Model
     {
         return [
             'submitted_at'    => 'datetime',
+            'reviewed_at'     => 'datetime',
             'jumlah_pengajuan' => 'decimal:2',
         ];
     }
@@ -37,6 +40,11 @@ class PengajuanPendanaan extends Model
     public function sumberPendanaan()
     {
         return $this->belongsTo(SumberPendanaan::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 
     /**

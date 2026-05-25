@@ -2,6 +2,7 @@
   /* Colors */
   --color-primary: #1A365D; /* Sidebar Dark (Dinas Main) */
   --color-primary-active: #0056B3; 
+  --color-secondary: #0056B3;
   --color-brand: #0F2D5C;   /* SIP UMKM Brand */
   --color-bg-body: #F5F7FA;
   --color-surface: #FFFFFF;
@@ -12,6 +13,8 @@
   --color-text-main: #4B5563; /* Gray 600 */
   --color-text-muted: #6B7280; /* Gray 500 */
   --color-text-light: #9CA3AF;
+  --color-gray-50: #F9FAFB;
+  --color-gray-900: #111827;
   
   /* Status Colors */
   --color-status-wait-bg: #FEF08A;
@@ -22,6 +25,9 @@
   --color-status-approve-text: #166534;
   --color-status-reject-bg: #FEE2E2;
   --color-status-reject-text: #991B1B;
+  --color-success-bg: #DCFCE7;
+  --color-success: #166534;
+  --color-danger: #DC2626;
 
   --color-banner-bg: #F4F6FF;
   
@@ -321,12 +327,42 @@ input, select, textarea {
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
   padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
   border-radius: var(--radius-md);
   transition: all 0.2s;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-active);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #004494;
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #14532d;
+}
+
+.btn-danger {
+  background-color: var(--color-status-reject-text);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #7f1d1d;
 }
 
 .btn-brand {

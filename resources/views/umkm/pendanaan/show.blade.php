@@ -93,6 +93,18 @@
                 <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50, #f9fafb); border-radius: var(--radius-md); border: 1px solid var(--color-border);">{{ $pengajuanPendanaan->catatan }}</div>
             </div>
             @endif
+            @if($pengajuanPendanaan->reviewed_at)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Review</div>
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px;">{{ $pengajuanPendanaan->reviewed_at->format('d M Y, H:i') }}</div>
+            </div>
+            @endif
+            @if($pengajuanPendanaan->reviewer)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Direview Oleh</div>
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900, #111827); margin-top: 2px;">{{ $pengajuanPendanaan->reviewer->name }}</div>
+            </div>
+            @endif
         </div>
     </div>
 </div>

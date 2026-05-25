@@ -95,7 +95,7 @@ class PengajuanPendanaanController extends Controller
             abort(403);
         }
 
-        $pengajuanPendanaan->load('sumberPendanaan');
+        $pengajuanPendanaan->load(['sumberPendanaan', 'reviewer']);
 
         return view('umkm.pendanaan.show', compact('pengajuanPendanaan'));
     }
