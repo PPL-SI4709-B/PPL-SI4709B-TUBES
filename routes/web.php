@@ -68,26 +68,5 @@ Route::prefix('umkm')->group(function () {
 
         return view('umkm.notifikasi', compact('notifications', 'statusLogs'));
     })->name('umkm.notifikasi');
-    Route::get('/pengajuan/timeline', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
-        
-        // Dummy data for Timeline
-        $logs = collect([
-            (object) [
-                'created_at' => now()->subDays(2),
-                'status' => 'pending',
-                'catatan' => 'Menunggu verifikasi admin',
-                'user' => (object) ['name' => 'Sistem']
-            ],
-            (object) [
-                'created_at' => now()->subDay(),
-                'status' => 'verifikasi',
-                'catatan' => 'Berkas sedang diperiksa',
-                'user' => (object) ['name' => 'Petugas Dinas']
-            ]
-        ]);
-
-        return view('umkm.pengajuan.timeline', compact('logs'));
-    })->name('umkm.pengajuan.timeline');
 });
 
