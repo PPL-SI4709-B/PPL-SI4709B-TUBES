@@ -47,5 +47,47 @@ Route::prefix('umkm')->group(function () {
         if (!session()->has('is_logged_in')) return redirect()->route('login');
         return view('umkm.event');
     })->name('umkm.event');
+
+    Route::get('/faq', function () {
+        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        return view('umkm.faq');
+    })->name('umkm.faq');
+
+    Route::get('/notifikasi', function () {
+        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        
+        $notifications = [
+            ['title' => 'Selamat Datang!', 'message' => 'Akun UMKM Anda berhasil didaftarkan.', 'created_at' => '2 hari yang lalu', 'is_read' => true],
+            ['title' => 'Peringatan Laporan', 'message' => 'Jangan lupa untuk mengumpulkan laporan kuartal ini.', 'created_at' => '1 hari yang lalu', 'is_read' => false],
+        ];
+
+        $statusLogs = [
+            ['status' => 'Pengajuan Diterima', 'catatan' => 'Berkas lengkap, sedang dalam tahap verifikasi petugas.', 'created_at' => '1 hari yang lalu'],
+            ['status' => 'Verifikasi', 'catatan' => 'Menunggu persetujuan kepala dinas.', 'created_at' => '5 jam yang lalu'],
+        ];
+
+        return view('umkm.notifikasi', compact('notifications', 'statusLogs'));
+    })->name('umkm.notifikasi');
+    Route::get('/pengajuan/timeline', function () {
+        if (!session()->has('is_logged_in')) return redirect()->route('login');
+        
+        // Dummy data for Timeline
+        $logs = collect([
+            (object) [
+                'created_at' => now()->subDays(2),
+                'status' => 'pending',
+                'catatan' => 'Menunggu verifikasi admin',
+                'user' => (object) ['name' => 'Sistem']
+            ],
+            (object) [
+                'created_at' => now()->subDay(),
+                'status' => 'verifikasi',
+                'catatan' => 'Berkas sedang diperiksa',
+                'user' => (object) ['name' => 'Petugas Dinas']
+            ]
+        ]);
+
+        return view('umkm.pengajuan.timeline', compact('logs'));
+    })->name('umkm.pengajuan.timeline');
 });
 
