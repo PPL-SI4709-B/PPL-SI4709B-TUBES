@@ -67,6 +67,7 @@ Route::middleware(['auth', 'role:umkm'])->group(function () {
 // ─── Dinas Routes ─────────────────────────────────────────────────────────────
 Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dinas'])->name('dashboard');
+    Route::get('/dashboard/export-umkm', [DashboardController::class, 'exportUmkm'])->name('dashboard.export-umkm');
 
     Route::get('master-data', [MasterDataController::class, 'index'])->name('master-data');
     Route::resource('program', ProgramController::class)->except(['show']);

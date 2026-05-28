@@ -6,8 +6,15 @@
 
 @section('header')
 <header class="main-header">
-    <div class="page-title">Dashboard Dinas</div>
-    <div class="flex items-center gap-6">
+    <div>
+        <div class="page-title">Dashboard Monitoring Dinas</div>
+        <div class="text-sm text-gray-500 mt-1">Rekap UMKM, pengajuan, laporan, dan export data</div>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="{{ route('dinas.dashboard.export-umkm') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export UMKM
+        </a>
         <div class="user-profile">
             <div class="user-info">
                 <div class="user-name">{{ Auth::user()->name }}</div>
@@ -23,110 +30,186 @@
 
 @section('content')
 <div class="flex flex-col gap-6">
-
     <div class="grid grid-cols-4 gap-6">
-        <div class="card p-6" style="padding: var(--space-5) var(--space-6);">
-            <div class="flex justify-between items-start mb-4">
-                <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: var(--radius-md); color: var(--color-primary);">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                </div>
+        <div class="card p-6">
+            <div class="text-xs font-bold text-gray-500 uppercase mb-3">Total UMKM</div>
+            <div class="flex items-end justify-between">
+                <div class="text-4xl font-extrabold text-gray-900">{{ $totalUmkm }}</div>
+                <div class="badge badge-approved">{{ $verificationRate }}% verified</div>
             </div>
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">TOTAL UMKM TERDAFTAR</div>
-            <div class="text-3xl font-bold text-gray-900">{{ $totalUmkm }}</div>
+            <div class="mt-4" style="height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden;">
+                <div style="height: 100%; width: {{ $verificationRate }}%; background: #16a34a;"></div>
+            </div>
         </div>
 
-        <div class="card p-6" style="padding: var(--space-5) var(--space-6);">
-            <div class="flex justify-between items-start mb-4">
-                <div style="background-color: var(--color-success-bg); padding: 0.5rem; border-radius: var(--radius-md); color: var(--color-success);">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                </div>
-                <div class="badge" style="background-color: var(--color-success-bg); color: var(--color-success);">Terverifikasi</div>
+        <div class="card p-6">
+            <div class="text-xs font-bold text-gray-500 uppercase mb-3">Pengajuan Program</div>
+            <div class="flex items-end justify-between">
+                <div class="text-4xl font-extrabold text-gray-900">{{ $totalPengajuan }}</div>
+                <div class="badge badge-pending">{{ $pendingApproval }} perlu review</div>
             </div>
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">UMKM TERVERIFIKASI</div>
-            <div class="text-3xl font-bold text-gray-900">{{ $verifiedUmkm }}</div>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-xs font-semibold">
+                <span style="color: #16a34a;">{{ $approvedPengajuan }} disetujui</span>
+                <span style="color: #d97706;">{{ $pendingApproval }} pending</span>
+                <span style="color: #dc2626;">{{ $rejectedPengajuan }} ditolak</span>
+            </div>
         </div>
 
-        <div class="card p-6" style="padding: var(--space-5) var(--space-6);">
-            <div class="flex justify-between items-start mb-4">
-                <div style="background-color: #fff7ed; padding: 0.5rem; border-radius: var(--radius-md); color: #ea580c;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </div>
-                @if($pendingApproval > 0)
-                    <div class="badge" style="background-color: #ffedd5; color: #c2410c;">{{ $pendingApproval }} Pending</div>
-                @endif
+        <div class="card p-6">
+            <div class="text-xs font-bold text-gray-500 uppercase mb-3">Laporan UMKM</div>
+            <div class="flex items-end justify-between">
+                <div class="text-4xl font-extrabold text-gray-900">{{ $totalReports }}</div>
+                <div class="badge badge-approved">{{ $reportReviewRate }}% direview</div>
             </div>
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">PENGAJUAN MASUK</div>
-            <div class="text-3xl font-bold text-gray-900">{{ $totalPengajuan }}</div>
+            <div class="mt-4 text-sm text-gray-600">{{ $pendingReports }} laporan menunggu catatan petugas</div>
         </div>
 
-        <div class="card p-6" style="padding: var(--space-5) var(--space-6);">
-            <div class="flex justify-between items-start mb-4">
-                <div style="background-color: #fef3c7; padding: 0.5rem; border-radius: var(--radius-md); color: #d97706;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+        <div class="card p-6">
+            <div class="text-xs font-bold text-gray-500 uppercase mb-3">Verifikasi UMKM</div>
+            <div class="grid grid-cols-3 gap-3">
+                <div>
+                    <div class="text-2xl font-bold" style="color: #16a34a;">{{ $verifiedUmkm }}</div>
+                    <div class="text-xs text-gray-500">Terverifikasi</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold" style="color: #d97706;">{{ $pendingUmkm }}</div>
+                    <div class="text-xs text-gray-500">Pending</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold" style="color: #dc2626;">{{ $rejectedUmkm }}</div>
+                    <div class="text-xs text-gray-500">Ditolak</div>
                 </div>
             </div>
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">MENUNGGU VERIFIKASI</div>
-            <div class="text-3xl font-bold text-gray-900">{{ $pendingUmkm }}</div>
         </div>
     </div>
 
-    <div class="card p-0 overflow-hidden">
-        <div class="flex justify-between items-center p-6 border-b border-border">
-            <h3 class="font-bold text-gray-900 text-lg">Pengajuan Terbaru</h3>
-            <a href="{{ route('dinas.pengajuan.index') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Lihat Semua &rarr;</a>
+    <div class="grid grid-cols-3 gap-6">
+        <div class="card p-6 col-span-2">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg">Rekap Pengajuan Terbaru</h3>
+                    <p class="text-sm text-gray-500">Monitoring antrean approval terbaru dari UMKM</p>
+                </div>
+                <a href="{{ route('dinas.pengajuan.index') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Lihat Semua</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>UMKM</th>
+                            <th>Program</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($recentPengajuans as $pengajuan)
+                            <tr>
+                                <td class="font-bold text-gray-900">{{ $pengajuan->user?->name ?? '-' }}</td>
+                                <td class="text-gray-600">{{ $pengajuan->program?->name ?? '-' }}</td>
+                                <td class="text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
+                                <td><x-status-badge :status="$pengajuan->status" /></td>
+                                <td style="text-align: right;">
+                                    <a href="{{ route('dinas.pengajuan.show', $pengajuan) }}" style="color: var(--color-secondary); font-size: var(--text-sm);">Detail</a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+                                    Belum ada pengajuan masuk.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="table-container p-6 pt-0">
-            <table class="table" style="margin-top: -1px;">
-                <thead>
-                    <tr>
-                        <th style="padding-top: var(--space-4);">NAMA UMKM</th>
-                        <th style="padding-top: var(--space-4);">PROGRAM</th>
-                        <th style="padding-top: var(--space-4);">TANGGAL</th>
-                        <th style="padding-top: var(--space-4);">STATUS</th>
-                        <th style="padding-top: var(--space-4); text-align: right;">AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recentPengajuans as $pengajuan)
-                        @php
-                            $statusColor = match($pengajuan->status) {
-                                'approved' => 'badge-approved',
-                                'rejected' => 'badge-rejected',
-                                default    => 'badge-pending',
-                            };
-                            $statusLabel = match($pengajuan->status) {
-                                'approved' => 'Disetujui',
-                                'rejected' => 'Ditolak',
-                                default    => 'Menunggu',
-                            };
-                        @endphp
-                        <tr>
-                            <td>
-                                <div class="flex items-center gap-3">
-                                    <div style="width: 28px; height: 28px; background: #bfdbfe; color: #1e40af; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">
-                                        {{ strtoupper(substr($pengajuan->user?->name ?? '?', 0, 2)) }}
-                                    </div>
-                                    <span class="font-bold text-gray-900">{{ $pengajuan->user?->name ?? '-' }}</span>
-                                </div>
-                            </td>
-                            <td class="text-gray-600">{{ $pengajuan->program?->name ?? '-' }}</td>
-                            <td class="text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
-                            <td><span class="badge {{ $statusColor }}">{{ $statusLabel }}</span></td>
-                            <td style="text-align: right;">
-                                <a href="{{ route('dinas.pengajuan.show', $pengajuan) }}" style="color: var(--color-secondary); font-size: var(--text-sm);">Detail</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted); font-size: var(--text-sm);">
-                                Belum ada pengajuan masuk.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+
+        <div class="card p-6">
+            <h3 class="font-bold text-gray-900 text-lg mb-5">Sebaran Kategori UMKM</h3>
+            <div class="flex flex-col gap-4">
+                @forelse ($categoryDistribution as $category => $count)
+                    @php $percentage = $totalUmkm > 0 ? round(($count / $totalUmkm) * 100) : 0; @endphp
+                    <div>
+                        <div class="flex justify-between text-sm font-semibold mb-2">
+                            <span class="text-gray-700">{{ $category }}</span>
+                            <span class="text-gray-500">{{ $count }}</span>
+                        </div>
+                        <div style="height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden;">
+                            <div style="height: 100%; width: {{ $percentage }}%; background: #2563eb;"></div>
+                        </div>
+                    </div>
+                @empty
+                    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-muted); font-size: var(--text-sm);">
+                        Belum ada data profil UMKM.
+                    </div>
+                @endforelse
+            </div>
         </div>
     </div>
 
+    <div class="grid grid-cols-3 gap-6">
+        <div class="card p-6">
+            <h3 class="font-bold text-gray-900 text-lg mb-5">Program Paling Banyak Diajukan</h3>
+            <div class="flex flex-col gap-3">
+                @forelse ($topPrograms as $program)
+                    <div class="flex items-center justify-between" style="padding: 0.875rem 0; border-bottom: 1px solid var(--color-border);">
+                        <div>
+                            <div class="font-semibold text-gray-900">{{ $program->name }}</div>
+                            <div class="text-xs text-gray-500">{{ ucfirst($program->jenis) }} · {{ ucfirst($program->status) }}</div>
+                        </div>
+                        <div class="text-xl font-bold text-gray-900">{{ $program->pengajuans_count }}</div>
+                    </div>
+                @empty
+                    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-muted); font-size: var(--text-sm);">
+                        Belum ada program dengan pengajuan.
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="card p-6 col-span-2">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg">Rekap Laporan Terbaru</h3>
+                    <p class="text-sm text-gray-500">Laporan perkembangan usaha yang perlu dipantau petugas</p>
+                </div>
+                <a href="{{ route('dinas.report.index') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Review Laporan</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>UMKM</th>
+                            <th>Judul</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($recentReports as $report)
+                            <tr>
+                                <td class="font-bold text-gray-900">{{ $report->user?->name ?? '-' }}</td>
+                                <td class="text-gray-600">{{ $report->judul }}</td>
+                                <td class="text-gray-600">{{ $report->created_at->format('d M Y') }}</td>
+                                <td><x-status-badge :status="$report->status" /></td>
+                                <td style="text-align: right;">
+                                    <a href="{{ route('dinas.report.show', $report) }}" style="color: var(--color-secondary); font-size: var(--text-sm);">Detail</a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+                                    Belum ada laporan UMKM.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
