@@ -17,6 +17,19 @@ class NotificationController extends Controller
         return view('dinas.notifications.index', compact('notifications'));
     }
 
+    public function umkmIndex()
+    {
+        $notifications = Notification::where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        $pengajuans = \App\Models\Pengajuan::where('user_id', Auth::id())
+            ->orderByDesc('updated_at')
+            ->get();
+
+        return view('umkm.notifications.index', compact('notifications', 'pengajuans'));
+    }
+
     public function markAsRead(Notification $notification)
     {
         if ($notification->user_id === Auth::id()) {

@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\ScaleController;
 use App\Http\Controllers\UmkmController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\NotificationController;
 
 // Root
 Route::get('/', function () {
@@ -54,6 +55,9 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
 
     Route::get('/event', [EventController::class, 'index'])->name('event');
     Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
+
+    Route::get('/notifications', [NotificationController::class, 'umkmIndex'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 // UMKM Reports
