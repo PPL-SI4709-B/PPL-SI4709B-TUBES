@@ -58,6 +58,8 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     
     Route::get('/event/{event}/feedback', [\App\Http\Controllers\EventFeedbackController::class, 'create'])->name('event-feedback.create');
     Route::post('/event/{event}/feedback', [\App\Http\Controllers\EventFeedbackController::class, 'store'])->name('event-feedback.store');
+    
+    Route::view('/panduan', 'umkm.panduan')->name('panduan');
 });
 
 // UMKM Reports
