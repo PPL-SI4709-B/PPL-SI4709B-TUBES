@@ -11,22 +11,22 @@
     <div class="page-title">Kategori Usaha</div>
     <div class="user-profile">
         <div class="user-info">
-            <div class="user-name">Petugas Dinas</div>
+            <div class="user-name">{{ Auth::user()->name }}</div>
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name=Petugas+Dinas&background=2563eb&color=fff" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6" dusk="category-index">
 
     {{-- Flash Messages --}}
     @if(session('success'))
-        <div style="background-color: var(--color-status-approve-bg); color: var(--color-status-approve-text); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; display: flex; align-items: center; gap: var(--space-2);">
+        <div dusk="flash-success" style="background-color: var(--color-status-approve-bg); color: var(--color-status-approve-text); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; display: flex; align-items: center; gap: var(--space-2);">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             {{ session('success') }}
         </div>
@@ -38,7 +38,7 @@
             <h1 class="font-bold" style="font-size: var(--text-xl); color: var(--color-text-dark);">Kelola Kategori Usaha</h1>
             <p class="text-sm text-muted mt-1">Klasifikasi standar untuk data UMKM</p>
         </div>
-        <a href="{{ route('dinas.category.create') }}" class="btn btn-brand" id="btn-tambah-kategori">
+        <a href="{{ route('dinas.category.create') }}" class="btn btn-brand" id="btn-tambah-kategori" dusk="category-create-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Tambah Kategori
         </a>
@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                     @forelse($categories as $category)
-                        <tr style="border-bottom: 1px solid var(--color-border);" onmouseover="this.style.backgroundColor='var(--color-input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
+                        <tr dusk="category-row-{{ $category->id }}" style="border-bottom: 1px solid var(--color-border);" onmouseover="this.style.backgroundColor='var(--color-input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
                             <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted);">
                                 {{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}
                             </td>
@@ -74,13 +74,13 @@
                             </td>
                             <td style="padding: var(--space-3) var(--space-4); text-align: right;">
                                 <div class="flex justify-end gap-2">
-                                    <a href="{{ route('dinas.category.edit', $category) }}" title="Edit" style="color: var(--color-primary); padding: 4px;" id="btn-edit-{{ $category->id }}">
+                                    <a href="{{ route('dinas.category.edit', $category) }}" title="Edit" style="color: var(--color-primary); padding: 4px;" id="btn-edit-{{ $category->id }}" dusk="category-edit-{{ $category->id }}">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </a>
                                     <form action="{{ route('dinas.category.destroy', $category) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kategori ini?');" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" title="Hapus" style="color: var(--color-status-reject-text); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $category->id }}">
+                                        <button type="submit" title="Hapus" style="color: var(--color-status-reject-text); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $category->id }}" dusk="category-delete-{{ $category->id }}">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </button>
                                     </form>

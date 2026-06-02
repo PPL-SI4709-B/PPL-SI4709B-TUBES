@@ -11,6 +11,7 @@ class Program extends Model
 
     protected $fillable = [
         'name',
+        'jenis',
         'description',
         'quota',
         'start_date',

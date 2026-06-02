@@ -3,37 +3,7 @@
 @section('title', 'Edit Program')
 
 @section('sidebar')
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <div class="brand-title">PORTAL UMKM</div>
-        <div class="brand-subtitle">Kabupaten Bandung</div>
-    </div>
-
-    <nav class="nav-menu">
-        <a href="{{ route('dinas.dashboard') }}" class="nav-item">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            </span>
-            Beranda
-        </a>
-        <a href="{{ route('dinas.program.index') }}" class="nav-item active">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-            </span>
-            Kelola Program
-        </a>
-    </nav>
-
-    <div class="sidebar-bottom">
-        <a href="#" class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Keluar
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-    </div>
-</aside>
+<x-dinas-sidebar active="program" />
 @endsection
 
 @section('header')
@@ -64,6 +34,18 @@
             @method('PUT')
 
             <div class="flex flex-col gap-5">
+
+                <div>
+                    <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Jenis Program <span style="color: var(--color-danger);">*</span></label>
+                    <select name="jenis"
+                        style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('jenis') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm); background-color: white;">
+                        <option value="pembinaan" {{ old('jenis', $program->jenis) === 'pembinaan' ? 'selected' : '' }}>Pembinaan</option>
+                        <option value="pendanaan" {{ old('jenis', $program->jenis) === 'pendanaan' ? 'selected' : '' }}>Pendanaan</option>
+                    </select>
+                    @error('jenis')
+                        <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <div>
                     <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Nama Program <span style="color: var(--color-danger);">*</span></label>

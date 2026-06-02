@@ -1,42 +1,7 @@
 @extends('layouts.app')
 
 @section('sidebar')
-<aside class="sidebar">
-    <div class="sidebar-brand flex items-center gap-3">
-        <div style="background: white; border-radius: var(--radius-sm); padding: 0.25rem;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        </div>
-        <div>
-            <div class="brand-title" style="font-size: 1rem; line-height: 1.1;">PORTAL UMKM</div>
-            <div class="brand-subtitle" style="font-size: 0.65rem; color: rgba(255,255,255,0.7);">KABUPATEN BANDUNG</div>
-        </div>
-    </div>
-    <nav class="nav-menu">
-        <a href="{{ route('umkm.dashboard') }}" class="nav-item active">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
-            Beranda
-        </a>
-        <a href="{{ route('umkm.pengajuan.index') }}" class="nav-item">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span>
-            Pengajuan Program
-        </a>
-        <a href="{{ route('umkm.event') }}" class="nav-item">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
-            Event &amp; Pelatihan
-        </a>
-        <a href="{{ route('reports.index') }}" class="nav-item">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
-            Laporan Perkembangan
-        </a>
-    </nav>
-    <div class="sidebar-bottom">
-        <a href="#" class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Keluar
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-    </div>
-</aside>
+<x-umkm-sidebar active="dashboard" />
 @endsection
 
 @section('header')
@@ -61,6 +26,12 @@
 @section('content')
 <div class="flex flex-col gap-6" style="max-width: 64rem; margin: 0 auto;">
 
+    @if(session('success'))
+        <div style="background-color: var(--color-success-bg); border-left: 4px solid var(--color-success); padding: 1.25rem 1.5rem; border-radius: var(--radius-md); color: #166534; font-size: 0.875rem; font-weight: 500;">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if(Auth::user()->profile_status === 'pending')
         <div class="card p-0" style="background-color: #fefce8; border-color: transparent;">
             <div class="flex items-center justify-between" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-warning);">
@@ -70,21 +41,29 @@
                     </div>
                     <div>
                         <h3 class="text-base font-bold" style="color: #854d0e;">Profil Anda belum diverifikasi</h3>
-                        <p class="text-sm" style="color: #a16207;">Tunggu petugas memverifikasi akun Anda untuk dapat mengajukan program.</p>
+                        <p class="text-sm" style="color: #a16207;">Tunggu petugas Dinas memverifikasi akun Anda. Pastikan profil usaha sudah lengkap.</p>
                     </div>
                 </div>
+                <a href="{{ route('umkm.profile.show') }}" style="font-size: var(--text-sm); font-weight: 600; color: #854d0e; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">
+                    Cek Profil →
+                </a>
             </div>
         </div>
     @elseif(Auth::user()->profile_status === 'rejected')
         <div class="card p-0" style="background-color: #fef2f2; border-color: transparent;">
-            <div style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-danger);">
-                <h3 class="text-base font-bold" style="color: #991b1b;">Verifikasi ditolak</h3>
-                <p class="text-sm" style="color: #b91c1c;">Hubungi petugas dinas untuk informasi lebih lanjut.</p>
+            <div style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-danger); display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h3 class="text-base font-bold" style="color: #991b1b;">Verifikasi ditolak</h3>
+                    <p class="text-sm" style="color: #b91c1c;">Profil Anda ditolak oleh petugas Dinas. Perbarui data profil dan hubungi petugas.</p>
+                </div>
+                <a href="{{ route('umkm.profile.edit') }}" style="font-size: var(--text-sm); font-weight: 600; color: #991b1b; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">
+                    Edit Profil →
+                </a>
             </div>
         </div>
     @endif
 
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 gap-6" style="grid-template-columns: repeat(4, 1fr);">
         <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
             <div style="background-color: #f1f5f9; padding: 0.75rem; border-radius: var(--radius-md); color: var(--color-primary);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 12"></polyline></svg>
@@ -114,6 +93,16 @@
                 <div class="text-3xl font-bold" style="color: #9333ea;">{{ $totalLaporan }}</div>
             </div>
         </div>
+
+        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
+            <div style="background-color: #ecfdf5; padding: 0.75rem; border-radius: var(--radius-md); color: #16a34a;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+                <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">PENDANAAN</div>
+                <div class="text-3xl font-bold" style="color: #16a34a;">{{ $totalPendanaan }}</div>
+            </div>
+        </div>
     </div>
 
     <div class="card p-0 overflow-hidden">
@@ -132,25 +121,11 @@
                 </thead>
                 <tbody>
                     @forelse ($recentPengajuans as $pengajuan)
-                        @php
-                            $colors = match($pengajuan->status) {
-                                'approved' => ['bg' => '#d1fae5', 'text' => '#059669'],
-                                'rejected' => ['bg' => '#fee2e2', 'text' => '#dc2626'],
-                                default    => ['bg' => '#fef3c7', 'text' => '#d97706'],
-                            };
-                            $label = match($pengajuan->status) {
-                                'approved' => 'Disetujui',
-                                'rejected' => 'Ditolak',
-                                default    => 'Menunggu',
-                            };
-                        @endphp
                         <tr>
                             <td class="font-bold text-gray-900">{{ $pengajuan->program?->name ?? '-' }}</td>
                             <td class="text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
                             <td style="text-align: right;">
-                                <span style="display:inline-flex; align-items:center; background-color: {{ $colors['bg'] }}; color: {{ $colors['text'] }}; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
-                                    {{ $label }}
-                                </span>
+                                <x-status-badge :status="$pengajuan->status" />
                             </td>
                         </tr>
                     @empty
@@ -181,25 +156,11 @@
                 </thead>
                 <tbody>
                     @forelse ($recentReports as $report)
-                        @php
-                            $colors = match($report->status) {
-                                'approved' => ['bg' => '#d1fae5', 'text' => '#059669'],
-                                'rejected' => ['bg' => '#fee2e2', 'text' => '#dc2626'],
-                                default    => ['bg' => '#fef3c7', 'text' => '#d97706'],
-                            };
-                            $label = match($report->status) {
-                                'approved' => 'Disetujui',
-                                'rejected' => 'Ditolak',
-                                default    => 'Menunggu',
-                            };
-                        @endphp
                         <tr>
                             <td class="font-bold text-gray-900">{{ $report->judul }}</td>
                             <td class="text-gray-600">{{ $report->created_at->format('d M Y') }}</td>
                             <td style="text-align: right;">
-                                <span style="display:inline-flex; align-items:center; background-color: {{ $colors['bg'] }}; color: {{ $colors['text'] }}; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
-                                    {{ $label }}
-                                </span>
+                                <x-status-badge :status="$report->status" />
                             </td>
                         </tr>
                     @empty
