@@ -52,15 +52,20 @@
         </div>
     @endif
 
-    <div class="grid grid-cols-3 gap-6">
-        <div class="card p-6 col-span-2" style="background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #374151 100%); color: white;">
-            <div class="flex items-start justify-between">
-                <div>
-                    <div class="text-sm" style="color: #d1d5db;">Status Usaha</div>
-                    <h2 class="text-3xl font-extrabold mt-2">{{ $profile?->business_name ?? Auth::user()->name }}</h2>
-                    <div class="mt-3" style="color: #d1d5db;">{{ $profile?->category?->name ?? 'Kategori belum diisi' }} · {{ $profile?->region?->name ?? 'Wilayah belum diisi' }}</div>
-                </div>
-                <x-status-badge :status="Auth::user()->profile_status" />
+    <div class="grid grid-cols-2 gap-6" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
+            <div style="background-color: #f1f5f9; padding: 0.75rem; border-radius: var(--radius-md); color: var(--color-primary);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 12"></polyline></svg>
+            </div>
+            <div>
+                <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">TOTAL PENGAJUAN</div>
+                <div class="text-3xl font-bold text-gray-900">{{ $totalPengajuan }}</div>
+            </div>
+        </div>
+
+        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
+            <div style="background-color: var(--color-success-bg); padding: 0.75rem; border-radius: var(--radius-md); color: var(--color-success);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
             <div class="mt-8 grid grid-cols-4 gap-4">
                 <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
@@ -94,6 +99,16 @@
                 <div style="height: 100%; width: {{ $profileCompleteness }}%; background: #2563eb;"></div>
             </div>
             <p class="text-sm text-gray-500 mt-4">Lengkapi identitas, kategori, wilayah, dan skala agar proses verifikasi lebih cepat.</p>
+        </div>
+
+        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
+            <div style="background-color: #ecfdf5; padding: 0.75rem; border-radius: var(--radius-md); color: #16a34a;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+                <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">PENDANAAN</div>
+                <div class="text-3xl font-bold" style="color: #16a34a;">{{ $totalPendanaan }}</div>
+            </div>
         </div>
     </div>
 

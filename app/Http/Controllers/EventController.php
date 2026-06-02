@@ -19,4 +19,14 @@ class EventController extends Controller
     {   
         return view('umkm.eventdetail', compact('event'));
     }
+
+    public function history()
+    {
+        $registrations = \App\Models\EventRegistration::with('event')
+            ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('umkm.event_history', compact('registrations'));
+    }
 }

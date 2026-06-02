@@ -34,27 +34,6 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        $reportStatus = $user->reports()
-            ->selectRaw('status, count(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
-
-        $approvedPengajuan = $pengajuanStatus->get('approved', 0);
-        $pendingPengajuan = $pengajuanStatus->get('pending', 0);
-        $rejectedPengajuan = $pengajuanStatus->get('rejected', 0);
-        $reviewedReports = $reportStatus->get('reviewed', 0);
-
-        $profileFields = [
-            $profile?->business_name,
-            $profile?->phone,
-            $profile?->nib,
-            $profile?->business_address,
-            $profile?->category_id,
-            $profile?->region_id,
-            $profile?->scale_id,
-        ];
-        $completedProfileFields = collect($profileFields)->filter(fn ($value) => filled($value))->count();
-        $profileCompleteness = (int) round(($completedProfileFields / count($profileFields)) * 100);
         $totalPendanaan = $user->pengajuanPendanaans()->count();
 
         return view('umkm.dashboard', compact(
@@ -69,8 +48,7 @@ class DashboardController extends Controller
             'reviewedReports',
             'recentPengajuans',
             'recentReports',
-            'totalPendanaan',
-            'reportStatus'
+            'totalPendanaan'
         ));
     }
 
