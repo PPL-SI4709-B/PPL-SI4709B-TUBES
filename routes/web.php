@@ -63,7 +63,13 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     Route::get('/pendanaan/{pengajuanPendanaan}', [PengajuanPendanaanController::class, 'show'])->name('pendanaan.show');
 
     Route::get('/event', [EventController::class, 'index'])->name('event');
+    Route::get('/event/history', [EventController::class, 'history'])->name('event.history');
     Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
+    
+    Route::get('/event/{event}/feedback', [\App\Http\Controllers\EventFeedbackController::class, 'create'])->name('event-feedback.create');
+    Route::post('/event/{event}/feedback', [\App\Http\Controllers\EventFeedbackController::class, 'store'])->name('event-feedback.store');
+    
+    Route::view('/panduan', 'umkm.panduan')->name('panduan');
 });
 
 // UMKM Reports
