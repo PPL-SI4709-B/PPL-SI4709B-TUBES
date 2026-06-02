@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Program;
 use App\Models\Region;
 use App\Models\Scale;
+use App\Models\SumberPendanaan;
 use Illuminate\Database\Seeder;
 
 class ReferenceDataSeeder extends Seeder
@@ -128,5 +129,14 @@ class ReferenceDataSeeder extends Seeder
         foreach ($programs as $data) {
             Program::firstOrCreate(['name' => $data['name']], $data);
         }
+
+        // PBI-23: Sumber Pendanaan
+        SumberPendanaan::firstOrCreate(['nama_program' => 'Rekomendasi Pendanaan UMKM'], [
+            'mitra_penyalur' => 'BPR Kerta Raharja',
+            'batas_maksimal' => 6000000,
+            'deskripsi'      => 'Skema rekomendasi pendanaan UMKM melalui BPR Kerta Raharja. Dinas memberikan surat rekomendasi/persetujuan untuk diteruskan oleh UMKM kepada pihak bank.',
+            'persyaratan'    => 'Profil UMKM terverifikasi, memiliki pengajuan pendanaan, dan memenuhi kelayakan awal dari Dinas.',
+            'status'         => 'aktif',
+        ]);
     }
 }

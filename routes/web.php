@@ -13,6 +13,9 @@ use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\ScaleController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UmkmController;
+use App\Http\Controllers\PengajuanPendanaanController;
+use App\Http\Controllers\SumberPendanaanController;
+use App\Http\Controllers\DinasPendanaanVerifikasiController;
 use App\Http\Controllers\VerificationController;
 
 // Root
@@ -53,6 +56,12 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     Route::get('/pengajuan', [PengajuanController::class, 'umkmIndex'])->name('pengajuan.index');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
 
+    // PBI-22: Pengajuan Pendanaan UMKM
+    Route::get('/pendanaan', [PengajuanPendanaanController::class, 'index'])->name('pendanaan.index');
+    Route::get('/pendanaan/create', [PengajuanPendanaanController::class, 'create'])->name('pendanaan.create');
+    Route::post('/pendanaan', [PengajuanPendanaanController::class, 'store'])->name('pendanaan.store');
+    Route::get('/pendanaan/{pengajuanPendanaan}', [PengajuanPendanaanController::class, 'show'])->name('pendanaan.show');
+
     Route::get('/event', [EventController::class, 'index'])->name('event');
     Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
 });
@@ -74,6 +83,15 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::resource('category', CategoryController::class)->except(['show']);
     Route::resource('region', RegionController::class)->except(['show']);
     Route::resource('scale', ScaleController::class)->except(['show']);
+    Route::resource('sumber-pendanaan', SumberPendanaanController::class)->except(['show']);
+    Route::get('pendanaan-verifikasi', [DinasPendanaanVerifikasiController::class, 'index'])
+        ->name('pendanaan-verifikasi.index');
+    Route::get('pendanaan-verifikasi/{pengajuanPendanaan}', [DinasPendanaanVerifikasiController::class, 'show'])
+        ->name('pendanaan-verifikasi.show');
+    Route::put('pendanaan-verifikasi/{pengajuanPendanaan}/approve', [DinasPendanaanVerifikasiController::class, 'approve'])
+        ->name('pendanaan-verifikasi.approve');
+    Route::put('pendanaan-verifikasi/{pengajuanPendanaan}/reject', [DinasPendanaanVerifikasiController::class, 'reject'])
+        ->name('pendanaan-verifikasi.reject');
 
     Route::get('pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');

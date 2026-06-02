@@ -55,6 +55,7 @@ class DashboardController extends Controller
         ];
         $completedProfileFields = collect($profileFields)->filter(fn ($value) => filled($value))->count();
         $profileCompleteness = (int) round(($completedProfileFields / count($profileFields)) * 100);
+        $totalPendanaan = $user->pengajuanPendanaans()->count();
 
         return view('umkm.dashboard', compact(
             'profile',
@@ -68,6 +69,7 @@ class DashboardController extends Controller
             'reviewedReports',
             'recentPengajuans',
             'recentReports',
+            'totalPendanaan',
             'reportStatus'
         ));
     }

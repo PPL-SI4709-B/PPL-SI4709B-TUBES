@@ -62,7 +62,7 @@
                 </div>
                 <x-status-badge :status="Auth::user()->profile_status" />
             </div>
-            <div class="mt-8 grid grid-cols-3 gap-4">
+            <div class="mt-8 grid grid-cols-4 gap-4">
                 <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
                     <div class="text-3xl font-bold">{{ $totalPengajuan }}</div>
                     <div class="text-sm mt-1" style="color: #d1d5db;">Total Pengajuan</div>
@@ -74,6 +74,10 @@
                 <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
                     <div class="text-3xl font-bold">{{ $totalLaporan }}</div>
                     <div class="text-sm mt-1" style="color: #d1d5db;">Laporan Terkirim</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
+                    <div class="text-3xl font-bold">{{ $totalPendanaan }}</div>
+                    <div class="text-sm mt-1" style="color: #d1d5db;">Total Pendanaan</div>
                 </div>
             </div>
         </div>

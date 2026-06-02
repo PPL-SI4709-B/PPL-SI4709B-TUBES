@@ -22,10 +22,10 @@
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6" dusk="scale-index">
 
     @if(session('success'))
-        <div style="background-color: var(--color-status-approve-bg); color: var(--color-status-approve-text); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; display: flex; align-items: center; gap: var(--space-2);">
+        <div dusk="flash-success" style="background-color: var(--color-status-approve-bg); color: var(--color-status-approve-text); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; display: flex; align-items: center; gap: var(--space-2);">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             {{ session('success') }}
         </div>
@@ -36,7 +36,7 @@
             <h1 class="font-bold" style="font-size: var(--text-xl); color: var(--color-text-dark);">Kelola Skala Usaha</h1>
             <p class="text-sm text-muted mt-1">Data skala usaha untuk profil UMKM</p>
         </div>
-        <a href="{{ route('dinas.scale.create') }}" class="btn btn-brand" id="btn-tambah-skala">
+        <a href="{{ route('dinas.scale.create') }}" class="btn btn-brand" id="btn-tambah-skala" dusk="scale-create-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Tambah Skala Usaha
         </a>
@@ -56,7 +56,7 @@
                 </thead>
                 <tbody>
                     @forelse($scales as $scale)
-                        <tr style="border-bottom: 1px solid var(--color-border);" onmouseover="this.style.backgroundColor='var(--color-input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
+                        <tr dusk="scale-row-{{ $scale->id }}" style="border-bottom: 1px solid var(--color-border);" onmouseover="this.style.backgroundColor='var(--color-input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
                             <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted);">
                                 {{ ($scales->currentPage() - 1) * $scales->perPage() + $loop->iteration }}
                             </td>
@@ -71,13 +71,13 @@
                             </td>
                             <td style="padding: var(--space-3) var(--space-4); text-align: right;">
                                 <div class="flex justify-end gap-2">
-                                    <a href="{{ route('dinas.scale.edit', $scale) }}" title="Edit" style="color: var(--color-primary); padding: 4px;" id="btn-edit-{{ $scale->id }}">
+                                    <a href="{{ route('dinas.scale.edit', $scale) }}" title="Edit" style="color: var(--color-primary); padding: 4px;" id="btn-edit-{{ $scale->id }}" dusk="scale-edit-{{ $scale->id }}">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </a>
                                     <form action="{{ route('dinas.scale.destroy', $scale) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus skala usaha ini?');" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" title="Hapus" style="color: var(--color-status-reject-text); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $scale->id }}">
+                                        <button type="submit" title="Hapus" style="color: var(--color-status-reject-text); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $scale->id }}" dusk="scale-delete-{{ $scale->id }}">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </button>
                                     </form>

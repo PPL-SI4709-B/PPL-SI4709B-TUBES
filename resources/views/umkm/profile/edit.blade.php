@@ -26,7 +26,7 @@
         <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900); margin-bottom: var(--space-6);">Edit Profil Usaha</div>
 
         @if($errors->any())
-            <div style="background-color: #fef2f2; color: var(--color-danger); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); margin-bottom: var(--space-4); border-left: 4px solid var(--color-danger);">
+            <div dusk="validation-errors" style="background-color: #fef2f2; color: var(--color-danger); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); margin-bottom: var(--space-4); border-left: 4px solid var(--color-danger);">
                 <ul style="margin: 0; padding-left: 1rem;">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -35,29 +35,29 @@
             </div>
         @endif
 
-        <form action="{{ route('umkm.profile.update') }}" method="POST">
+        <form action="{{ route('umkm.profile.update') }}" method="POST" dusk="profile-edit-form">
             @csrf
             @method('PUT')
 
             <div class="flex flex-col gap-4">
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Nama Usaha <span style="color: var(--color-danger);">*</span></label>
-                    <input type="text" name="business_name" value="{{ old('business_name', $profile?->business_name) }}" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+                    <input type="text" name="business_name" value="{{ old('business_name', $profile?->business_name) }}" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-business-name">
                 </div>
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Nomor Telepon</label>
-                    <input type="text" name="phone" value="{{ old('phone', $profile?->phone) }}" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" placeholder="+62...">
+                    <input type="text" name="phone" value="{{ old('phone', $profile?->phone) }}" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" placeholder="+62..." dusk="profile-phone">
                 </div>
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">NIB</label>
-                    <input type="text" name="nib" value="{{ old('nib', $profile?->nib) }}" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+                    <input type="text" name="nib" value="{{ old('nib', $profile?->nib) }}" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-nib">
                 </div>
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Kategori Usaha <span style="color: var(--color-danger);">*</span></label>
-                    <select name="category_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+                    <select name="category_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-category-select">
                         <option value="">-- Pilih Kategori --</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id', $profile?->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -67,7 +67,7 @@
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Wilayah <span style="color: var(--color-danger);">*</span></label>
-                    <select name="region_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+                    <select name="region_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-region-select">
                         <option value="">-- Pilih Wilayah --</option>
                         @foreach($regions as $reg)
                             <option value="{{ $reg->id }}" {{ old('region_id', $profile?->region_id) == $reg->id ? 'selected' : '' }}>{{ $reg->name }}</option>
@@ -77,7 +77,7 @@
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Skala Usaha <span style="color: var(--color-danger);">*</span></label>
-                    <select name="scale_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+                    <select name="scale_id" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-scale-select">
                         <option value="">-- Pilih Skala --</option>
                         @foreach($scales as $scale)
                             <option value="{{ $scale->id }}" {{ old('scale_id', $profile?->scale_id) == $scale->id ? 'selected' : '' }}>{{ $scale->name }}</option>
@@ -87,12 +87,12 @@
 
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Alamat Usaha <span style="color: var(--color-danger);">*</span></label>
-                    <textarea name="business_address" rows="3" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); resize: vertical;">{{ old('business_address', $profile?->business_address) }}</textarea>
+                    <textarea name="business_address" rows="3" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); resize: vertical;" dusk="profile-business-address">{{ old('business_address', $profile?->business_address) }}</textarea>
                 </div>
             </div>
 
             <div class="flex gap-3 mt-6">
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary" dusk="profile-submit">Simpan</button>
                 <a href="{{ route('umkm.profile.show') }}" class="btn" style="background-color: var(--color-border); color: var(--color-primary);">Batal</a>
             </div>
         </form>

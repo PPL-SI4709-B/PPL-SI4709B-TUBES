@@ -22,10 +22,10 @@
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6" style="max-width: 48rem; margin: 0 auto;">
+<div class="flex flex-col gap-6" style="max-width: 48rem; margin: 0 auto;" dusk="profile-show">
 
     @if(session('success'))
-        <div style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500; border-left: 4px solid var(--color-success);">
+        <div dusk="flash-success" style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500; border-left: 4px solid var(--color-success);">
             {{ session('success') }}
         </div>
     @endif
@@ -36,7 +36,7 @@
                 <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900);">Profil Usaha</div>
                 <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">Informasi usaha terdaftar Anda</div>
             </div>
-            <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary" style="font-size: var(--text-sm);">
+            <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary" style="font-size: var(--text-sm);" dusk="profile-edit-link">
                 Edit Profil
             </a>
         </div>

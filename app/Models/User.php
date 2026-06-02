@@ -38,4 +38,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UmkmProfile::class);
     }
+
+    public function pengajuanPendanaans()
+    {
+        return $this->hasMany(PengajuanPendanaan::class);
+    }
 }
