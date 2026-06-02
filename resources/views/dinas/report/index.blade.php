@@ -11,5 +11,7 @@
     @endif
 
     <a href="/dinas/report/1">Detail</a>
+    |
+    <a href="{{ route('dinas.evaluation.create', 1) }}">Evaluasi</a>
 </body>
 </html>

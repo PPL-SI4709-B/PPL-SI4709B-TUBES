@@ -43,6 +43,9 @@ Route::prefix('dinas')->name('dinas.')->group(function () {
     Route::get('/report', [ReportReviewController::class, 'index'])->name('report.index');
     Route::get('/report/{id}', [ReportReviewController::class, 'show'])->name('report.show');
     Route::put('/report/{id}', [ReportReviewController::class, 'update'])->name('report.update');
+
+    Route::get('/report/{id}/evaluate', [\App\Http\Controllers\EvaluationController::class, 'create'])->name('evaluation.create');
+    Route::post('/report/{id}/evaluate', [\App\Http\Controllers\EvaluationController::class, 'store'])->name('evaluation.store');
 });
 
 Route::prefix('dinas')->name('dinas.')->group(function () {
