@@ -101,23 +101,32 @@
                                     Laporan Kuartal {{ $laporan->kuartal }} - Tahun {{ $laporan->tahun }}
                                 </p>
                                 <div class="ml-2 flex-shrink-0 flex">
-                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Terkirim
-                                    </p>
+                                    @if($laporan->status === 'draft')
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Draft
+                                        </p>
+                                    @else
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Terkirim
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="mt-2 sm:flex sm:justify-between">
                                 <div class="sm:flex">
                                     <p class="flex items-center text-sm text-gray-500">
-                                        Omzet: Rp {{ number_format($laporan->omzet, 0, ',', '.') }}
+                                        Omzet: {{ $laporan->omzet !== null ? 'Rp ' . number_format($laporan->omzet, 0, ',', '.') : '-' }}
                                     </p>
                                     <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                        Karyawan: {{ $laporan->jumlah_karyawan }} Orang
+                                        Karyawan: {{ $laporan->jumlah_karyawan !== null ? $laporan->jumlah_karyawan . ' Orang' : '-' }}
                                     </p>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                    @if($laporan->status === 'draft')
+                                        <a href="{{ route('umkm.laporan_berkala.edit', $laporan->id) }}" class="text-blue-600 hover:text-blue-900 mr-4 text-sm font-medium">Lanjutkan Draft</a>
+                                    @endif
                                     <p>
-                                        Dikirim pada {{ $laporan->created_at->format('d M Y, H:i') }}
+                                        {{ $laporan->status === 'draft' ? 'Diperbarui' : 'Dikirim' }} pada {{ $laporan->updated_at->format('d M Y, H:i') }}
                                     </p>
                                 </div>
                             </div>

@@ -82,4 +82,6 @@ Route::middleware('auth')->prefix('umkm')->group(function () {
     Route::get('/laporan-berkala', [App\Http\Controllers\LaporanBerkalaController::class, 'index'])->name('umkm.laporan_berkala.index');
     Route::get('/laporan-berkala/create', [App\Http\Controllers\LaporanBerkalaController::class, 'create'])->name('umkm.laporan_berkala.create');
     Route::post('/laporan-berkala', [App\Http\Controllers\LaporanBerkalaController::class, 'store'])->name('umkm.laporan_berkala.store');
+    Route::get('/laporan-berkala/{id}/edit', [App\Http\Controllers\LaporanBerkalaController::class, 'edit'])->name('umkm.laporan_berkala.edit');
+    Route::put('/laporan-berkala/{id}', [App\Http\Controllers\LaporanBerkalaController::class, 'update'])->name('umkm.laporan_berkala.update');
 });

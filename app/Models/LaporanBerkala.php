@@ -17,6 +17,7 @@ class LaporanBerkala extends Model
         'jumlah_karyawan',
         'kendala',
         'strategi_kedepan',
+        'status',
     ];
 
     public function user()

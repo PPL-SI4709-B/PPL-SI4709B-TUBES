@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('tahun');
             $table->enum('kuartal', ['Q1', 'Q2', 'Q3', 'Q4']);
-            $table->decimal('omzet', 15, 2);
-            $table->integer('jumlah_karyawan');
+            $table->decimal('omzet', 15, 2)->nullable();
+            $table->integer('jumlah_karyawan')->nullable();
             $table->text('kendala')->nullable();
             $table->text('strategi_kedepan')->nullable();
+            $table->enum('status', ['draft', 'submitted'])->default('draft');
             $table->timestamps();
         });
     }

@@ -42,7 +42,7 @@
 
 @section('header')
     <header class="main-header">
-        <h2 class="page-title">Buat Laporan Berkala</h2>
+        <h2 class="page-title">{{ isset($laporan) ? 'Edit Laporan Berkala' : 'Buat Laporan Berkala' }}</h2>
         <div class="user-profile">
             <div class="user-info">
                 <div class="user-name">{{ Auth::user()->name }}</div>
@@ -59,17 +59,24 @@
     <div class="max-w-3xl mx-auto pb-10">
         <div class="bg-white shadow sm:rounded-lg overflow-hidden border border-gray-200">
             <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Form Laporan Perkembangan Usaha</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ isset($laporan) ? 'Edit Laporan Perkembangan Usaha' : 'Form Laporan Perkembangan Usaha' }}</h3>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">Silakan isi data laporan perkembangan usaha untuk kuartal ini.</p>
             </div>
             <div class="px-4 py-5 sm:p-6">
-                <form action="{{ route('umkm.laporan_berkala.store') }}" method="POST">
+                @php
+                    $isEdit = isset($laporan);
+                    $actionUrl = $isEdit ? route('umkm.laporan_berkala.update', $laporan->id) : route('umkm.laporan_berkala.store');
+                @endphp
+                <form action="{{ $actionUrl }}" method="POST">
                     @csrf
+                    @if($isEdit)
+                        @method('PUT')
+                    @endif
                     
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6 sm:col-span-3">
                             <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun Laporan</label>
-                            <input type="text" name="tahun" id="tahun" value="{{ date('Y') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" required>
+                            <input type="text" name="tahun" id="tahun" value="{{ old('tahun', $isEdit ? $laporan->tahun : date('Y')) }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" required>
                             @error('tahun')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -78,10 +85,10 @@
                         <div class="col-span-6 sm:col-span-3">
                             <label for="kuartal" class="block text-sm font-medium text-gray-700">Kuartal</label>
                             <select id="kuartal" name="kuartal" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
-                                <option value="Q1">Q1 (Januari - Maret)</option>
-                                <option value="Q2">Q2 (April - Juni)</option>
-                                <option value="Q3">Q3 (Juli - September)</option>
-                                <option value="Q4">Q4 (Oktober - Desember)</option>
+                                <option value="Q1" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q1' ? 'selected' : '' }}>Q1 (Januari - Maret)</option>
+                                <option value="Q2" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q2' ? 'selected' : '' }}>Q2 (April - Juni)</option>
+                                <option value="Q3" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q3' ? 'selected' : '' }}>Q3 (Juli - September)</option>
+                                <option value="Q4" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q4' ? 'selected' : '' }}>Q4 (Oktober - Desember)</option>
                             </select>
                             @error('kuartal')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -94,7 +101,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <span class="text-gray-500 sm:text-sm">Rp</span>
                                 </div>
-                                <input type="number" name="omzet" id="omzet" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 px-3 border" placeholder="0" min="0" required>
+                                <input type="number" name="omzet" id="omzet" value="{{ old('omzet', $isEdit ? $laporan->omzet : '') }}" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 px-3 border" placeholder="0" min="0">
                             </div>
                             @error('omzet')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -103,7 +110,7 @@
 
                         <div class="col-span-6 sm:col-span-3">
                             <label for="jumlah_karyawan" class="block text-sm font-medium text-gray-700">Jumlah Karyawan Saat Ini</label>
-                            <input type="number" name="jumlah_karyawan" id="jumlah_karyawan" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" min="0" required>
+                            <input type="number" name="jumlah_karyawan" id="jumlah_karyawan" value="{{ old('jumlah_karyawan', $isEdit ? $laporan->jumlah_karyawan : '') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" min="0">
                             @error('jumlah_karyawan')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -112,7 +119,7 @@
                         <div class="col-span-6">
                             <label for="kendala" class="block text-sm font-medium text-gray-700">Kendala yang Dihadapi (Opsional)</label>
                             <div class="mt-1">
-                                <textarea id="kendala" name="kendala" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3"></textarea>
+                                <textarea id="kendala" name="kendala" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3">{{ old('kendala', $isEdit ? $laporan->kendala : '') }}</textarea>
                             </div>
                             @error('kendala')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -122,7 +129,7 @@
                         <div class="col-span-6">
                             <label for="strategi_kedepan" class="block text-sm font-medium text-gray-700">Strategi ke Depan (Opsional)</label>
                             <div class="mt-1">
-                                <textarea id="strategi_kedepan" name="strategi_kedepan" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3"></textarea>
+                                <textarea id="strategi_kedepan" name="strategi_kedepan" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3">{{ old('strategi_kedepan', $isEdit ? $laporan->strategi_kedepan : '') }}</textarea>
                             </div>
                             @error('strategi_kedepan')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -134,7 +141,10 @@
                         <a href="{{ route('umkm.laporan_berkala.index') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-3">
                             Batal
                         </a>
-                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <button type="submit" name="action" value="draft" class="bg-yellow-500 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 mr-3">
+                            Simpan Draft
+                        </button>
+                        <button type="submit" name="action" value="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Kirim Laporan
                         </button>
                     </div>
