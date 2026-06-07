@@ -40,6 +40,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middl
 Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post')->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Dokumen pendukung — privat, hanya pemilik atau petugas dinas (authz di controller)
+Route::middleware('auth')->group(function () {
+    Route::get('dokumen/pengajuan/{pengajuan}', [PengajuanController::class, 'dokumen'])->name('pengajuan.dokumen');
+    Route::get('dokumen/pendanaan/{pengajuanPendanaan}', [PengajuanPendanaanController::class, 'dokumen'])->name('pendanaan.dokumen');
+});
+
 // UMKM Register
 Route::prefix('umkm/register')->name('umkm.register.')->middleware('guest')->group(function () {
     Route::get('/step-1', fn () => view('umkm.register.step-1'))->name('step-1');

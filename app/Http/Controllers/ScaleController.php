@@ -13,6 +13,7 @@ class ScaleController extends Controller
     public function index()
     {
         $scales = Scale::latest()->paginate(10);
+
         return view('dinas.scale.index', compact('scales'));
     }
 
@@ -59,7 +60,7 @@ class ScaleController extends Controller
     public function update(Request $request, Scale $scale)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:scales,name,' . $scale->id,
+            'name' => 'required|string|max:255|unique:scales,name,'.$scale->id,
             'description' => 'nullable|string|max:1000',
         ], [
             'name.required' => 'Nama skala usaha wajib diisi.',

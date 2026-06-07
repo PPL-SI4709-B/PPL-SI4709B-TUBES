@@ -13,6 +13,7 @@ class RegionController extends Controller
     public function index()
     {
         $regions = Region::latest()->paginate(10);
+
         return view('dinas.region.index', compact('regions'));
     }
 
@@ -59,7 +60,7 @@ class RegionController extends Controller
     public function update(Request $request, Region $region)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:regions,name,' . $region->id,
+            'name' => 'required|string|max:255|unique:regions,name,'.$region->id,
             'description' => 'nullable|string|max:1000',
         ], [
             'name.required' => 'Nama wilayah wajib diisi.',

@@ -6,6 +6,7 @@ use App\Models\Pengajuan;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PengajuanController extends Controller
 {
@@ -48,8 +49,8 @@ class PengajuanController extends Controller
         }
 
         $request->validate([
-            'program_id'        => 'required|exists:programs,id',
-            'kebutuhan_usaha'   => 'required|string',
+            'program_id' => 'required|exists:programs,id',
+            'kebutuhan_usaha' => 'required|string',
             'dokumen_pendukung' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
         ]);
 
@@ -57,16 +58,16 @@ class PengajuanController extends Controller
 
         $dokumenPath = null;
         if ($request->hasFile('dokumen_pendukung')) {
-            $dokumenPath = $request->file('dokumen_pendukung')->store('dokumen_pengajuan', 'public');
+            $dokumenPath = $request->file('dokumen_pendukung')->store('dokumen_pengajuan', 'local');
         }
 
         Pengajuan::create([
-            'user_id'           => Auth::id(),
-            'program_id'        => $request->program_id,
-            'jenis'             => $program->jenis,
-            'kebutuhan_usaha'   => $request->kebutuhan_usaha,
+            'user_id' => Auth::id(),
+            'program_id' => $request->program_id,
+            'jenis' => $program->jenis,
+            'kebutuhan_usaha' => $request->kebutuhan_usaha,
             'dokumen_pendukung' => $dokumenPath,
-            'status'            => 'pending',
+            'status' => 'pending',
         ]);
 
         return redirect()->back()->with('success', 'Pengajuan berhasil dikirim.');
@@ -74,13 +75,18 @@ class PengajuanController extends Controller
 
     public function approve(Request $request, Pengajuan $pengajuan)
     {
+        if ($pengajuan->status !== 'pending') {
+            return redirect()->back()
+                ->with('error', 'Pengajuan sudah diproses dan tidak dapat diproses ulang.');
+        }
+
         $request->validate([
             'notes' => 'nullable|string|max:1000',
         ]);
 
         $pengajuan->update([
             'status' => 'approved',
-            'notes'  => $request->notes,
+            'notes' => $request->notes,
         ]);
 
         return redirect()->route('dinas.pengajuan.index')
@@ -89,16 +95,35 @@ class PengajuanController extends Controller
 
     public function reject(Request $request, Pengajuan $pengajuan)
     {
+        if ($pengajuan->status !== 'pending') {
+            return redirect()->back()
+                ->with('error', 'Pengajuan sudah diproses dan tidak dapat diproses ulang.');
+        }
+
         $request->validate([
             'notes' => 'nullable|string|max:1000',
         ]);
 
         $pengajuan->update([
             'status' => 'rejected',
-            'notes'  => $request->notes,
+            'notes' => $request->notes,
         ]);
 
         return redirect()->route('dinas.pengajuan.index')
             ->with('success', 'Pengajuan berhasil ditolak.');
+    }
+
+    public function dokumen(Pengajuan $pengajuan)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'dinas' && $pengajuan->user_id !== $user->id) {
+            abort(403);
+        }
+
+        if (! $pengajuan->dokumen_pendukung || ! Storage::disk('local')->exists($pengajuan->dokumen_pendukung)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->response($pengajuan->dokumen_pendukung);
     }
 }

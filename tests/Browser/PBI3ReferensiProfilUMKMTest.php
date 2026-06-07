@@ -37,8 +37,8 @@ class PBI3ReferensiProfilUMKMTest extends DuskTestCase
         ]);
 
         $category = Category::create(['name' => 'Kuliner', 'description' => 'Usaha kuliner']);
-        $region   = Region::create(['name' => 'Kecamatan Cileunyi', 'description' => 'Wilayah Cileunyi']);
-        $scale    = Scale::create(['name' => 'Mikro', 'description' => 'Skala mikro']);
+        $region = Region::create(['name' => 'Kecamatan Cileunyi', 'description' => 'Wilayah Cileunyi']);
+        $scale = Scale::create(['name' => 'Mikro', 'description' => 'Skala mikro']);
 
         $this->browse(function (Browser $browser) use ($umkm, $category, $region, $scale) {
             $browser->loginAs($umkm)
@@ -63,10 +63,10 @@ class PBI3ReferensiProfilUMKMTest extends DuskTestCase
         });
 
         $this->assertDatabaseHas('umkm_profiles', [
-            'user_id'     => $umkm->id,
+            'user_id' => $umkm->id,
             'category_id' => $category->id,
-            'region_id'   => $region->id,
-            'scale_id'    => $scale->id,
+            'region_id' => $region->id,
+            'scale_id' => $scale->id,
         ]);
     }
 

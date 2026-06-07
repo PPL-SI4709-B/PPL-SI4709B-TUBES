@@ -14,10 +14,10 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'         => User::factory(),
-            'judul'           => fake()->sentence(4),
-            'deskripsi'       => fake()->paragraph(),
-            'status'          => 'pending',
+            'user_id' => User::factory(),
+            'judul' => fake()->sentence(4),
+            'deskripsi' => fake()->paragraph(),
+            'status' => 'pending',
             'catatan_petugas' => null,
         ];
     }

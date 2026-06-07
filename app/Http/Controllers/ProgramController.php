@@ -22,13 +22,13 @@ class ProgramController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'jenis'       => 'required|in:pendanaan,pembinaan',
+            'name' => 'required|string|max:255',
+            'jenis' => 'required|in:pendanaan,pembinaan',
             'description' => 'nullable|string',
-            'quota'       => 'required|integer|min:0',
-            'start_date'  => 'nullable|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
-            'status'      => 'required|in:active,inactive',
+            'quota' => 'required|integer|min:0',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'required|in:active,inactive',
         ]);
 
         Program::create($validated);
@@ -45,13 +45,13 @@ class ProgramController extends Controller
     public function update(Request $request, Program $program)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'jenis'       => 'required|in:pendanaan,pembinaan',
+            'name' => 'required|string|max:255',
+            'jenis' => 'required|in:pendanaan,pembinaan',
             'description' => 'nullable|string',
-            'quota'       => 'required|integer|min:0',
-            'start_date'  => 'nullable|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
-            'status'      => 'required|in:active,inactive',
+            'quota' => 'required|integer|min:0',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'required|in:active,inactive',
         ]);
 
         $program->update($validated);

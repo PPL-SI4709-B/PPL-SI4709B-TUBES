@@ -2,23 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\Program;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Program>
+ * @extends Factory<Event>
  */
-class ProgramFactory extends Factory
+class EventFactory extends Factory
 {
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence(3),
-            'jenis' => fake()->randomElement(['pendanaan', 'pembinaan']),
+            'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
+            'location' => fake()->city(),
+            'event_date' => now()->addDays(fake()->numberBetween(1, 30)),
             'quota' => fake()->numberBetween(10, 100),
-            'start_date' => now(),
-            'end_date' => now()->addMonths(3),
+            'type' => 'pelatihan',
             'status' => 'active',
         ];
     }

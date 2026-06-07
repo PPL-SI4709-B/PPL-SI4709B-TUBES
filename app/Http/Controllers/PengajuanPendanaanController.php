@@ -6,6 +6,7 @@ use App\Models\PengajuanPendanaan;
 use App\Models\SumberPendanaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PengajuanPendanaanController extends Controller
 {
@@ -40,20 +41,20 @@ class PengajuanPendanaanController extends Controller
 
         $request->validate([
             'sumber_pendanaan_id' => 'required|exists:sumber_pendanaans,id',
-            'jumlah_pengajuan'    => 'required|numeric|min:100000',
-            'tujuan_pendanaan'    => 'required|string|max:255',
+            'jumlah_pengajuan' => 'required|numeric|min:100000',
+            'tujuan_pendanaan' => 'required|string|max:255',
             'deskripsi_kebutuhan' => 'required|string|min:30',
-            'dokumen_pendukung'   => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
+            'dokumen_pendukung' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
         ], [
             'sumber_pendanaan_id.required' => 'Sumber pendanaan wajib dipilih.',
-            'sumber_pendanaan_id.exists'   => 'Sumber pendanaan tidak valid.',
+            'sumber_pendanaan_id.exists' => 'Sumber pendanaan tidak valid.',
             'jumlah_pengajuan.required' => 'Jumlah pengajuan wajib diisi.',
-            'jumlah_pengajuan.min'      => 'Jumlah pengajuan minimal Rp 100.000.',
+            'jumlah_pengajuan.min' => 'Jumlah pengajuan minimal Rp 100.000.',
             'tujuan_pendanaan.required' => 'Tujuan pendanaan wajib diisi.',
             'deskripsi_kebutuhan.required' => 'Deskripsi kebutuhan wajib diisi.',
-            'deskripsi_kebutuhan.min'   => 'Deskripsi kebutuhan minimal 30 karakter.',
-            'dokumen_pendukung.mimes'   => 'Dokumen harus berformat PDF, PNG, JPG, atau JPEG.',
-            'dokumen_pendukung.max'     => 'Ukuran dokumen maksimal 2MB.',
+            'deskripsi_kebutuhan.min' => 'Deskripsi kebutuhan minimal 30 karakter.',
+            'dokumen_pendukung.mimes' => 'Dokumen harus berformat PDF, PNG, JPG, atau JPEG.',
+            'dokumen_pendukung.max' => 'Ukuran dokumen maksimal 2MB.',
         ]);
 
         $sumberPendanaan = SumberPendanaan::findOrFail($request->sumber_pendanaan_id);
@@ -71,18 +72,18 @@ class PengajuanPendanaanController extends Controller
 
         $dokumenPath = null;
         if ($request->hasFile('dokumen_pendukung')) {
-            $dokumenPath = $request->file('dokumen_pendukung')->store('dokumen_pendanaan', 'public');
+            $dokumenPath = $request->file('dokumen_pendukung')->store('dokumen_pendanaan', 'local');
         }
 
         $pengajuan = PengajuanPendanaan::create([
-            'user_id'             => Auth::id(),
+            'user_id' => Auth::id(),
             'sumber_pendanaan_id' => $request->sumber_pendanaan_id,
-            'jumlah_pengajuan'    => $request->jumlah_pengajuan,
-            'tujuan_pendanaan'    => $request->tujuan_pendanaan,
+            'jumlah_pengajuan' => $request->jumlah_pengajuan,
+            'tujuan_pendanaan' => $request->tujuan_pendanaan,
             'deskripsi_kebutuhan' => $request->deskripsi_kebutuhan,
-            'dokumen_pendukung'   => $dokumenPath,
-            'status'              => 'diajukan',
-            'submitted_at'        => now(),
+            'dokumen_pendukung' => $dokumenPath,
+            'status' => 'diajukan',
+            'submitted_at' => now(),
         ]);
 
         return redirect()->route('umkm.pendanaan.show', $pengajuan)
@@ -98,5 +99,19 @@ class PengajuanPendanaanController extends Controller
         $pengajuanPendanaan->load(['sumberPendanaan', 'reviewer']);
 
         return view('umkm.pendanaan.show', compact('pengajuanPendanaan'));
+    }
+
+    public function dokumen(PengajuanPendanaan $pengajuanPendanaan)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'dinas' && $pengajuanPendanaan->user_id !== $user->id) {
+            abort(403);
+        }
+
+        if (! $pengajuanPendanaan->dokumen_pendukung || ! Storage::disk('local')->exists($pengajuanPendanaan->dokumen_pendukung)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->response($pengajuanPendanaan->dokumen_pendukung);
     }
 }

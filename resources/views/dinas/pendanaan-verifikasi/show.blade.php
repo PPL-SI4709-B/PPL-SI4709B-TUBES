@@ -175,7 +175,7 @@
                 <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">Dokumen dari UMKM untuk bahan pemeriksaan administrasi.</div>
             </div>
             @if ($pengajuanPendanaan->dokumen_pendukung)
-                <a href="{{ Storage::url($pengajuanPendanaan->dokumen_pendukung) }}" target="_blank" class="btn btn-primary">Lihat Dokumen</a>
+                <a href="{{ route('pendanaan.dokumen', $pengajuanPendanaan) }}" target="_blank" class="btn btn-primary">Lihat Dokumen</a>
             @endif
         </div>
         @unless ($pengajuanPendanaan->dokumen_pendukung)

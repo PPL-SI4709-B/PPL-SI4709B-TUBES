@@ -31,20 +31,20 @@ class SumberPendanaanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_program'    => 'required|string|max:255',
-            'mitra_penyalur'  => 'required|string|max:255',
-            'batas_maksimal'  => 'required|numeric|min:1|max:6000000',
-            'deskripsi'       => 'nullable|string',
-            'persyaratan'     => 'nullable|string',
-            'status'          => 'required|in:aktif,nonaktif',
+            'nama_program' => 'required|string|max:255',
+            'mitra_penyalur' => 'required|string|max:255',
+            'batas_maksimal' => 'required|numeric|min:1|max:6000000',
+            'deskripsi' => 'nullable|string',
+            'persyaratan' => 'nullable|string',
+            'status' => 'required|in:aktif,nonaktif',
         ], [
-            'nama_program.required'   => 'Nama program wajib diisi.',
+            'nama_program.required' => 'Nama program wajib diisi.',
             'mitra_penyalur.required' => 'Mitra penyalur wajib diisi.',
             'batas_maksimal.required' => 'Batas maksimal wajib diisi.',
-            'batas_maksimal.min'      => 'Batas maksimal minimal Rp 1.',
-            'batas_maksimal.max'      => 'Batas maksimal tidak boleh melebihi Rp 6.000.000.',
-            'status.required'         => 'Status wajib dipilih.',
-            'status.in'               => 'Status harus aktif atau nonaktif.',
+            'batas_maksimal.min' => 'Batas maksimal minimal Rp 1.',
+            'batas_maksimal.max' => 'Batas maksimal tidak boleh melebihi Rp 6.000.000.',
+            'status.required' => 'Status wajib dipilih.',
+            'status.in' => 'Status harus aktif atau nonaktif.',
         ]);
 
         SumberPendanaan::create($validated);
@@ -67,20 +67,20 @@ class SumberPendanaanController extends Controller
     public function update(Request $request, SumberPendanaan $sumberPendanaan)
     {
         $validated = $request->validate([
-            'nama_program'    => 'required|string|max:255',
-            'mitra_penyalur'  => 'required|string|max:255',
-            'batas_maksimal'  => 'required|numeric|min:1|max:6000000',
-            'deskripsi'       => 'nullable|string',
-            'persyaratan'     => 'nullable|string',
-            'status'          => 'required|in:aktif,nonaktif',
+            'nama_program' => 'required|string|max:255',
+            'mitra_penyalur' => 'required|string|max:255',
+            'batas_maksimal' => 'required|numeric|min:1|max:6000000',
+            'deskripsi' => 'nullable|string',
+            'persyaratan' => 'nullable|string',
+            'status' => 'required|in:aktif,nonaktif',
         ], [
-            'nama_program.required'   => 'Nama program wajib diisi.',
+            'nama_program.required' => 'Nama program wajib diisi.',
             'mitra_penyalur.required' => 'Mitra penyalur wajib diisi.',
             'batas_maksimal.required' => 'Batas maksimal wajib diisi.',
-            'batas_maksimal.min'      => 'Batas maksimal minimal Rp 1.',
-            'batas_maksimal.max'      => 'Batas maksimal tidak boleh melebihi Rp 6.000.000.',
-            'status.required'         => 'Status wajib dipilih.',
-            'status.in'               => 'Status harus aktif atau nonaktif.',
+            'batas_maksimal.min' => 'Batas maksimal minimal Rp 1.',
+            'batas_maksimal.max' => 'Batas maksimal tidak boleh melebihi Rp 6.000.000.',
+            'status.required' => 'Status wajib dipilih.',
+            'status.in' => 'Status harus aktif atau nonaktif.',
         ]);
 
         $sumberPendanaan->update($validated);

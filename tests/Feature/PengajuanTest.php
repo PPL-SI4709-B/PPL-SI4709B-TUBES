@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Storage;
 uses(RefreshDatabase::class);
 
 it('UMKM dapat mengirim pengajuan program beserta dokumen (PBI #13 #14)', function () {
-    Storage::fake('public');
+    Storage::fake('local');
 
-    $user    = User::factory()->create(['role' => 'umkm', 'profile_status' => 'verified']);
+    $user = User::factory()->create(['role' => 'umkm', 'profile_status' => 'verified']);
     $program = Program::factory()->create(['status' => 'active', 'jenis' => 'pembinaan']);
-    $file    = UploadedFile::fake()->create('dokumen.pdf', 500, 'application/pdf');
+    $file = UploadedFile::fake()->create('dokumen.pdf', 500, 'application/pdf');
 
     $response = $this->actingAs($user)->post(route('umkm.pengajuan.store'), [
-        'program_id'        => $program->id,
-        'kebutuhan_usaha'   => 'Butuh modal untuk beli mesin produksi',
+        'program_id' => $program->id,
+        'kebutuhan_usaha' => 'Butuh modal untuk beli mesin produksi',
         'dokumen_pendukung' => $file,
     ]);
 
@@ -26,15 +26,15 @@ it('UMKM dapat mengirim pengajuan program beserta dokumen (PBI #13 #14)', functi
     $response->assertSessionHas('success');
 
     $this->assertDatabaseHas('pengajuans', [
-        'user_id'         => $user->id,
-        'program_id'      => $program->id,
+        'user_id' => $user->id,
+        'program_id' => $program->id,
         'kebutuhan_usaha' => 'Butuh modal untuk beli mesin produksi',
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $pengajuan = Pengajuan::first();
     expect($pengajuan->dokumen_pendukung)->not->toBeNull();
-    Storage::disk('public')->assertExists($pengajuan->dokumen_pendukung);
+    Storage::disk('local')->assertExists($pengajuan->dokumen_pendukung);
 });
 
 it('UMKM tidak dapat mengakses halaman pengajuan tanpa login', function () {

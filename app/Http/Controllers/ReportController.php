@@ -22,6 +22,11 @@ class ReportController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->profile_status !== 'verified') {
+            return redirect()->back()
+                ->with('error', 'Akun Anda belum diverifikasi. Tunggu petugas memverifikasi akun Anda sebelum membuat laporan.');
+        }
+
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',

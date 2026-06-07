@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('UMKM dapat membuat laporan', function () {
-    $umkm = User::factory()->create(['role' => 'umkm']);
+    $umkm = User::factory()->create(['role' => 'umkm', 'profile_status' => 'verified']);
 
     $response = $this->actingAs($umkm)->post(route('reports.store'), [
         'judul' => 'Laporan Oktober 2024',
@@ -29,8 +29,20 @@ it('UMKM dapat membuat laporan', function () {
     ]);
 });
 
+it('UMKM belum terverifikasi tidak dapat membuat laporan', function () {
+    $umkm = User::factory()->create(['role' => 'umkm', 'profile_status' => 'pending']);
+
+    $response = $this->actingAs($umkm)->post(route('reports.store'), [
+        'judul' => 'Laporan',
+        'deskripsi' => 'Isi laporan',
+    ]);
+
+    $response->assertSessionHas('error');
+    $this->assertDatabaseMissing('reports', ['user_id' => $umkm->id]);
+});
+
 it('Laporan membutuhkan judul dan deskripsi', function () {
-    $umkm = User::factory()->create(['role' => 'umkm']);
+    $umkm = User::factory()->create(['role' => 'umkm', 'profile_status' => 'verified']);
 
     $response = $this->actingAs($umkm)->post(route('reports.store'), []);
 

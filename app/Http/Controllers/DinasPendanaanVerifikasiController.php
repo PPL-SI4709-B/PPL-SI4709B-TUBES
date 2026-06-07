@@ -65,8 +65,8 @@ class DinasPendanaanVerifikasiController extends Controller
         ]);
 
         $pengajuanPendanaan->update([
-            'status'      => 'disetujui',
-            'catatan'     => $validated['catatan'] ?? null,
+            'status' => 'disetujui',
+            'catatan' => $validated['catatan'] ?? null,
             'reviewed_by' => Auth::id(),
             'reviewed_at' => now(),
         ]);
@@ -89,8 +89,8 @@ class DinasPendanaanVerifikasiController extends Controller
         ]);
 
         $pengajuanPendanaan->update([
-            'status'      => 'ditolak',
-            'catatan'     => $validated['catatan'],
+            'status' => 'ditolak',
+            'catatan' => $validated['catatan'],
             'reviewed_by' => Auth::id(),
             'reviewed_at' => now(),
         ]);

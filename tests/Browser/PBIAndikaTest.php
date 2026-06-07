@@ -5,10 +5,9 @@ use App\Models\Program;
 use App\Models\User;
 use Laravel\Dusk\Browser;
 
-
 test('PBI#4 - dinas dapat membuat program baru', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
@@ -32,13 +31,13 @@ test('PBI#4 - dinas dapat membuat program baru', function () {
 
 test('PBI#4 - dinas dapat mengedit program', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $program = Program::factory()->create([
-        'name'   => 'Program Lama',
-        'jenis'  => 'pembinaan',
+        'name' => 'Program Lama',
+        'jenis' => 'pembinaan',
         'status' => 'active',
     ]);
 
@@ -56,17 +55,17 @@ test('PBI#4 - dinas dapat mengedit program', function () {
 
 test('PBI#4 - dinas dapat menghapus program', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $program = Program::factory()->create([
-        'name'   => 'Program Akan Dihapus',
-        'jenis'  => 'pembinaan',
+        'name' => 'Program Akan Dihapus',
+        'jenis' => 'pembinaan',
         'status' => 'active',
     ]);
 
-    $this->browse(function (Browser $browser) use ($dinas, $program) {
+    $this->browse(function (Browser $browser) use ($dinas) {
         $browser->loginAs($dinas)
             ->visit('/dinas/program')
             ->assertSee('Program Akan Dihapus')
@@ -82,26 +81,26 @@ test('PBI#4 - dinas dapat menghapus program', function () {
 
 test('PBI#5 - dinas dapat menyetujui pengajuan', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $umkm = User::factory()->create([
-        'role'           => 'umkm',
+        'role' => 'umkm',
         'profile_status' => 'verified',
     ]);
 
     $program = Program::factory()->create([
-        'jenis'  => 'pendanaan',
+        'jenis' => 'pendanaan',
         'status' => 'active',
     ]);
 
     $pengajuan = Pengajuan::create([
-        'user_id'         => $umkm->id,
-        'program_id'      => $program->id,
-        'jenis'           => 'pendanaan',
+        'user_id' => $umkm->id,
+        'program_id' => $program->id,
+        'jenis' => 'pendanaan',
         'kebutuhan_usaha' => 'Butuh modal untuk ekspansi usaha',
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $this->browse(function (Browser $browser) use ($dinas, $pengajuan) {
@@ -120,26 +119,26 @@ test('PBI#5 - dinas dapat menyetujui pengajuan', function () {
 
 test('PBI#5 - dinas dapat menolak pengajuan', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $umkm = User::factory()->create([
-        'role'           => 'umkm',
+        'role' => 'umkm',
         'profile_status' => 'verified',
     ]);
 
     $program = Program::factory()->create([
-        'jenis'  => 'pembinaan',
+        'jenis' => 'pembinaan',
         'status' => 'active',
     ]);
 
     $pengajuan = Pengajuan::create([
-        'user_id'         => $umkm->id,
-        'program_id'      => $program->id,
-        'jenis'           => 'pembinaan',
+        'user_id' => $umkm->id,
+        'program_id' => $program->id,
+        'jenis' => 'pembinaan',
         'kebutuhan_usaha' => 'Butuh pelatihan manajemen keuangan',
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $this->browse(function (Browser $browser) use ($dinas, $pengajuan) {
@@ -159,26 +158,26 @@ test('PBI#5 - dinas dapat menolak pengajuan', function () {
 
 test('PBI#6 - dinas dapat menyetujui pengajuan dengan catatan', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $umkm = User::factory()->create([
-        'role'           => 'umkm',
+        'role' => 'umkm',
         'profile_status' => 'verified',
     ]);
 
     $program = Program::factory()->create([
-        'jenis'  => 'pendanaan',
+        'jenis' => 'pendanaan',
         'status' => 'active',
     ]);
 
     $pengajuan = Pengajuan::create([
-        'user_id'         => $umkm->id,
-        'program_id'      => $program->id,
-        'jenis'           => 'pendanaan',
+        'user_id' => $umkm->id,
+        'program_id' => $program->id,
+        'jenis' => 'pendanaan',
         'kebutuhan_usaha' => 'Butuh dana untuk beli mesin baru',
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $this->browse(function (Browser $browser) use ($dinas, $pengajuan) {
@@ -199,26 +198,26 @@ test('PBI#6 - dinas dapat menyetujui pengajuan dengan catatan', function () {
 
 test('PBI#6 - dinas dapat menolak pengajuan dengan catatan alasan', function () {
     $dinas = User::factory()->create([
-        'role'     => 'dinas',
+        'role' => 'dinas',
         'password' => bcrypt('password'),
     ]);
 
     $umkm = User::factory()->create([
-        'role'           => 'umkm',
+        'role' => 'umkm',
         'profile_status' => 'verified',
     ]);
 
     $program = Program::factory()->create([
-        'jenis'  => 'pembinaan',
+        'jenis' => 'pembinaan',
         'status' => 'active',
     ]);
 
     $pengajuan = Pengajuan::create([
-        'user_id'         => $umkm->id,
-        'program_id'      => $program->id,
-        'jenis'           => 'pembinaan',
+        'user_id' => $umkm->id,
+        'program_id' => $program->id,
+        'jenis' => 'pembinaan',
         'kebutuhan_usaha' => 'Butuh pelatihan ekspor produk',
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $this->browse(function (Browser $browser) use ($dinas, $pengajuan) {

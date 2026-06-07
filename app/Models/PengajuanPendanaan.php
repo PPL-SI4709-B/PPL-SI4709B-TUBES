@@ -26,8 +26,8 @@ class PengajuanPendanaan extends Model
     protected function casts(): array
     {
         return [
-            'submitted_at'    => 'datetime',
-            'reviewed_at'     => 'datetime',
+            'submitted_at' => 'datetime',
+            'reviewed_at' => 'datetime',
             'jumlah_pengajuan' => 'decimal:2',
         ];
     }
@@ -53,12 +53,12 @@ class PengajuanPendanaan extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'diajukan'             => 'Diajukan',
-            'menunggu_verifikasi'  => 'Menunggu Verifikasi',
-            'diproses'             => 'Diproses',
-            'disetujui'            => 'Disetujui',
-            'ditolak'              => 'Ditolak',
-            default                => ucfirst($this->status),
+            'diajukan' => 'Diajukan',
+            'menunggu_verifikasi' => 'Menunggu Verifikasi',
+            'diproses' => 'Diproses',
+            'disetujui' => 'Disetujui',
+            'ditolak' => 'Ditolak',
+            default => ucfirst($this->status),
         };
     }
 }

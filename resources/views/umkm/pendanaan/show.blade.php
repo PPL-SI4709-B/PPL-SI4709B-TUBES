@@ -81,7 +81,7 @@
             <div>
                 <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Dokumen Pendukung</div>
                 <div style="margin-top: 4px;">
-                    <a href="{{ Storage::url($pengajuanPendanaan->dokumen_pendukung) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary, var(--color-primary)); text-decoration: underline;">
+                    <a href="{{ route('pendanaan.dokumen', $pengajuanPendanaan) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary, var(--color-primary)); text-decoration: underline;">
                         Lihat Dokumen ↗
                     </a>
                 </div>

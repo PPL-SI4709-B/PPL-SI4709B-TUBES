@@ -18,16 +18,16 @@ class DatabaseSeeder extends Seeder
         $this->call(ReferenceDataSeeder::class);
 
         User::firstOrCreate(['email' => 'test@example.com'], [
-            'name'           => 'Test User',
-            'password'       => bcrypt('password'),
-            'role'           => 'umkm',
+            'name' => 'Test User',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
             'profile_status' => 'verified',
         ]);
 
         User::firstOrCreate(['email' => 'dinas@example.com'], [
-            'name'           => 'Petugas Dinas',
-            'password'       => bcrypt('password'),
-            'role'           => 'dinas',
+            'name' => 'Petugas Dinas',
+            'password' => bcrypt('password'),
+            'role' => 'dinas',
             'profile_status' => 'verified',
         ]);
     }

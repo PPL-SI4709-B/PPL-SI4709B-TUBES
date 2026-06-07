@@ -10,7 +10,7 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string $role): mixed
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
+        if (! Auth::check() || Auth::user()->role !== $role) {
             abort(403);
         }
 

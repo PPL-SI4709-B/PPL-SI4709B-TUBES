@@ -9,7 +9,7 @@ class VerificationController extends Controller
 {
     public function index()
     {
-        $pending  = User::where('role', 'umkm')->where('profile_status', 'pending')->latest()->get();
+        $pending = User::where('role', 'umkm')->where('profile_status', 'pending')->latest()->get();
         $verified = User::where('role', 'umkm')->where('profile_status', 'verified')->latest()->get();
         $rejected = User::where('role', 'umkm')->where('profile_status', 'rejected')->latest()->get();
 
@@ -18,7 +18,15 @@ class VerificationController extends Controller
 
     public function verify(User $user)
     {
-        $user->update(['profile_status' => 'verified']);
+        if ($user->profile_status !== 'pending') {
+            return redirect()->route('dinas.verification.index')
+                ->with('error', 'UMKM ini sudah diproses.');
+        }
+
+        $user->update([
+            'profile_status' => 'verified',
+            'verification_note' => null,
+        ]);
 
         return redirect()->route('dinas.verification.index')
             ->with('success', "UMKM {$user->name} berhasil diverifikasi.");
@@ -26,7 +34,19 @@ class VerificationController extends Controller
 
     public function reject(Request $request, User $user)
     {
-        $user->update(['profile_status' => 'rejected']);
+        if ($user->profile_status !== 'pending') {
+            return redirect()->route('dinas.verification.index')
+                ->with('error', 'UMKM ini sudah diproses.');
+        }
+
+        $validated = $request->validate([
+            'verification_note' => 'nullable|string|max:1000',
+        ]);
+
+        $user->update([
+            'profile_status' => 'rejected',
+            'verification_note' => $validated['verification_note'] ?? null,
+        ]);
 
         return redirect()->route('dinas.verification.index')
             ->with('success', "UMKM {$user->name} ditolak verifikasinya.");

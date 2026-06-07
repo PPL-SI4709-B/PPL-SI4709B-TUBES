@@ -7,7 +7,7 @@ uses(RefreshDatabase::class);
 
 it('Petugas dapat memverifikasi UMKM', function () {
     $dinas = User::factory()->create(['role' => 'dinas']);
-    $umkm  = User::factory()->create(['role' => 'umkm', 'profile_status' => 'pending']);
+    $umkm = User::factory()->create(['role' => 'umkm', 'profile_status' => 'pending']);
 
     $response = $this->actingAs($dinas)
         ->put(route('dinas.verification.verify', $umkm));
@@ -16,14 +16,14 @@ it('Petugas dapat memverifikasi UMKM', function () {
     $response->assertSessionHas('success');
 
     $this->assertDatabaseHas('users', [
-        'id'             => $umkm->id,
+        'id' => $umkm->id,
         'profile_status' => 'verified',
     ]);
 });
 
 it('Petugas dapat menolak verifikasi UMKM', function () {
     $dinas = User::factory()->create(['role' => 'dinas']);
-    $umkm  = User::factory()->create(['role' => 'umkm', 'profile_status' => 'pending']);
+    $umkm = User::factory()->create(['role' => 'umkm', 'profile_status' => 'pending']);
 
     $response = $this->actingAs($dinas)
         ->put(route('dinas.verification.reject', $umkm));
@@ -31,7 +31,7 @@ it('Petugas dapat menolak verifikasi UMKM', function () {
     $response->assertRedirect(route('dinas.verification.index'));
 
     $this->assertDatabaseHas('users', [
-        'id'             => $umkm->id,
+        'id' => $umkm->id,
         'profile_status' => 'rejected',
     ]);
 });
