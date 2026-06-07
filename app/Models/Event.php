@@ -12,16 +12,24 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
-        'date',
         'location',
+        'event_date',
         'quota',
+        'type',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'event_date' => 'datetime',
+        ];
+    }
 
     public function registrants()
     {
         return $this->belongsToMany(User::class, 'event_registrations')
-                    ->withPivot('status')
-                    ->withTimestamps();
+            ->withPivot('status')
+            ->withTimestamps();
     }
 }

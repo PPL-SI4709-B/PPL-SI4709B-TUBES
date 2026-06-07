@@ -82,7 +82,7 @@
                             <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 4px;">{{ Str::limit($event->description, 100) }}</div>
                         @endif
                         <div class="flex gap-4 mt-3" style="font-size: var(--text-xs); color: var(--color-text-muted);">
-                            <span>Tanggal: <strong>{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</strong></span>
+                            <span>Tanggal: <strong>{{ $event->event_date?->format('d M Y, H:i') }}</strong></span>
                             <span>Lokasi: <strong>{{ $event->location }}</strong></span>
                             <span>Kuota: <strong>{{ $event->quota }}</strong></span>
                         </div>
@@ -91,16 +91,13 @@
                         @php
                             $statusBg = '#f1f5f9';
                             $statusColor = 'var(--color-text-muted)';
-                            if ($event->status === 'published') {
+                            if ($event->status === 'active') {
                                 $statusBg = 'var(--color-success-bg)';
                                 $statusColor = 'var(--color-success)';
-                            } elseif ($event->status === 'completed') {
-                                $statusBg = '#e0e7ff';
-                                $statusColor = 'var(--color-primary)';
                             }
                         @endphp
                         <span class="badge" style="background-color: {{ $statusBg }}; color: {{ $statusColor }};">
-                            {{ ucfirst($event->status) }}
+                            {{ $event->status === 'active' ? 'Aktif' : 'Nonaktif' }}
                         </span>
                         <a href="{{ route('dinas.event.edit', $event) }}" style="font-size: var(--text-sm); color: var(--color-secondary); font-weight: 500;">Edit</a>
                         <form action="{{ route('dinas.event.destroy', $event) }}" method="POST" onsubmit="return confirm('Hapus event ini?');" style="display: inline;">

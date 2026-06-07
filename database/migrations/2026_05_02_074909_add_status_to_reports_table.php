@@ -11,19 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('reports')) {
-            Schema::table('reports', function (Blueprint $table) {
+        Schema::table('reports', function (Blueprint $table) {
+            if (!Schema::hasColumn('reports', 'status')) {
                 $table->string('status')->default('pending');
-            });
-        }
+            }
+        });
     }
 
     public function down(): void
     {
-        if (Schema::hasTable('reports')) {
-            Schema::table('reports', function (Blueprint $table) {
-                $table->dropColumn('status');
-            });
-        }
+        // intentionally no-op: status owned by create_reports_table migration
     }
 };

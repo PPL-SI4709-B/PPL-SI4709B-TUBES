@@ -86,10 +86,10 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Tanggal <span style="color: var(--color-danger);">*</span></label>
-                        <input type="date" name="date" value="{{ old('date') }}"
-                            style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('date') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm);">
-                        @error('date')
+                        <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Tanggal & Waktu <span style="color: var(--color-danger);">*</span></label>
+                        <input type="datetime-local" name="event_date" value="{{ old('event_date') }}"
+                            style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('event_date') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm);">
+                        @error('event_date')
                             <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
                         @enderror
                     </div>
@@ -113,17 +113,31 @@
                     @enderror
                 </div>
 
-                <div>
-                    <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Status <span style="color: var(--color-danger);">*</span></label>
-                    <select name="status"
-                        style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('status') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm); background-color: white;">
-                        <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>Published</option>
-                        <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>Completed</option>
-                    </select>
-                    @error('status')
-                        <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
-                    @enderror
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Jenis</label>
+                        <select name="type"
+                            style="width: 100%; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); background-color: white;">
+                            <option value="pelatihan" {{ old('type', 'pelatihan') === 'pelatihan' ? 'selected' : '' }}>Pelatihan</option>
+                            <option value="bootcamp" {{ old('type') === 'bootcamp' ? 'selected' : '' }}>Bootcamp</option>
+                            <option value="seminar" {{ old('type') === 'seminar' ? 'selected' : '' }}>Seminar</option>
+                            <option value="workshop" {{ old('type') === 'workshop' ? 'selected' : '' }}>Workshop</option>
+                        </select>
+                        @error('type')
+                            <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-2);">Status <span style="color: var(--color-danger);">*</span></label>
+                        <select name="status"
+                            style="width: 100%; padding: var(--space-3); border: 1px solid {{ $errors->has('status') ? 'var(--color-danger)' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: var(--text-sm); background-color: white;">
+                            <option value="active" {{ old('status', 'active') === 'active' ? 'selected' : '' }}>Aktif</option>
+                            <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                        </select>
+                        @error('status')
+                            <div style="font-size: var(--text-xs); color: var(--color-danger); margin-top: 4px;">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="flex gap-3 justify-end" style="margin-top: var(--space-2);">

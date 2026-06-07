@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->date('date');
             $table->string('location');
-            $table->integer('quota');
-            $table->string('status')->default('draft'); // draft, published, completed
+            $table->dateTime('event_date');
+            $table->unsignedInteger('quota');
+            $table->string('type')->default('pelatihan');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

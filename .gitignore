@@ -24,4 +24,5 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 CLAUDE.md
-.claudeignore
+.claudeignore.env.dusk.local
+.env.dusk.local
