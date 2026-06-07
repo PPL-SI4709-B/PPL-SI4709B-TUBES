@@ -74,13 +74,13 @@
 
         <!-- Checkbox -->
         <div class="flex items-start gap-3 mt-3 mb-3">
-            <label class="custom-checkbox">
-                <input type="checkbox" checked>
+            <label class="custom-checkbox" for="agree_terms">
+                <input type="checkbox" id="agree_terms" name="agree_terms" value="1">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <div class="text-sm text-main" style="line-height: 1.5; padding-top: 1px;">
+            <label for="agree_terms" class="text-sm text-main" style="line-height: 1.5; padding-top: 1px; cursor: pointer;">
                 Saya menyetujui <a href="#" class="link-brand">syarat dan ketentuan</a> yang berlaku di portal SIP UMKM Kab. Bandung.
-            </div>
+            </label>
         </div>
 
         <!-- Action Buttons -->

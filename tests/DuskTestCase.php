@@ -35,8 +35,15 @@ abstract class DuskTestCase extends BaseTestCase
             return $items->merge([
                 '--disable-gpu',
                 '--headless=new',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
             ]);
         })->all());
+
+        // Allow pinning the Chromium binary inside Docker (CHROME_BINARY=/usr/bin/chromium).
+        if ($binary = env('CHROME_BINARY')) {
+            $options->setBinary($binary);
+        }
 
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL') ?? 'http://localhost:9515',

@@ -3,7 +3,7 @@
 @section('title', 'Tambah Wilayah - Portal UMKM')
 
 @section('sidebar')
-@include('dinas.region._sidebar')
+<x-dinas-sidebar active="master-data" />
 @endsection
 
 @section('header')
@@ -11,11 +11,11 @@
     <div class="page-title">Tambah Wilayah</div>
     <div class="user-profile">
         <div class="user-info">
-            <div class="user-name">Petugas Dinas</div>
+            <div class="user-name">{{ Auth::user()->name }}</div>
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name=Petugas+Dinas&background=2563eb&color=fff" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>
@@ -33,27 +33,27 @@
     <div class="card" style="padding: var(--space-6);">
         <h2 class="font-bold mb-6" style="font-size: var(--text-lg); color: var(--color-text-dark);">Tambah Wilayah Baru</h2>
 
-        <form action="{{ route('dinas.region.store') }}" method="POST" id="form-create-region">
+        <form action="{{ route('dinas.region.store') }}" method="POST" id="form-create-region" dusk="region-form">
             @csrf
 
             <div class="mb-4">
                 <label for="name" class="input-label mb-2">NAMA WILAYAH <span style="color: var(--color-status-reject-text);">*</span></label>
-                <input type="text" name="name" id="name" class="input-field" value="{{ old('name') }}" placeholder="Contoh: Kecamatan Cileunyi, Kecamatan Bojongsoang" required>
+                <input type="text" name="name" id="name" class="input-field" value="{{ old('name') }}" placeholder="Contoh: Kecamatan Cileunyi, Kecamatan Bojongsoang" required dusk="region-name">
                 @error('name')
-                    <p style="color: var(--color-status-reject-text); font-size: var(--text-xs); margin-top: var(--space-1); font-weight: 500;">{{ $message }}</p>
+                    <p dusk="error-name" style="color: var(--color-status-reject-text); font-size: var(--text-xs); margin-top: var(--space-1); font-weight: 500;">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mb-6">
                 <label for="description" class="input-label mb-2">DESKRIPSI</label>
-                <textarea name="description" id="description" class="input-field" rows="4" placeholder="Deskripsi singkat wilayah (opsional)" style="resize: vertical;">{{ old('description') }}</textarea>
+                <textarea name="description" id="description" class="input-field" rows="4" placeholder="Deskripsi singkat wilayah (opsional)" style="resize: vertical;" dusk="region-description">{{ old('description') }}</textarea>
                 @error('description')
                     <p style="color: var(--color-status-reject-text); font-size: var(--text-xs); margin-top: var(--space-1); font-weight: 500;">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="flex gap-3">
-                <button type="submit" class="btn btn-brand" id="btn-simpan">
+                <button type="submit" class="btn btn-brand" id="btn-simpan" dusk="region-submit">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     Simpan
                 </button>

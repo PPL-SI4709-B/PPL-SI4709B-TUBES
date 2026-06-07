@@ -19,9 +19,9 @@
         <div class="grid grid-cols-2 gap-4">
             <!-- Account Summary -->
             <div class="relative p-6" style="border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
-                <button type="button" class="absolute bg-input-bg text-muted" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9;">
+                <a href="{{ route('umkm.register.step-1') }}" class="absolute" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9; color: var(--color-text-muted);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </button>
+                </a>
                 
                 <h3 class="text-base font-bold text-dark mb-4 tracking-tight" style="padding-right: 40px;">Ringkasan Data Akun</h3>
                 
@@ -43,9 +43,9 @@
 
             <!-- Business Summary -->
             <div class="relative p-6" style="border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
-                <button type="button" class="absolute bg-input-bg text-muted" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9;">
+                <a href="{{ route('umkm.register.step-2') }}" class="absolute" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9; color: var(--color-text-muted);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </button>
+                </a>
                 
                 <h3 class="text-base font-bold text-dark mb-4 tracking-tight" style="padding-right: 40px;">Ringkasan Data Usaha</h3>
                 
@@ -83,10 +83,11 @@
 
         <!-- Confimation Checkbox Banner -->
         <div class="flex items-start gap-4 p-4 mt-2" style="background-color: #eff6ff; border-radius: var(--radius-md);">
-            <label class="custom-checkbox bg-white" style="border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-top: 2px;">
-                <input type="checkbox" name="assurance" value="1">
+            <label class="custom-checkbox" style="margin-top: 2px;">
+                <input type="checkbox" id="assurance" name="assurance" value="1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <label class="text-sm text-dark font-medium leading-snug cursor-pointer">
+            <label for="assurance" class="text-sm text-dark font-medium leading-snug cursor-pointer">
                 Saya menyatakan bahwa data yang saya isi adalah benar dan dapat dipertanggungjawabkan.
             </label>
         </div>
