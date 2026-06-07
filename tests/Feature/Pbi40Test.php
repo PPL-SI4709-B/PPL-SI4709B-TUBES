@@ -1,8 +1,15 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
 test('PBI 40: umkm can access notifikasi page when logged in', function () {
-    session(['is_logged_in' => true]);
-    $response = $this->get('/umkm/notifikasi');
+    $user = User::factory()->create(['role' => 'umkm']);
+
+    $response = $this->actingAs($user)->get('/umkm/notifikasi');
+
     $response->assertStatus(200);
     $response->assertViewIs('umkm.notifikasi');
     $response->assertSee('Notifikasi & Riwayat Status');

@@ -60,7 +60,7 @@
 @section('header')
 <header class="main-header" style="height: 4rem;">
     <div class="page-title" style="color: var(--color-text-muted); font-size: 0.875rem; font-weight: 500;">
-        Beranda <span style="margin: 0 0.5rem;">&#8250;</span> <span style="color: var(--color-primary); font-weight: 700;">Notifikasi & Riwayat Status</span>
+        Beranda <span style="margin: 0 0.5rem;">&#8250;</span> <span style="color: var(--color-primary); font-weight: 700;">Notifikasi &amp; Riwayat Status</span>
     </div>
     <div class="flex items-center gap-6">
         <a href="{{ route('umkm.notifikasi') }}" class="text-primary hover:text-blue-700">

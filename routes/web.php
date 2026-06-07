@@ -75,6 +75,10 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     Route::post('/event/{event}/feedback', [EventFeedbackController::class, 'store'])->name('event-feedback.store');
 
     Route::view('/panduan', 'umkm.panduan')->name('panduan');
+
+    // PBI-40 / PBI-42: static support pages
+    Route::view('/notifikasi', 'umkm.notifikasi')->name('notifikasi');
+    Route::view('/faq', 'umkm.faq')->name('faq');
 });
 
 // UMKM Reports

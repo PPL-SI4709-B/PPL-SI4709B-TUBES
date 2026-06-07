@@ -1,8 +1,15 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
 test('PBI 42: umkm can access faq page when logged in', function () {
-    session(['is_logged_in' => true]);
-    $response = $this->get('/umkm/faq');
+    $user = User::factory()->create(['role' => 'umkm']);
+
+    $response = $this->actingAs($user)->get('/umkm/faq');
+
     $response->assertStatus(200);
     $response->assertViewIs('umkm.faq');
     $response->assertSee('FAQ & Bantuan');
