@@ -10,6 +10,8 @@ use App\Http\Controllers\EventFeedbackController;
 use App\Http\Controllers\EventRegistrationController;
 use App\Http\Controllers\LaporanBerkalaController;
 use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\MateriEdukasiUmkmController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PengajuanPendanaanController;
 use App\Http\Controllers\ProgramController;
@@ -80,6 +82,15 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     // PBI-40 / PBI-42: static support pages
     Route::view('/notifikasi', 'umkm.notifikasi')->name('notifikasi');
     Route::view('/faq', 'umkm.faq')->name('faq');
+
+    // PBI-39/40: in-app notifications (UMKM)
+    Route::get('/notifications', [NotificationController::class, 'umkmIndex'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    // PBI-38/39: Materi Edukasi (UMKM access + download)
+    Route::get('/materi-edukasi', [MateriEdukasiUmkmController::class, 'index'])->name('materi-edukasi.index');
+    Route::get('/materi-edukasi/{materiEdukasi}', [MateriEdukasiUmkmController::class, 'show'])->name('materi-edukasi.show');
+    Route::get('/materi-edukasi/{materiEdukasi}/download', [MateriEdukasiUmkmController::class, 'download'])->name('materi-edukasi.download');
 
     // PBI-34/35/36: Laporan Perkembangan Usaha Berkala
     Route::get('/laporan-berkala', [LaporanBerkalaController::class, 'index'])->name('laporan_berkala.index');
