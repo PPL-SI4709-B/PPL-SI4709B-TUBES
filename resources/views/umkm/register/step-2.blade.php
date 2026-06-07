@@ -18,27 +18,38 @@
         <!-- Nama Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">NAMA USAHA</label>
-<<<<<<< HEAD
-            <input type="text" class="input-field" placeholder="Masukkan nama usaha Anda">
-=======
-            <input type="text" name="business_name" class="input-field" placeholder="Masukkan nama usaha Anda">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
+            <input type="text" name="business_name" class="input-field" value="{{ old('business_name', $registerStep2['business_name'] ?? '') }}" placeholder="Masukkan nama usaha Anda">
         </div>
 
-        <!-- Sektor Usaha -->
+        <!-- Kategori Usaha -->
         <div class="flex-col gap-2">
-            <label class="input-label">SEKTOR USAHA</label>
+            <label class="input-label">KATEGORI USAHA</label>
             <div class="relative">
-<<<<<<< HEAD
-                <select class="input-field text-muted" style="appearance: none; padding-right: 40px;">
-=======
-                <select name="business_sector" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
-                    <option>Pilih Sektor Usaha</option>
-                    <option>Kuliner</option>
-                    <option>Perdagangan</option>
-                    <option>Fashion</option>
-                    <option>Jasa</option>
+                <select name="category_id" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
+                    <option value="">Pilih Kategori Usaha</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id', $registerStep2['category_id'] ?? '') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <span class="absolute text-muted" style="right: 12px; top: 12px; pointer-events: none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+            </div>
+        </div>
+
+        <!-- Wilayah Usaha -->
+        <div class="flex-col gap-2">
+            <label class="input-label">WILAYAH USAHA</label>
+            <div class="relative">
+                <select name="region_id" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
+                    <option value="">Pilih Wilayah Usaha</option>
+                    @foreach($regions as $region)
+                        <option value="{{ $region->id }}" {{ old('region_id', $registerStep2['region_id'] ?? '') == $region->id ? 'selected' : '' }}>
+                            {{ $region->name }}
+                        </option>
+                    @endforeach
                 </select>
                 <span class="absolute text-muted" style="right: 12px; top: 12px; pointer-events: none;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -49,36 +60,26 @@
         <!-- Alamat Usaha -->
         <div class="flex-col gap-2">
             <label class="input-label">ALAMAT USAHA</label>
-<<<<<<< HEAD
-            <textarea class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;"></textarea>
-=======
-            <textarea name="business_address" class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;"></textarea>
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
+            <textarea name="business_address" class="input-field" rows="3" placeholder="Masukkan alamat lengkap usaha Anda" style="resize: vertical;">{{ old('business_address', $registerStep2['business_address'] ?? '') }}</textarea>
         </div>
 
         <!-- NIB -->
         <div class="flex-col gap-2">
             <label class="input-label">NIB (Opsional)</label>
-<<<<<<< HEAD
-            <input type="text" class="input-field" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
-=======
-            <input type="text" name="nib" class="input-field" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
+            <input type="text" name="nib" class="input-field" value="{{ old('nib', $registerStep2['nib'] ?? '') }}" placeholder="Masukkan Nomor Induk Berusaha (jika ada)">
         </div>
         
-        <!-- Omzet Tahunan -->
+        <!-- Skala Usaha -->
         <div class="flex-col gap-2 mb-2">
-            <label class="input-label">OMZET TAHUNAN</label>
+            <label class="input-label">SKALA USAHA</label>
             <div class="relative">
-<<<<<<< HEAD
-                <select class="input-field text-muted" style="appearance: none; padding-right: 40px;">
-=======
-                <select name="revenue" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
-                    <option>Pilih Omzet Tahunan</option>
-                    <option>&lt; Rp 300 Juta</option>
-                    <option>Rp 300 Juta - Rp 2 Miliar</option>
-                    <option>&gt; Rp 2 Miliar</option>
+                <select name="scale_id" class="input-field text-muted" style="appearance: none; padding-right: 40px;">
+                    <option value="">Pilih Skala Usaha</option>
+                    @foreach($scales as $scale)
+                        <option value="{{ $scale->id }}" {{ old('scale_id', $registerStep2['scale_id'] ?? '') == $scale->id ? 'selected' : '' }}>
+                            {{ $scale->name }}
+                        </option>
+                    @endforeach
                 </select>
                 <span class="absolute text-muted" style="right: 12px; top: 12px; pointer-events: none;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>

@@ -18,21 +18,13 @@
         <!-- Nama Lengkap Pemilik -->
         <div class="flex-col gap-2">
             <label class="input-label">NAMA LENGKAP PEMILIK</label>
-<<<<<<< HEAD
-            <input type="text" class="input-field" placeholder="Sesuai KTP">
-=======
             <input type="text" name="name" class="input-field" placeholder="Sesuai KTP">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
         </div>
 
         <!-- Email -->
         <div class="flex-col gap-2">
             <label class="input-label">EMAIL</label>
-<<<<<<< HEAD
-            <input type="email" class="input-field" placeholder="contoh@email.com">
-=======
             <input type="email" name="email" class="input-field" placeholder="contoh@email.com">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
         </div>
 
         <!-- No HP -->
@@ -40,11 +32,7 @@
             <label class="input-label">NO. HP/WHATSAPP</label>
             <div class="flex">
                 <div class="input-prefix">+62</div>
-<<<<<<< HEAD
-                <input type="tel" class="input-field input-with-prefix" placeholder="8123456xxx">
-=======
                 <input type="tel" name="phone" class="input-field input-with-prefix" placeholder="8123456xxx">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
             </div>
         </div>
 
@@ -54,11 +42,7 @@
             <div class="flex-col gap-2">
                 <label class="input-label">PASSWORD</label>
                 <div class="relative">
-<<<<<<< HEAD
-                    <input type="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
-=======
                     <input type="password" name="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
                     <span class="absolute text-light" style="right: 12px; top: 12px; cursor: pointer;" onclick="togglePassword(this)">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
                     </span>
@@ -80,11 +64,7 @@
             <div class="flex-col gap-2">
                 <label class="input-label">KONFIRMASI PASSWORD</label>
                 <div class="relative">
-<<<<<<< HEAD
-                    <input type="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
-=======
                     <input type="password" name="password_confirmation" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
                     <span class="absolute text-light" style="right: 12px; top: 12px;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
                     </span>
@@ -94,13 +74,13 @@
 
         <!-- Checkbox -->
         <div class="flex items-start gap-3 mt-3 mb-3">
-            <label class="custom-checkbox">
-                <input type="checkbox" checked>
+            <label class="custom-checkbox" for="agree_terms">
+                <input type="checkbox" id="agree_terms" name="agree_terms" value="1">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <div class="text-sm text-main" style="line-height: 1.5; padding-top: 1px;">
+            <label for="agree_terms" class="text-sm text-main" style="line-height: 1.5; padding-top: 1px; cursor: pointer;">
                 Saya menyetujui <a href="#" class="link-brand">syarat dan ketentuan</a> yang berlaku di portal SIP UMKM Kab. Bandung.
-            </div>
+            </label>
         </div>
 
         <!-- Action Buttons -->

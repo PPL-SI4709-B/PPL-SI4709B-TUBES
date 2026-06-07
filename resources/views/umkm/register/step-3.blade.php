@@ -19,56 +19,63 @@
         <div class="grid grid-cols-2 gap-4">
             <!-- Account Summary -->
             <div class="relative p-6" style="border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
-                <button type="button" class="absolute bg-input-bg text-muted" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9;">
+                <a href="{{ route('umkm.register.step-1') }}" class="absolute" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9; color: var(--color-text-muted);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </button>
+                </a>
                 
                 <h3 class="text-base font-bold text-dark mb-4 tracking-tight" style="padding-right: 40px;">Ringkasan Data Akun</h3>
                 
                 <div class="flex-col gap-3">
                     <div>
                         <div class="text-xs text-muted mb-1">Nama Lengkap</div>
-                        <div class="text-sm font-semibold text-dark">Budi Santoso</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep1['name'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Email</div>
-                        <div class="text-sm font-semibold text-dark">budi.santoso@email.com</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep1['email'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Nomor HP</div>
-                        <div class="text-sm font-semibold text-dark">081234567890</div>
+                        <div class="text-sm font-semibold text-dark">{{ !empty($registerStep1['phone']) ? $registerStep1['phone'] : '-' }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Business Summary -->
             <div class="relative p-6" style="border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
-                <button type="button" class="absolute bg-input-bg text-muted" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9;">
+                <a href="{{ route('umkm.register.step-2') }}" class="absolute" style="top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #F1F5F9; color: var(--color-text-muted);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </button>
+                </a>
                 
                 <h3 class="text-base font-bold text-dark mb-4 tracking-tight" style="padding-right: 40px;">Ringkasan Data Usaha</h3>
                 
                 <div class="flex-col gap-3">
                     <div>
                         <div class="text-xs text-muted mb-1">Nama Usaha</div>
-                        <div class="text-sm font-semibold text-dark">Warung Sejahtera</div>
+                        <div class="text-sm font-semibold text-dark">{{ $registerStep2['business_name'] ?? '-' }}</div>
                     </div>
                     <div>
-                        <div class="text-xs text-muted mb-1">Sektor Usaha</div>
-                        <div class="text-sm font-semibold text-dark">Perdagangan</div>
+                        <div class="text-xs text-muted mb-1">Kategori Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedCategory->name ?? '-' }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Wilayah Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedRegion->name ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">Alamat Usaha</div>
-                        <div class="text-sm font-semibold text-dark" style="line-height: 1.4;">Jl. Merdeka No. 123, Bandung</div>
+                        <div class="text-sm font-semibold text-dark" style="line-height: 1.4;">{{ $registerStep2['business_address'] ?? '-' }}</div>
                     </div>
                     <div>
                         <div class="text-xs text-muted mb-1">NIB</div>
-                        <div class="text-sm font-semibold text-dark">1234567890123 <span class="text-muted font-medium">(Opsional)</span></div>
+                        <div class="text-sm font-semibold text-dark">
+                            {{ !empty($registerStep2['nib']) ? $registerStep2['nib'] : '-' }}
+                            <span class="text-muted font-medium">(Opsional)</span>
+                        </div>
                     </div>
                     <div>
-                        <div class="text-xs text-muted mb-1">Omzet Tahunan</div>
-                        <div class="text-sm font-semibold text-dark">&lt; Rp 300 Juta</div>
+                        <div class="text-xs text-muted mb-1">Skala Usaha</div>
+                        <div class="text-sm font-semibold text-dark">{{ $selectedScale->name ?? '-' }}</div>
                     </div>
                 </div>
             </div>
@@ -76,14 +83,11 @@
 
         <!-- Confimation Checkbox Banner -->
         <div class="flex items-start gap-4 p-4 mt-2" style="background-color: #eff6ff; border-radius: var(--radius-md);">
-            <label class="custom-checkbox bg-white" style="border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-top: 2px;">
-<<<<<<< HEAD
-                <input type="checkbox">
-=======
-                <input type="checkbox" name="assurance" value="1">
->>>>>>> a15cbf70f39e9d2664e573b01c406838ba06c190
+            <label class="custom-checkbox" style="margin-top: 2px;">
+                <input type="checkbox" id="assurance" name="assurance" value="1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
-            <label class="text-sm text-dark font-medium leading-snug cursor-pointer">
+            <label for="assurance" class="text-sm text-dark font-medium leading-snug cursor-pointer">
                 Saya menyatakan bahwa data yang saya isi adalah benar dan dapat dipertanggungjawabkan.
             </label>
         </div>

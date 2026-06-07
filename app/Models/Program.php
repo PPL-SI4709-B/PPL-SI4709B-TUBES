@@ -11,6 +11,7 @@ class Program extends Model
 
     protected $fillable = [
         'name',
+        'jenis',
         'description',
         'quota',
         'start_date',
@@ -22,7 +23,12 @@ class Program extends Model
     {
         return [
             'start_date' => 'date',
-            'end_date' => 'date',
+            'end_date'   => 'date',
         ];
+    }
+
+    public function pengajuans()
+    {
+        return $this->hasMany(Pengajuan::class);
     }
 }

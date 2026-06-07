@@ -12,10 +12,11 @@ class Pengajuan extends Model
     protected $fillable = [
         'user_id',
         'program_id',
-        'program_name',
+        'jenis',
         'kebutuhan_usaha',
         'dokumen_pendukung',
         'status',
+        'notes',
     ];
 
     public function user()
