@@ -8,6 +8,7 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventFeedbackController;
 use App\Http\Controllers\EventRegistrationController;
+use App\Http\Controllers\LaporanBerkalaController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PengajuanPendanaanController;
@@ -79,6 +80,13 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     // PBI-40 / PBI-42: static support pages
     Route::view('/notifikasi', 'umkm.notifikasi')->name('notifikasi');
     Route::view('/faq', 'umkm.faq')->name('faq');
+
+    // PBI-34/35/36: Laporan Perkembangan Usaha Berkala
+    Route::get('/laporan-berkala', [LaporanBerkalaController::class, 'index'])->name('laporan_berkala.index');
+    Route::get('/laporan-berkala/create', [LaporanBerkalaController::class, 'create'])->name('laporan_berkala.create');
+    Route::post('/laporan-berkala', [LaporanBerkalaController::class, 'store'])->name('laporan_berkala.store');
+    Route::get('/laporan-berkala/{id}/edit', [LaporanBerkalaController::class, 'edit'])->name('laporan_berkala.edit');
+    Route::put('/laporan-berkala/{id}', [LaporanBerkalaController::class, 'update'])->name('laporan_berkala.update');
 });
 
 // UMKM Reports
