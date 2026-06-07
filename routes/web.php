@@ -87,6 +87,11 @@ Route::prefix('umkm')->name('umkm.')->middleware(['auth', 'role:umkm'])->group(f
     Route::get('/notifications', [NotificationController::class, 'umkmIndex'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 
+    // PBI-38/39: Materi Edukasi (UMKM access + download)
+    Route::get('/materi-edukasi', [MateriEdukasiUmkmController::class, 'index'])->name('materi-edukasi.index');
+    Route::get('/materi-edukasi/{materiEdukasi}', [MateriEdukasiUmkmController::class, 'show'])->name('materi-edukasi.show');
+    Route::get('/materi-edukasi/{materiEdukasi}/download', [MateriEdukasiUmkmController::class, 'download'])->name('materi-edukasi.download');
+
     // PBI-34/35/36: Laporan Perkembangan Usaha Berkala
     Route::get('/laporan-berkala', [LaporanBerkalaController::class, 'index'])->name('laporan_berkala.index');
     Route::get('/laporan-berkala/create', [LaporanBerkalaController::class, 'create'])->name('laporan_berkala.create');
@@ -100,11 +105,6 @@ Route::middleware(['auth', 'role:umkm'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
-
-    // Materi Edukasi
-    Route::get('/materi-edukasi', [MateriEdukasiUmkmController::class, 'index'])->name('materi-edukasi.index');
-    Route::get('/materi-edukasi/{materiEdukasi}', [MateriEdukasiUmkmController::class, 'show'])->name('materi-edukasi.show');
-    Route::get('/materi-edukasi/{materiEdukasi}/download', [MateriEdukasiUmkmController::class, 'download'])->name('materi-edukasi.download');
 });
 
 // ─── Dinas Routes ─────────────────────────────────────────────────────────────
