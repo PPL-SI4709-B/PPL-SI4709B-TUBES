@@ -41,7 +41,7 @@ class ScaleController extends Controller
 
         Scale::create($request->only('name', 'description'));
 
-        return redirect()->route('dinas.scale.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Skala usaha berhasil ditambahkan.');
     }
 
@@ -70,7 +70,7 @@ class ScaleController extends Controller
 
         $scale->update($request->only('name', 'description'));
 
-        return redirect()->route('dinas.scale.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Skala usaha berhasil diperbarui.');
     }
 
@@ -81,7 +81,7 @@ class ScaleController extends Controller
     {
         $scale->delete();
 
-        return redirect()->route('dinas.scale.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Skala usaha berhasil dihapus.');
     }
 }

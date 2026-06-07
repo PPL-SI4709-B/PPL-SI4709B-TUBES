@@ -3,29 +3,7 @@
 @section('title', 'Detail Laporan')
 
 @section('sidebar')
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <div class="brand-title">PORTAL UMKM</div>
-        <div class="brand-subtitle">Kabupaten Bandung</div>
-    </div>
-    <nav class="nav-menu">
-        <a href="{{ route('dinas.dashboard') }}" class="nav-item">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
-            Beranda
-        </a>
-        <a href="{{ route('dinas.report.index') }}" class="nav-item active">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
-            Review Laporan
-        </a>
-    </nav>
-    <div class="sidebar-bottom">
-        <a href="#" class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Keluar
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-    </div>
-</aside>
+<x-dinas-sidebar active="report" />
 @endsection
 
 @section('header')

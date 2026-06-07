@@ -11,7 +11,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = Report::where('user_id', Auth::id())->latest()->get();
-        
+
         return view('umkm.reports.index', compact('reports'));
     }
 
@@ -42,7 +42,7 @@ class ReportController extends Controller
             'income' => $validated['income'],
             'expense' => $validated['expense'],
             'profit' => $profit,
-            'catatan_usaha' => $validated['catatan_usaha'],
+            'catatan_usaha' => $validated['catatan_usaha'] ?? null,
             'report_date' => $validated['report_date'],
             'period' => $validated['period'],
             'due_date' => $validated['due_date'],

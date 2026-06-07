@@ -10,8 +10,13 @@ it('UMKM dapat membuat laporan', function () {
     $umkm = User::factory()->create(['role' => 'umkm']);
 
     $response = $this->actingAs($umkm)->post(route('reports.store'), [
-        'judul'     => 'Laporan Oktober 2024',
+        'judul' => 'Laporan Oktober 2024',
         'deskripsi' => 'Omzet bulan ini meningkat 15%',
+        'income' => 10000000,
+        'expense' => 4000000,
+        'report_date' => '2024-10-01',
+        'period' => 'Oktober 2024',
+        'due_date' => '2024-10-31',
     ]);
 
     $response->assertRedirect(route('reports.index'));
@@ -19,8 +24,8 @@ it('UMKM dapat membuat laporan', function () {
 
     $this->assertDatabaseHas('reports', [
         'user_id' => $umkm->id,
-        'judul'   => 'Laporan Oktober 2024',
-        'status'  => 'pending',
+        'judul' => 'Laporan Oktober 2024',
+        'status' => 'pending',
     ]);
 });
 
@@ -33,19 +38,19 @@ it('Laporan membutuhkan judul dan deskripsi', function () {
 });
 
 it('Petugas dapat menyetujui laporan', function () {
-    $dinas  = User::factory()->create(['role' => 'dinas']);
-    $umkm   = User::factory()->create(['role' => 'umkm']);
+    $dinas = User::factory()->create(['role' => 'dinas']);
+    $umkm = User::factory()->create(['role' => 'umkm']);
     $report = Report::factory()->create(['user_id' => $umkm->id, 'status' => 'pending']);
 
     $response = $this->actingAs($dinas)->put(route('dinas.report.update', $report), [
-        'status'          => 'approved',
+        'status' => 'approved',
         'catatan_petugas' => 'Laporan valid.',
     ]);
 
     $response->assertRedirect(route('dinas.report.index'));
 
     $this->assertDatabaseHas('reports', [
-        'id'     => $report->id,
+        'id' => $report->id,
         'status' => 'approved',
     ]);
 });

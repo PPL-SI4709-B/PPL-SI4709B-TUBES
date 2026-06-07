@@ -41,7 +41,7 @@ class RegionController extends Controller
 
         Region::create($request->only('name', 'description'));
 
-        return redirect()->route('dinas.region.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Wilayah berhasil ditambahkan.');
     }
 
@@ -70,7 +70,7 @@ class RegionController extends Controller
 
         $region->update($request->only('name', 'description'));
 
-        return redirect()->route('dinas.region.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Wilayah berhasil diperbarui.');
     }
 
@@ -81,7 +81,7 @@ class RegionController extends Controller
     {
         $region->delete();
 
-        return redirect()->route('dinas.region.index')
+        return redirect()->route('dinas.master-data')
             ->with('success', 'Wilayah berhasil dihapus.');
     }
 }

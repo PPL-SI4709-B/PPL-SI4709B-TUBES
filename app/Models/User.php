@@ -20,8 +20,15 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
+    }
+
+    public function registeredEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_registrations')
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function pengajuans()
@@ -37,5 +44,10 @@ class User extends Authenticatable
     public function umkmProfile()
     {
         return $this->hasOne(UmkmProfile::class);
+    }
+
+    public function pengajuanPendanaans()
+    {
+        return $this->hasMany(PengajuanPendanaan::class);
     }
 }

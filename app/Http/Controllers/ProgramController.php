@@ -23,6 +23,7 @@ class ProgramController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
+            'jenis'       => 'required|in:pendanaan,pembinaan',
             'description' => 'nullable|string',
             'quota'       => 'required|integer|min:0',
             'start_date'  => 'nullable|date',
@@ -45,6 +46,7 @@ class ProgramController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
+            'jenis'       => 'required|in:pendanaan,pembinaan',
             'description' => 'nullable|string',
             'quota'       => 'required|integer|min:0',
             'start_date'  => 'nullable|date',
