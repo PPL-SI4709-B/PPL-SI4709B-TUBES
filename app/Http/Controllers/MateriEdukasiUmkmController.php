@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\MateriEdukasi;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,6 +10,7 @@ class MateriEdukasiUmkmController extends Controller
     public function index()
     {
         $materi = MateriEdukasi::latest()->paginate(9);
+
         return view('umkm.materi-edukasi.index', compact('materi'));
     }
 
@@ -21,7 +21,7 @@ class MateriEdukasiUmkmController extends Controller
 
     public function download(MateriEdukasi $materiEdukasi)
     {
-        if (!Storage::disk('public')->exists($materiEdukasi->file_path)) {
+        if (! Storage::disk('public')->exists($materiEdukasi->file_path)) {
             return back()->with('error', 'File tidak ditemukan.');
         }
 

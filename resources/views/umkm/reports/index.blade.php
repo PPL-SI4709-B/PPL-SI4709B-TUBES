@@ -79,6 +79,12 @@
                             @else
                                 <span class="text-xs text-gray-400 italic">Belum ada catatan</span>
                             @endif
+                            @if ($report->reviewed_at)
+                                <div class="text-xs text-gray-400 mt-1">Ditinjau: {{ $report->reviewed_at->format('d M Y') }}</div>
+                            @endif
+                            @if ($report->lampiran)
+                                <a href="{{ route('reports.lampiran', $report) }}" target="_blank" class="text-xs" style="color: var(--color-primary); text-decoration: underline; display: inline-block; margin-top: 0.25rem;">Lihat Lampiran ↗</a>
+                            @endif
                         </td>
                     </tr>
                     @empty

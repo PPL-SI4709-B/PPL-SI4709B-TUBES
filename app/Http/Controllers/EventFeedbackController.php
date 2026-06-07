@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Event;
 use App\Models\EventFeedback;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EventFeedbackController extends Controller

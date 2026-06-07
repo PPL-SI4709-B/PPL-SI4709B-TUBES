@@ -44,6 +44,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('dokumen/pengajuan/{pengajuan}', [PengajuanController::class, 'dokumen'])->name('pengajuan.dokumen');
     Route::get('dokumen/pendanaan/{pengajuanPendanaan}', [PengajuanPendanaanController::class, 'dokumen'])->name('pendanaan.dokumen');
+    Route::get('dokumen/laporan/{report}', [ReportController::class, 'lampiran'])->name('reports.lampiran');
 });
 
 // UMKM Register
@@ -119,7 +120,7 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::get('/dashboard/export-umkm', [DashboardController::class, 'exportUmkm'])->name('dashboard.export-umkm');
 
     Route::get('master-data', [MasterDataController::class, 'index'])->name('master-data');
-    Route::resource('program', ProgramController::class)->except(['show']);
+    Route::resource('program', ProgramController::class);
     Route::resource('category', CategoryController::class)->except(['show']);
     Route::resource('region', RegionController::class)->except(['show']);
     Route::resource('scale', ScaleController::class)->except(['show']);

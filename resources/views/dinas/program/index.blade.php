@@ -65,6 +65,7 @@
                         <span class="badge" style="background-color: {{ $program->status === 'active' ? 'var(--color-success-bg)' : '#f1f5f9' }}; color: {{ $program->status === 'active' ? 'var(--color-success)' : 'var(--color-text-muted)' }};">
                             {{ $program->status === 'active' ? 'Aktif' : 'Nonaktif' }}
                         </span>
+                        <a href="{{ route('dinas.program.show', $program) }}" style="font-size: var(--text-sm); color: var(--color-text-muted); font-weight: 500;">Detail</a>
                         <a href="{{ route('dinas.program.edit', $program) }}" style="font-size: var(--text-sm); color: var(--color-secondary); font-weight: 500;">Edit</a>
                         <form action="{{ route('dinas.program.destroy', $program) }}" method="POST" onsubmit="return confirm('Hapus program ini?');" style="display: inline;">
                             @csrf

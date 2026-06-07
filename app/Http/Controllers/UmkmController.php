@@ -40,9 +40,16 @@ class UmkmController extends Controller
             'category_id' => 'required|exists:categories,id',
             'region_id' => 'required|exists:regions,id',
             'scale_id' => 'required|exists:scales,id',
+            'logo' => 'nullable|file|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
         $user = Auth::user();
+
+        if ($request->hasFile('logo')) {
+            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+        } else {
+            unset($validated['logo']);
+        }
 
         UmkmProfile::updateOrCreate(
             ['user_id' => $user->id],

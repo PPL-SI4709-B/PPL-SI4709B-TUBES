@@ -77,7 +77,8 @@
                         <th class="pb-3">TANGGAL</th>
                         <th class="pb-3">NAMA PROGRAM</th>
                         <th class="pb-3">KEBUTUHAN USAHA</th>
-                        <th class="pb-3 text-right">STATUS</th>
+                        <th class="pb-3">CATATAN DINAS</th>
+                        <th class="pb-3 text-right">STATUS & RIWAYAT</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm divide-y divide-gray-100">
@@ -86,13 +87,29 @@
                             <td class="py-4 text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
                             <td class="py-4 font-bold text-gray-900">{{ $pengajuan->program?->name ?? '-' }}</td>
                             <td class="py-4 text-gray-600">{{ Str::limit($pengajuan->kebutuhan_usaha, 40) }}</td>
+                            <td class="py-4 text-gray-600" style="max-width: 16rem;">
+                                @if($pengajuan->notes)
+                                    {{ $pengajuan->notes }}
+                                @else
+                                    <span class="text-xs text-gray-400 italic">Belum ada catatan</span>
+                                @endif
+                            </td>
                             <td class="py-4 text-right">
                                 <x-status-badge :status="$pengajuan->status" />
+                                {{-- PBI-20: timeline status --}}
+                                <div style="margin-top: 0.5rem; font-size: 0.7rem; color: #6b7280; line-height: 1.5;">
+                                    <div>● Diajukan — {{ $pengajuan->created_at->format('d M Y') }}</div>
+                                    @if($pengajuan->reviewed_at)
+                                        <div>● {{ $pengajuan->status === 'approved' ? 'Disetujui' : 'Ditolak' }} — {{ $pengajuan->reviewed_at->format('d M Y') }}</div>
+                                    @else
+                                        <div style="color: #9ca3af;">○ Menunggu peninjauan</div>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="py-12 text-center">
+                            <td colspan="5" class="py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div style="background-color: var(--color-bg); padding: 1rem; border-radius: 50%; color: var(--color-text-muted); margin-bottom: 1rem;">
                                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>

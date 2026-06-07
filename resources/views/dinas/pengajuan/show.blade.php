@@ -75,7 +75,10 @@
         @if ($pengajuan->status === 'pending')
             <div class="flex flex-col gap-4">
                 <div>
-                    <label for="notes" style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Catatan (opsional)</label>
+                    <label for="notes" style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Catatan (wajib saat menolak)</label>
+                    @error('notes')
+                        <div style="font-size: var(--text-xs); color: var(--color-danger); margin-bottom: var(--space-1);">{{ $message }}</div>
+                    @enderror
                     <textarea id="notes" name="notes" rows="3" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); resize: vertical;" placeholder="Tulis catatan untuk UMKM..."></textarea>
                 </div>
                 <div class="flex gap-3">
@@ -104,7 +107,14 @@
                     <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-border);">{{ $pengajuan->notes }}</div>
                 </div>
             @endif
-            <div style="font-size: var(--text-sm); color: var(--color-text-muted);">Pengajuan ini sudah diproses.</div>
+            {{-- PBI-5: riwayat approval --}}
+            <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Riwayat Peninjauan</div>
+            <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px;">
+                Diproses oleh <strong>{{ $pengajuan->reviewer?->name ?? 'Petugas' }}</strong>
+                @if ($pengajuan->reviewed_at)
+                    pada {{ $pengajuan->reviewed_at->format('d M Y, H:i') }}
+                @endif
+            </div>
         @endif
     </div>
 

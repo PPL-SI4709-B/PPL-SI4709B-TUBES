@@ -41,6 +41,22 @@
         <p class="text-gray-500 text-sm mt-1">Program pelatihan dan bootcamp yang diselenggarakan oleh Dinas untuk pelaku UMKM.</p>
     </div>
 
+    {{-- PBI-11: search & filter --}}
+    <form method="GET" action="{{ route('umkm.event') }}" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama event..."
+            style="flex: 1; min-width: 12rem; padding: 0.5rem 0.875rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.875rem;">
+        <select name="type" style="padding: 0.5rem 0.875rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.875rem; background: white;">
+            <option value="">Semua Jenis</option>
+            @foreach($types as $t)
+                <option value="{{ $t }}" {{ ($type ?? '') === $t ? 'selected' : '' }}>{{ ucfirst($t) }}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-primary" style="font-size: 0.875rem;">Cari</button>
+        @if(!empty($search) || !empty($type))
+            <a href="{{ route('umkm.event') }}" style="font-size: 0.8rem; color: var(--color-text-muted);">Reset</a>
+        @endif
+    </form>
+
     @forelse ($events as $event)
         @php
             $typeColors = match(strtolower($event->type)) {

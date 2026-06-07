@@ -14,6 +14,13 @@ Tanggal audit: 2026-06-07.
 
 ---
 
+> **⚠️ Catatan keterbaruan (2026-06-08):** Matriks asli dibuat pada HEAD lama. Repo kini di
+> HEAD `ba71dda` yang **jauh lebih lengkap** (Event CRUD/registrasi/feedback, notifikasi, materi
+> edukasi, laporan berkala, evaluasi, status-log sudah ada). Hanya **9 baris PARTIAL yang
+> ditargetkan** (4,5,6,8,10,11,17,19,20) yang **diperbarui ke COMPLETE** di bawah ini setelah
+> implementasi — lihat `IMPLEMENTATION_REPORT.md`. Baris MISSING lainnya kemungkinan sudah usang
+> dan butuh re-audit penuh terhadap HEAD saat ini.
+
 ## Completion Matrix
 
 | PBI | Status | Evidence / Gap |
@@ -21,23 +28,23 @@ Tanggal audit: 2026-06-07.
 | 1 Kategori | COMPLETE | `CategoryController` (resource), `…create_categories_table`, `tests/Browser/PBI1KategoriUsahaTest`. Tanpa soft-delete/status (opsional). |
 | 2 Wilayah & Skala | COMPLETE | `Region/ScaleController`, `…regions/scales_table`, FK di `…umkm_profiles_table`, `PBI2…Test`. |
 | 3 Reference dropdowns | COMPLETE | `AuthController::showRegisterStep2`, `umkm/register/step-2.blade`, `PBI3…Test`. |
-| 4 Program CRUD | PARTIAL | `ProgramController` CRUD penuh + status + periode. **Tidak ada halaman detail/show** (resource `except show`). |
-| 5 Approval | PARTIAL | `PengajuanController::approve/reject` (status-guarded). **Tidak ada riwayat/audit trail** approval. |
-| 6 Catatan pengajuan | PARTIAL | Pendanaan: reject wajib `catatan` + UMKM lihat (`pendanaan/show.blade:90`). **Pengajuan pembinaan `notes` nullable saat reject + tidak ditampilkan ke UMKM**; tanpa riwayat catatan. |
+| 4 Program CRUD | **COMPLETE** ✅ | +`ProgramController::show` + `dinas/program/show.blade` + route `dinas.program.show`. `Pbi4ProgramDetailTest`. |
+| 5 Approval | **COMPLETE** ✅ | +kolom `pengajuans.reviewed_by/reviewed_at`, di-set saat approve/reject; riwayat di `dinas/pengajuan/show.blade`. `Pbi5PengajuanReviewTest`. |
+| 6 Catatan pengajuan | **COMPLETE** ✅ | reject `notes` kini `required`; catatan tampil ke UMKM di `umkm/pengajuan/index.blade`. `Pbi6RejectNotesTest`. |
 | 7 Verifikasi profil | COMPLETE | `VerificationController::verify/reject`, `users.verification_note`, `VerificationTest`. |
-| 8 Review laporan | PARTIAL | `ReportReviewController` review + `catatan_petugas`. **Tanpa riwayat review.** |
+| 8 Review laporan | **COMPLETE** ✅ | +`reports.reviewed_by/reviewed_at` di-set saat review; tampil di `umkm/reports/index` & `dinas/report/show`. `Pbi8ReportReviewMetaTest`. |
 | 9 Status laporan | PARTIAL | Hanya `pending/approved/rejected`. **Tanpa draft / submitted / reviewed.** |
-| 10 Profil UMKM | PARTIAL | `UmkmController` CRUD + data + kontak. **Tanpa upload logo** (tidak ada field di `umkm_profiles`/`profile/edit.blade`). |
-| 11 Event list | PARTIAL | `EventController::index`, `umkm/event.blade`. **Tanpa search/filter.** |
+| 10 Profil UMKM | **COMPLETE** ✅ | +kolom `umkm_profiles.logo` + upload (disk public) di `UmkmController::update`; tampil di profil. `Pbi10ProfileLogoTest`. |
+| 11 Event list | **COMPLETE** ✅ | `EventController::index` + `?search=`/`?type=`; form di `umkm/event.blade`. `Pbi11EventSearchTest`. |
 | 12 Event detail | COMPLETE | `EventController::show`, `umkm/eventdetail.blade`; jadwal/lokasi/kuota di `events`. |
 | 13 Pengajuan | COMPLETE | `PengajuanController::store` + validasi, `PengajuanTest`. |
 | 14 Upload dokumen | COMPLETE | simpan di disk privat + unduh via `pengajuan.dokumen`/`pendanaan.dokumen`, `DocumentAccessTest`. |
 | 15 Riwayat & status pengajuan | COMPLETE | `PengajuanController::umkmIndex`, `umkm/pengajuan/index.blade`. |
 | 16 Registrasi | PARTIAL | Register 3-langkah (`AuthController`). **Tanpa aktivasi akun / verifikasi email.** |
-| 17 Kirim laporan | PARTIAL | `ReportController::store` + validasi. **Tanpa upload lampiran** (`reports/create.blade` tanpa input file). |
+| 17 Kirim laporan | **COMPLETE** ✅ | +kolom `reports.lampiran` upload (disk privat) + serve berotorisasi `reports.lampiran`. `Pbi17ReportLampiranTest`. |
 | 18 Hasil review laporan | COMPLETE | `umkm/reports/index.blade` status + `catatan_petugas`. |
-| 19 Status verifikasi | PARTIAL | `umkm/profile/show.blade` tampil status. **Tanpa riwayat verifikasi.** |
-| 20 Tracking status pengajuan | PARTIAL | status di `umkm/pengajuan/index.blade`. **Tanpa timeline.** |
+| 19 Status verifikasi | **COMPLETE** ✅ | +kolom `users.verified_at` di-set saat verify/reject; tanggal + alasan di `umkm/profile/show.blade`. `Pbi19VerifiedAtTest`. |
+| 20 Tracking status pengajuan | **COMPLETE** ✅ | mini-timeline (Diajukan→keputusan) pakai `reviewed_at` di `umkm/pengajuan/index.blade`. `Pbi20TimelineTest`. |
 | 21 Dashboard UMKM | COMPLETE | `DashboardController::umkm` (total + recent pengajuan/laporan/pendanaan). |
 | 22 Form pendanaan | COMPLETE | `PengajuanPendanaanController::create/store` + validasi lengkap. |
 | 23 Master sumber pendanaan | COMPLETE | `SumberPendanaanController` (resource), `…sumber_pendanaans_table`. |

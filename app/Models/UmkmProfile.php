@@ -12,6 +12,7 @@ class UmkmProfile extends Model
     protected $fillable = [
         'user_id',
         'business_name',
+        'logo',
         'phone',
         'nib',
         'business_address',

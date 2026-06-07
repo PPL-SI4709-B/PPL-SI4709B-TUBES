@@ -13,18 +13,18 @@ class PBI8Test extends DuskTestCase
      * navigasi ke menu Daftar Laporan (URL: /dinas/report).
      * Halaman daftar laporan berhasil ditampilkan dan memuat list laporan masuk.
      */
-    public function testAksesDaftarLaporan(): void
+    public function test_akses_daftar_laporan(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('http://127.0.0.1:8000/login')
-                    ->waitFor('input[name="email"]')
-                    ->type('input[name="email"]', 'dinas@test.com')
-                    ->type('input[name="password"]', 'password')
-                    ->press('Masuk ke Dashboard')
-                    ->waitForLocation('/dinas/pengajuan')
-                    ->visit('/dinas/report')
-                    ->assertPathIs('/dinas/report')
-                    ->assertSee('Daftar Laporan');
+                ->waitFor('input[name="email"]')
+                ->type('input[name="email"]', 'dinas@test.com')
+                ->type('input[name="password"]', 'password')
+                ->press('Masuk ke Dashboard')
+                ->waitForLocation('/dinas/pengajuan')
+                ->visit('/dinas/report')
+                ->assertPathIs('/dinas/report')
+                ->assertSee('Daftar Laporan');
         });
     }
 
@@ -34,20 +34,20 @@ class PBI8Test extends DuskTestCase
      * klik tombol "Detail" pada salah satu laporan.
      * Halaman detail (URL: /dinas/report/{id}) terbuka menampilkan rincian laporan.
      */
-    public function testAksesDetailLaporan(): void
+    public function test_akses_detail_laporan(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('http://127.0.0.1:8000/login')
-                    ->waitFor('input[name="email"]')
-                    ->type('input[name="email"]', 'dinas@test.com')
-                    ->type('input[name="password"]', 'password')
-                    ->press('Masuk ke Dashboard')
-                    ->waitForLocation('/dinas/pengajuan')
-                    ->visit('/dinas/report')
-                    ->assertPathIs('/dinas/report')
-                    ->clickLink('Detail')
-                    ->assertPathContains('/dinas/report/')
-                    ->assertSee('Detail Laporan');
+                ->waitFor('input[name="email"]')
+                ->type('input[name="email"]', 'dinas@test.com')
+                ->type('input[name="password"]', 'password')
+                ->press('Masuk ke Dashboard')
+                ->waitForLocation('/dinas/pengajuan')
+                ->visit('/dinas/report')
+                ->assertPathIs('/dinas/report')
+                ->clickLink('Detail')
+                ->assertPathContains('/dinas/report/')
+                ->assertSee('Detail Laporan');
         });
     }
 }

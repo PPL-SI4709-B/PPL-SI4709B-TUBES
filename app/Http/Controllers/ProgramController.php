@@ -14,6 +14,13 @@ class ProgramController extends Controller
         return view('dinas.program.index', compact('programs'));
     }
 
+    public function show(Program $program)
+    {
+        $program->loadCount('pengajuans');
+
+        return view('dinas.program.show', compact('program'));
+    }
+
     public function create()
     {
         return view('dinas.program.create');

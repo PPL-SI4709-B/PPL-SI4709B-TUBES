@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -36,9 +37,15 @@ class ReportController extends Controller
             'report_date' => 'required|date',
             'period' => 'required|string',
             'due_date' => 'required|date',
+            'lampiran' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
         ]);
 
         $profit = $validated['income'] - $validated['expense'];
+
+        $lampiranPath = null;
+        if ($request->hasFile('lampiran')) {
+            $lampiranPath = $request->file('lampiran')->store('laporan', 'local');
+        }
 
         Report::create([
             'user_id' => Auth::id(),
@@ -51,10 +58,25 @@ class ReportController extends Controller
             'report_date' => $validated['report_date'],
             'period' => $validated['period'],
             'due_date' => $validated['due_date'],
+            'lampiran' => $lampiranPath,
             'status' => 'pending',
         ]);
 
         return redirect()->route('reports.index')
             ->with('success', 'Laporan berhasil diajukan.');
+    }
+
+    public function lampiran(Report $report)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'dinas' && $report->user_id !== $user->id) {
+            abort(403);
+        }
+
+        if (! $report->lampiran || ! Storage::disk('local')->exists($report->lampiran)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->response($report->lampiran);
     }
 }

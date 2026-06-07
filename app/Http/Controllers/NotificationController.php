@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
-use Illuminate\Http\Request;
+use App\Models\Pengajuan;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
@@ -23,7 +23,7 @@ class NotificationController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $pengajuans = \App\Models\Pengajuan::where('user_id', Auth::id())
+        $pengajuans = Pengajuan::where('user_id', Auth::id())
             ->orderByDesc('updated_at')
             ->get();
 
@@ -35,7 +35,7 @@ class NotificationController extends Controller
         if ($notification->user_id === Auth::id()) {
             $notification->update(['read_at' => now()]);
         }
-        
+
         return back();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportReviewController extends Controller
 {
@@ -16,7 +17,7 @@ class ReportReviewController extends Controller
 
     public function show(Report $report)
     {
-        $report->load('user');
+        $report->load(['user', 'reviewer']);
 
         return view('dinas.report.show', compact('report'));
     }
@@ -36,6 +37,8 @@ class ReportReviewController extends Controller
         $report->update([
             'status' => $request->status,
             'catatan_petugas' => $request->catatan_petugas,
+            'reviewed_by' => Auth::id(),
+            'reviewed_at' => now(),
         ]);
 
         return redirect()->route('dinas.report.index')

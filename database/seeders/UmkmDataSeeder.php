@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\Region;
 use App\Models\Scale;
+use Illuminate\Database\Seeder;
 
 class UmkmDataSeeder extends Seeder
 {
@@ -24,7 +24,7 @@ class UmkmDataSeeder extends Seeder
             'Perdagangan / Retail',
             'Kecantikan & Kesehatan',
             'Teknologi / Digital',
-            'Lainnya'
+            'Lainnya',
         ];
 
         foreach ($categories as $category) {
@@ -39,7 +39,7 @@ class UmkmDataSeeder extends Seeder
             'Katapang', 'Kertasari', 'Kutawaringin', 'Majalaya', 'Margaasih',
             'Margahayu', 'Nagreg', 'Pacet', 'Pameungpeuk', 'Pangalengan',
             'Paseh', 'Pasirjambu', 'Rancabali', 'Rancaekek', 'Solokanjeruk',
-            'Soreang'
+            'Soreang',
         ];
 
         foreach ($regions as $region) {
@@ -51,7 +51,7 @@ class UmkmDataSeeder extends Seeder
             'Usaha Mikro (Modal usaha < Rp 1 Miliar)',
             'Usaha Kecil (Modal usaha Rp 1 Miliar - Rp 5 Miliar)',
             'Usaha Menengah (Modal usaha Rp 5 Miliar - Rp 10 Miliar)',
-            'Usaha Besar (Modal usaha > Rp 10 Miliar)'
+            'Usaha Besar (Modal usaha > Rp 10 Miliar)',
         ];
 
         foreach ($scales as $scale) {

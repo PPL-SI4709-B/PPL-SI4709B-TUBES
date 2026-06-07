@@ -37,7 +37,7 @@
             <p class="text-sm text-gray-500 mt-1">Laporan akan diteruskan ke Dinas untuk ditinjau dan diberi umpan balik.</p>
         </div>
 
-        <form action="{{ route('reports.store') }}" method="POST" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+        <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
             @csrf
 
             <div>
@@ -171,6 +171,22 @@
                     style="width: 100%; padding: 0.625rem 0.875rem; border: 1px solid {{ $errors->has('catatan_usaha') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem; outline: none; font-family: inherit; resize: vertical;"
                 >{{ old('catatan_usaha') }}</textarea>
                 @error('catatan_usaha')
+                    <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="lampiran" style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.375rem;">
+                    Lampiran <span style="font-weight: 400; color: var(--color-text-muted);">(Opsional — PDF/PNG/JPG, maks 2MB)</span>
+                </label>
+                <input
+                    id="lampiran"
+                    type="file"
+                    name="lampiran"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    style="width: 100%; padding: 0.5rem; border: 1px solid {{ $errors->has('lampiran') ? '#dc2626' : 'var(--color-border)' }}; border-radius: var(--radius-md); font-size: 0.875rem;"
+                >
+                @error('lampiran')
                     <p style="color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p>
                 @enderror
             </div>

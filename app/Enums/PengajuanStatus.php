@@ -10,7 +10,7 @@ enum PengajuanStatus: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::PENDING => 'Menunggu',
             self::APPROVED => 'Disetujui',
             self::REJECTED => 'Ditolak',
@@ -19,7 +19,7 @@ enum PengajuanStatus: string
 
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::PENDING => 'warning',
             self::APPROVED => 'success',
             self::REJECTED => 'danger',

@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\User;
-use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
 
 uses(DatabaseMigrations::class);
 
@@ -13,12 +12,12 @@ uses(DatabaseMigrations::class);
 test('umkm can view pengajuan status', function () {
     $this->browse(function (Browser $browser) {
         $browser->visit('/login')
-                ->type('email', 'test@umkm.local')
-                ->type('password', 'password')
-                ->press('Masuk ke Dashboard')
-                ->assertPathIs('/umkm/dashboard')
-                ->visit('/umkm/pengajuan') // Halaman status pengajuan
-                ->assertSee('Status Pengajuan'); // Harusnya ada teks terkait
+            ->type('email', 'test@umkm.local')
+            ->type('password', 'password')
+            ->press('Masuk ke Dashboard')
+            ->assertPathIs('/umkm/dashboard')
+            ->visit('/umkm/pengajuan') // Halaman status pengajuan
+            ->assertSee('Status Pengajuan'); // Harusnya ada teks terkait
     });
 });
 
@@ -29,7 +28,7 @@ test('umkm can view pengajuan status', function () {
 test('guest cannot view pengajuan status', function () {
     $this->browse(function (Browser $browser) {
         $browser->visit('/umkm/pengajuan')
-                ->assertPathIs('/login')
-                ->assertSee('Login');
+            ->assertPathIs('/login')
+            ->assertSee('Login');
     });
 });

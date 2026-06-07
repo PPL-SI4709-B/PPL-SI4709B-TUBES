@@ -2,10 +2,10 @@
 
 namespace Tests\Browser;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-use App\Models\User;
 
 class PBI14UploadDocTest extends DuskTestCase
 {
@@ -17,9 +17,9 @@ class PBI14UploadDocTest extends DuskTestCase
     public function test_positive_upload_dokumen()
     {
         $user = User::factory()->create(['role' => 'umkm']);
-        
+
         $filePath = storage_path('app/public/dummy.pdf');
-        if (!file_exists(storage_path('app/public'))) {
+        if (! file_exists(storage_path('app/public'))) {
             mkdir(storage_path('app/public'), 0777, true);
         }
         // Create a minimal valid PDF content to pass the mimes validation
@@ -28,14 +28,14 @@ class PBI14UploadDocTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $filePath) {
             $browser->loginAs($user)
-                    ->visit('/umkm/pengajuan')
-                    ->press('Ajukan Program')
-                    ->waitFor('#modal-pengajuan')
-                    ->type('kebutuhan_usaha', 'Butuh mesin jahit baru')
-                    ->attach('dokumen_pendukung', $filePath)
-                    ->press('Kirim Pengajuan')
-                    ->waitForText('Berhasil!', 5)
-                    ->assertSee('Berhasil!');
+                ->visit('/umkm/pengajuan')
+                ->press('Ajukan Program')
+                ->waitFor('#modal-pengajuan')
+                ->type('kebutuhan_usaha', 'Butuh mesin jahit baru')
+                ->attach('dokumen_pendukung', $filePath)
+                ->press('Kirim Pengajuan')
+                ->waitForText('Berhasil!', 5)
+                ->assertSee('Berhasil!');
         });
     }
 
@@ -45,23 +45,23 @@ class PBI14UploadDocTest extends DuskTestCase
     public function test_negative_upload_dokumen_invalid()
     {
         $user = User::factory()->create(['role' => 'umkm']);
-        
+
         $filePath = storage_path('app/public/dummy.txt');
-        if (!file_exists(storage_path('app/public'))) {
+        if (! file_exists(storage_path('app/public'))) {
             mkdir(storage_path('app/public'), 0777, true);
         }
         file_put_contents($filePath, 'dummy text content');
 
         $this->browse(function (Browser $browser) use ($user, $filePath) {
             $browser->loginAs($user)
-                    ->visit('/umkm/pengajuan')
-                    ->press('Ajukan Program')
-                    ->waitFor('#modal-pengajuan')
-                    ->type('kebutuhan_usaha', 'Butuh mesin jahit baru')
-                    ->attach('dokumen_pendukung', $filePath)
-                    ->press('Kirim Pengajuan')
-                    ->pause(1000)
-                    ->assertDontSee('Berhasil!');
+                ->visit('/umkm/pengajuan')
+                ->press('Ajukan Program')
+                ->waitFor('#modal-pengajuan')
+                ->type('kebutuhan_usaha', 'Butuh mesin jahit baru')
+                ->attach('dokumen_pendukung', $filePath)
+                ->press('Kirim Pengajuan')
+                ->pause(1000)
+                ->assertDontSee('Berhasil!');
         });
     }
 }

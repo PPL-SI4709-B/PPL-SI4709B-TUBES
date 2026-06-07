@@ -17,7 +17,16 @@ class Pengajuan extends Model
         'dokumen_pendukung',
         'status',
         'notes',
+        'reviewed_by',
+        'reviewed_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'reviewed_at' => 'datetime',
+        ];
+    }
 
     public function user()
     {
@@ -27,5 +36,10 @@ class Pengajuan extends Model
     public function program()
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

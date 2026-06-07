@@ -11,7 +11,7 @@ class PengajuanStatusLog extends Model
         'pengajuan_id',
         'status',
         'catatan',
-        'created_by'
+        'created_by',
     ];
 
     public function pengajuan(): BelongsTo

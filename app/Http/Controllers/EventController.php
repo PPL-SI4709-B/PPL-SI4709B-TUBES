@@ -11,17 +11,24 @@ class EventController extends Controller
 {
     // ===== UMKM-facing =====
 
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->query('search');
+        $type = $request->query('type');
+
         $events = Event::where('status', 'active')
+            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
+            ->when($type, fn ($q) => $q->where('type', $type))
             ->orderBy('event_date')
             ->get();
+
+        $types = Event::where('status', 'active')->distinct()->orderBy('type')->pluck('type');
 
         $registeredEventIds = Auth::check()
             ? Auth::user()->registeredEvents()->pluck('events.id')->toArray()
             : [];
 
-        return view('umkm.event', compact('events', 'registeredEventIds'));
+        return view('umkm.event', compact('events', 'registeredEventIds', 'types', 'search', 'type'));
     }
 
     public function show(Event $event)

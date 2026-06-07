@@ -61,6 +61,20 @@
                     <span class="badge" style="background-color: {{ $statusColor['bg'] }}; color: {{ $statusColor['text'] }};">{{ $statusLabel }}</span>
                 </div>
             </div>
+            @if ($report->lampiran)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Lampiran</div>
+                <div style="margin-top: 4px;">
+                    <a href="{{ route('reports.lampiran', $report) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary); text-decoration: underline;">Lihat Lampiran ↗</a>
+                </div>
+            </div>
+            @endif
+            @if ($report->reviewed_at)
+            <div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Riwayat Review</div>
+                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">Ditinjau oleh <strong>{{ $report->reviewer?->name ?? 'Petugas' }}</strong> pada {{ $report->reviewed_at->format('d M Y, H:i') }}</div>
+            </div>
+            @endif
         </div>
 
         @if ($report->status === 'pending')

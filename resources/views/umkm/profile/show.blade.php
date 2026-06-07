@@ -67,6 +67,13 @@
                     @endphp
                     <span class="badge" style="background-color: {{ $statusColors['bg'] }}; color: {{ $statusColors['text'] }};">{{ $statusLabel }}</span>
                 </div>
+                {{-- PBI-19: riwayat verifikasi --}}
+                @if($user->verified_at)
+                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 4px;">Diproses pada {{ $user->verified_at->format('d M Y, H:i') }}</div>
+                @endif
+                @if($user->profile_status === 'rejected' && $user->verification_note)
+                    <div style="font-size: var(--text-sm); color: var(--color-danger); margin-top: 4px; padding: var(--space-2) var(--space-3); background: #fef2f2; border-radius: var(--radius-md);">Alasan: {{ $user->verification_note }}</div>
+                @endif
             </div>
         </div>
     </div>
@@ -75,6 +82,12 @@
         <div class="card" style="padding: var(--space-6);">
             <div style="font-size: var(--text-base); font-weight: 700; color: var(--color-gray-900); margin-bottom: var(--space-4);">Data Usaha</div>
             <div class="flex flex-col gap-4">
+                @if($profile->logo)
+                <div>
+                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Logo Usaha</div>
+                    <img src="{{ Storage::url($profile->logo) }}" alt="Logo {{ $profile->business_name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-top: 4px;">
+                </div>
+                @endif
                 <div>
                     <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Nama Usaha</div>
                     <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->business_name }}</div>

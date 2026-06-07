@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
 
 uses(DatabaseMigrations::class);
 
@@ -13,12 +13,12 @@ uses(DatabaseMigrations::class);
 test('umkm can view dynamic dashboard', function () {
     $this->browse(function (Browser $browser) {
         $browser->visit('/login')
-                ->type('email', 'budi@umkm.local')
-                ->type('password', 'password')
-                ->press('Masuk ke Dashboard')
-                ->assertPathIs('/umkm/dashboard')
-                ->assertSee('Pemilik Usaha') // Karena Auth::user() null, fallback ke nama default di blade
-                ->assertSee('Dashboard');
+            ->type('email', 'budi@umkm.local')
+            ->type('password', 'password')
+            ->press('Masuk ke Dashboard')
+            ->assertPathIs('/umkm/dashboard')
+            ->assertSee('Pemilik Usaha') // Karena Auth::user() null, fallback ke nama default di blade
+            ->assertSee('Dashboard');
     });
 });
 
@@ -29,14 +29,14 @@ test('umkm can view dynamic dashboard', function () {
 test('dinas cannot access umkm dashboard', function () {
     $this->browse(function (Browser $browser) {
         $browser->visit('/login')
-                ->type('email', 'petugas@dinas.local')
-                ->type('password', 'password')
-                ->press('Masuk ke Dashboard')
-                ->visit('/umkm/dashboard')
-                // Asumsi sistem redirect petugas ke dashboard petugas, 
+            ->type('email', 'petugas@dinas.local')
+            ->type('password', 'password')
+            ->press('Masuk ke Dashboard')
+            ->visit('/umkm/dashboard')
+                // Asumsi sistem redirect petugas ke dashboard petugas,
                 // Namun krn role auth dummy hanya email, asumsikan ini untuk dokumentasi test.
                 // Jika belum diimplementasikan, maka kita harapkan /umkm/dashboard atau bukan.
                 // Saat ini semua user ke /umkm/dashboard di AuthController
-                ->assertPathIs('/umkm/dashboard'); 
+            ->assertPathIs('/umkm/dashboard');
     });
 });

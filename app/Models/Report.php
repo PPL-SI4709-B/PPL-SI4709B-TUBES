@@ -22,15 +22,24 @@ class Report extends Model
         'report_date',
         'period',
         'due_date',
+        'reviewed_by',
+        'reviewed_at',
+        'lampiran',
     ];
 
     protected $casts = [
         'report_date' => 'date',
         'due_date' => 'date',
+        'reviewed_at' => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

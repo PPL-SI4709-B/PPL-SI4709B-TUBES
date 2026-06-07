@@ -26,6 +26,7 @@ class VerificationController extends Controller
         $user->update([
             'profile_status' => 'verified',
             'verification_note' => null,
+            'verified_at' => now(),
         ]);
 
         return redirect()->route('dinas.verification.index')
@@ -46,6 +47,7 @@ class VerificationController extends Controller
         $user->update([
             'profile_status' => 'rejected',
             'verification_note' => $validated['verification_note'] ?? null,
+            'verified_at' => now(),
         ]);
 
         return redirect()->route('dinas.verification.index')

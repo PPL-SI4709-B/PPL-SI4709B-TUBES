@@ -33,4 +33,3 @@ it('petugas dinas dapat export rekap data UMKM', function () {
         ->toContain('Sari Mandiri')
         ->toContain('Warung Sari');
 });
-

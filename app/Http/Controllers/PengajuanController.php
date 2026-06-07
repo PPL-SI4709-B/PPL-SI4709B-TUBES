@@ -19,7 +19,7 @@ class PengajuanController extends Controller
 
     public function show(Pengajuan $pengajuan)
     {
-        $pengajuan->load(['user', 'program']);
+        $pengajuan->load(['user', 'program', 'reviewer']);
 
         return view('dinas.pengajuan.show', compact('pengajuan'));
     }
@@ -87,6 +87,8 @@ class PengajuanController extends Controller
         $pengajuan->update([
             'status' => 'approved',
             'notes' => $request->notes,
+            'reviewed_by' => Auth::id(),
+            'reviewed_at' => now(),
         ]);
 
         return redirect()->route('dinas.pengajuan.index')
@@ -101,12 +103,16 @@ class PengajuanController extends Controller
         }
 
         $request->validate([
-            'notes' => 'nullable|string|max:1000',
+            'notes' => 'required|string|max:1000',
+        ], [
+            'notes.required' => 'Catatan wajib diisi ketika menolak pengajuan.',
         ]);
 
         $pengajuan->update([
             'status' => 'rejected',
             'notes' => $request->notes,
+            'reviewed_by' => Auth::id(),
+            'reviewed_at' => now(),
         ]);
 
         return redirect()->route('dinas.pengajuan.index')

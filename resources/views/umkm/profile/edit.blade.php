@@ -35,11 +35,19 @@
             </div>
         @endif
 
-        <form action="{{ route('umkm.profile.update') }}" method="POST" dusk="profile-edit-form">
+        <form action="{{ route('umkm.profile.update') }}" method="POST" enctype="multipart/form-data" dusk="profile-edit-form">
             @csrf
             @method('PUT')
 
             <div class="flex flex-col gap-4">
+                <div>
+                    <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Logo Usaha <span style="font-weight: 400; color: var(--color-text-muted);">(PNG/JPG, maks 2MB)</span></label>
+                    @if($profile?->logo)
+                        <img src="{{ Storage::url($profile->logo) }}" alt="Logo" style="width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-bottom: var(--space-2);">
+                    @endif
+                    <input type="file" name="logo" accept=".png,.jpg,.jpeg,.webp" style="width: 100%; padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-logo">
+                </div>
+
                 <div>
                     <label style="font-size: var(--text-sm); font-weight: 500; color: var(--color-gray-900); display: block; margin-bottom: var(--space-1);">Nama Usaha <span style="color: var(--color-danger);">*</span></label>
                     <input type="text" name="business_name" value="{{ old('business_name', $profile?->business_name) }}" required style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);" dusk="profile-business-name">
