@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\UmkmProfile;
 use App\Models\Category;
 use App\Models\Region;
 use App\Models\Scale;
+use App\Models\UmkmProfile;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -23,17 +23,18 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-        
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             if (Auth::user()->role === 'dinas') {
                 return redirect()->route('dinas.dashboard');
             }
+
             return redirect()->route('umkm.dashboard');
         }
-        
+
         return back()->with('error', 'Kredensial tidak valid.');
     }
 
@@ -43,9 +44,10 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'phone' => 'nullable|string',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
         ]);
         Session::put('register_step1', $validated);
+
         return redirect()->route('umkm.register.step-2');
     }
 
@@ -70,6 +72,7 @@ class AuthController extends Controller
             'scale_id' => 'required|exists:scales,id',
         ]);
         Session::put('register_step2', $validated);
+
         return redirect()->route('umkm.register.step-3');
     }
 
@@ -86,13 +89,13 @@ class AuthController extends Controller
             return redirect()->route('umkm.register.step-2')->with('error', 'Silakan isi data usaha terlebih dahulu.');
         }
 
-        $selectedCategory = !empty($registerStep2['category_id'])
+        $selectedCategory = ! empty($registerStep2['category_id'])
             ? Category::find($registerStep2['category_id'])
             : null;
-        $selectedRegion = !empty($registerStep2['region_id'])
+        $selectedRegion = ! empty($registerStep2['region_id'])
             ? Region::find($registerStep2['region_id'])
             : null;
-        $selectedScale = !empty($registerStep2['scale_id'])
+        $selectedScale = ! empty($registerStep2['scale_id'])
             ? Scale::find($registerStep2['scale_id'])
             : null;
 
@@ -108,36 +111,36 @@ class AuthController extends Controller
     public function processRegisterStep3(Request $request)
     {
         $request->validate([
-            'assurance' => 'required|accepted'
+            'assurance' => 'required|accepted',
         ]);
 
         $step1 = Session::get('register_step1');
         $step2 = Session::get('register_step2');
-        
-        if (!$step1) {
+
+        if (! $step1) {
             return redirect()->route('umkm.register.step-1')->with('error', 'Silakan isi data diri terlebih dahulu.');
         }
 
-        if (!$step2) {
+        if (! $step2) {
             return redirect()->route('umkm.register.step-2')->with('error', 'Silakan isi data usaha terlebih dahulu.');
         }
 
         $user = User::create([
-            'name'     => $step1['name'],
-            'email'    => $step1['email'],
+            'name' => $step1['name'],
+            'email' => $step1['email'],
             'password' => Hash::make($step1['password']),
-            'role'     => 'umkm',
+            'role' => 'umkm',
         ]);
 
         UmkmProfile::create([
-            'user_id'          => $user->id,
-            'business_name'    => $step2['business_name'],
-            'phone'            => $step1['phone'] ?? null,
-            'nib'              => $step2['nib'] ?? null,
+            'user_id' => $user->id,
+            'business_name' => $step2['business_name'],
+            'phone' => $step1['phone'] ?? null,
+            'nib' => $step2['nib'] ?? null,
             'business_address' => $step2['business_address'],
-            'category_id'      => $step2['category_id'],
-            'region_id'        => $step2['region_id'],
-            'scale_id'         => $step2['scale_id'],
+            'category_id' => $step2['category_id'],
+            'region_id' => $step2['region_id'],
+            'scale_id' => $step2['scale_id'],
         ]);
 
         Auth::login($user);
@@ -147,12 +150,13 @@ class AuthController extends Controller
 
         return redirect()->route('umkm.dashboard')->with('success', 'Pendaftaran berhasil!');
     }
-    
+
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

@@ -16,12 +16,22 @@ class DashboardController extends Controller
         $user = auth()->user();
         $profile = $user->umkmProfile()->with(['category', 'region', 'scale'])->first();
 
-        $totalPengajuan  = $user->pengajuans()->count();
-        $totalLaporan    = $user->reports()->count();
+        $totalPengajuan = $user->pengajuans()->count();
+        $totalLaporan = $user->reports()->count();
         $pengajuanStatus = $user->pengajuans()
             ->selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
+
+        $pendingPengajuan = (int) ($pengajuanStatus['pending'] ?? 0);
+        $approvedPengajuan = (int) ($pengajuanStatus['approved'] ?? 0);
+        $rejectedPengajuan = (int) ($pengajuanStatus['rejected'] ?? 0);
+        $reviewedReports = $user->reports()->where('status', 'reviewed')->count();
+
+        $profileFields = ['business_name', 'phone', 'nib', 'business_address', 'category_id', 'region_id', 'scale_id'];
+        $profileCompleteness = $profile
+            ? (int) round(collect($profileFields)->filter(fn ($field) => filled($profile->{$field}))->count() / count($profileFields) * 100)
+            : 0;
 
         $recentPengajuans = $user->pengajuans()
             ->with('program')
@@ -54,16 +64,16 @@ class DashboardController extends Controller
 
     public function dinas()
     {
-        $totalUmkm       = User::where('role', 'umkm')->count();
-        $verifiedUmkm    = User::where('role', 'umkm')->where('profile_status', 'verified')->count();
-        $pendingUmkm     = User::where('role', 'umkm')->where('profile_status', 'pending')->count();
-        $rejectedUmkm    = User::where('role', 'umkm')->where('profile_status', 'rejected')->count();
-        $totalPengajuan  = Pengajuan::count();
+        $totalUmkm = User::where('role', 'umkm')->count();
+        $verifiedUmkm = User::where('role', 'umkm')->where('profile_status', 'verified')->count();
+        $pendingUmkm = User::where('role', 'umkm')->where('profile_status', 'pending')->count();
+        $rejectedUmkm = User::where('role', 'umkm')->where('profile_status', 'rejected')->count();
+        $totalPengajuan = Pengajuan::count();
         $pendingApproval = Pengajuan::where('status', 'pending')->count();
         $approvedPengajuan = Pengajuan::where('status', 'approved')->count();
         $rejectedPengajuan = Pengajuan::where('status', 'rejected')->count();
-        $totalReports    = Report::count();
-        $pendingReports  = Report::where('status', 'pending')->count();
+        $totalReports = Report::count();
+        $pendingReports = Report::where('status', 'pending')->count();
         $reviewedReports = Report::where('status', 'reviewed')->count();
 
         $verificationRate = $totalUmkm > 0 ? round(($verifiedUmkm / $totalUmkm) * 100) : 0;
@@ -116,7 +126,7 @@ class DashboardController extends Controller
 
     public function exportUmkm(): StreamedResponse
     {
-        $fileName = 'rekap-data-umkm-' . now()->format('Ymd-His') . '.csv';
+        $fileName = 'rekap-data-umkm-'.now()->format('Ymd-His').'.csv';
 
         return response()->streamDownload(function () {
             $handle = fopen('php://output', 'w');
