@@ -25,4 +25,11 @@ class Event extends Model
             'event_date' => 'datetime',
         ];
     }
+
+    public function registrants()
+    {
+        return $this->belongsToMany(User::class, 'event_registrations')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
 }

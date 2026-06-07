@@ -24,6 +24,18 @@
 @section('content')
 <div class="flex flex-col gap-6" style="max-width: 72rem; margin: 0 auto;">
 
+    @if(session('success'))
+    <div style="background-color: #dcfce7; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #bbf7d0; font-weight: 600;">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #fecaca; font-weight: 600;">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Event &amp; Pelatihan</h1>
         <p class="text-gray-500 text-sm mt-1">Program pelatihan dan bootcamp yang diselenggarakan oleh Dinas untuk pelaku UMKM.</p>
@@ -81,11 +93,38 @@
 
                 </div>
 
-                {{-- Card footer --}}
-                <div style="padding: 0.75rem 1.25rem; border-top: 1px solid #f3f4f6;">
+                {{-- Card footer: kuota + register (PBI-29) + detail --}}
+                @php
+                    $registeredCount = $event->registrants()->count();
+                    $isFull = $registeredCount >= $event->quota;
+                    $isRegistered = in_array($event->id, $registeredEventIds ?? []);
+                @endphp
+                <div style="padding: 0.75rem 1.25rem; border-top: 1px solid #f3f4f6; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">
+                        <span>Kuota</span>
+                        @if($isFull)
+                            <span style="color: #dc2626;">Penuh</span>
+                        @else
+                            <span style="color: #111827;">{{ $registeredCount }} / {{ $event->quota }} peserta</span>
+                        @endif
+                    </div>
+
+                    @if($isRegistered)
+                        <button type="button" disabled
+                            style="width: 100%; padding: 0.5rem; background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: default;">Sudah Terdaftar</button>
+                    @elseif($isFull)
+                        <button type="button" disabled
+                            style="width: 100%; padding: 0.5rem; background-color: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: not-allowed;">Penuh</button>
+                    @else
+                        <form action="{{ route('umkm.event.register', $event->id) }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit"
+                                style="width: 100%; padding: 0.5rem; background-color: var(--color-brand); color: white; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Daftar Sekarang</button>
+                        </form>
+                    @endif
+
                     <a href="{{ route('umkm.event.show', $event) }}"
-                        style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.5rem; background-color: var(--color-brand); color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: opacity 0.15s;"
-                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                        style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.5rem; color: var(--color-brand); border: 1px solid var(--color-brand); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">
                         Lihat Detail
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
@@ -104,6 +143,5 @@
             <div style="font-size: 0.875rem; color: #6b7280;">Pantau halaman ini untuk event dan pelatihan terbaru dari Dinas.</div>
         </div>
     @endforelse
-
 </div>
 @endsection

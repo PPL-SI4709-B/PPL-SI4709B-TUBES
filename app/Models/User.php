@@ -24,6 +24,13 @@ class User extends Authenticatable
         ];
     }
 
+    public function registeredEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_registrations')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
     public function pengajuans()
     {
         return $this->hasMany(Pengajuan::class);
