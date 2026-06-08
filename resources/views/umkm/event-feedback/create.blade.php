@@ -1,5 +1,30 @@
 @extends('layouts.app')
 
+@section('title', 'Feedback Event - Portal UMKM')
+
+@section('sidebar')
+<x-umkm-sidebar active="event" />
+@endsection
+
+@section('header')
+<header class="main-header" style="height: 4rem;">
+    <div class="page-title" style="color: var(--color-text-muted); font-size: 0.875rem; font-weight: 500;">
+        <a href="{{ route('umkm.event.history') }}" style="color: var(--color-text-muted); text-decoration: none;">Riwayat Event</a>
+        <span style="margin: 0 0.5rem;">&#8250;</span>
+        <span style="color: var(--color-primary); font-weight: 700;">Feedback</span>
+    </div>
+    <div class="user-profile">
+        <div class="user-info">
+            <div class="user-name">{{ Auth::user()->name }}</div>
+            <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
+        </div>
+        <div class="user-avatar" style="background-color: transparent;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+        </div>
+    </div>
+</header>
+@endsection
+
 @section('content')
 <div class="max-w-3xl mx-auto py-8">
     <div class="mb-6">

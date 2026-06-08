@@ -1,5 +1,28 @@
 @extends('layouts.app')
 
+@section('title', 'Materi Edukasi - Portal UMKM')
+
+@section('sidebar')
+<x-umkm-sidebar active="materi-edukasi" />
+@endsection
+
+@section('header')
+<header class="main-header" style="height: 4rem;">
+    <div class="page-title" style="color: var(--color-text-muted); font-size: 0.875rem; font-weight: 500;">
+        <span style="color: var(--color-primary); font-weight: 700;">Materi Edukasi</span>
+    </div>
+    <div class="user-profile">
+        <div class="user-info">
+            <div class="user-name">{{ Auth::user()->name }}</div>
+            <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
+        </div>
+        <div class="user-avatar" style="background-color: transparent;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+        </div>
+    </div>
+</header>
+@endsection
+
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .dashboard-layout {
             display: flex;
@@ -252,7 +253,7 @@
     @stack('styles')
 </head>
 <body>
-    <div class="dashboard-layout">
+    <div class="dashboard-layout app-layout">
         <!-- Sidebar -->
         @yield('sidebar')
 
