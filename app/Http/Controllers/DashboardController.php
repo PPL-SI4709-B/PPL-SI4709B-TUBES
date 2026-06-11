@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengajuan;
-use App\Models\Program;
-use App\Models\Report;
+use App\Models\PengajuanPendanaan;
+use App\Models\Event;
+use App\Models\LaporanBerkala;
+use App\Models\SumberPendanaan;
 use App\Models\UmkmProfile;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -68,31 +69,27 @@ class DashboardController extends Controller
         $verifiedUmkm = User::where('role', 'umkm')->where('profile_status', 'verified')->count();
         $pendingUmkm = User::where('role', 'umkm')->where('profile_status', 'pending')->count();
         $rejectedUmkm = User::where('role', 'umkm')->where('profile_status', 'rejected')->count();
-        $totalPengajuan = Pengajuan::count();
-        $pendingApproval = Pengajuan::where('status', 'pending')->count();
-        $approvedPengajuan = Pengajuan::where('status', 'approved')->count();
-        $rejectedPengajuan = Pengajuan::where('status', 'rejected')->count();
-        $totalReports = Report::count();
-        $pendingReports = Report::where('status', 'pending')->count();
-        $reviewedReports = Report::where('status', 'reviewed')->count();
+        $totalReports = LaporanBerkala::where('status', 'submitted')->count();
+        $pendingReports = $totalReports;
+        $reviewedReports = 0;
+        $totalPendanaan = PengajuanPendanaan::count();
+        $pendingPendanaan = PengajuanPendanaan::whereIn('status', ['diajukan', 'menunggu_verifikasi', 'diproses'])->count();
+        $approvedPendanaan = PengajuanPendanaan::where('status', 'disetujui')->count();
+        $rejectedPendanaan = PengajuanPendanaan::where('status', 'ditolak')->count();
+        $totalEvents = Event::count();
+        $totalEventRegistrations = Event::query()
+            ->withCount('registrants')
+            ->get()
+            ->sum('registrants_count');
+        $totalSumberPendanaan = SumberPendanaan::count();
 
         $verificationRate = $totalUmkm > 0 ? round(($verifiedUmkm / $totalUmkm) * 100) : 0;
-        $approvalRate = $totalPengajuan > 0 ? round(($approvedPengajuan / $totalPengajuan) * 100) : 0;
-        $reportReviewRate = $totalReports > 0 ? round(($reviewedReports / $totalReports) * 100) : 0;
+        $reportReviewRate = 0;
 
-        $recentPengajuans = Pengajuan::with(['user', 'program'])
+        $recentReports = LaporanBerkala::with(['user.umkmProfile'])
+            ->where('status', 'submitted')
             ->latest()
             ->take(5)
-            ->get();
-
-        $recentReports = Report::with('user')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $topPrograms = Program::withCount('pengajuans')
-            ->orderByDesc('pengajuans_count')
-            ->take(4)
             ->get();
 
         $categoryDistribution = UmkmProfile::with('category')
@@ -107,19 +104,19 @@ class DashboardController extends Controller
             'verifiedUmkm',
             'pendingUmkm',
             'rejectedUmkm',
-            'totalPengajuan',
-            'pendingApproval',
-            'approvedPengajuan',
-            'rejectedPengajuan',
             'totalReports',
             'pendingReports',
             'reviewedReports',
+            'totalPendanaan',
+            'pendingPendanaan',
+            'approvedPendanaan',
+            'rejectedPendanaan',
+            'totalEvents',
+            'totalEventRegistrations',
+            'totalSumberPendanaan',
             'verificationRate',
-            'approvalRate',
             'reportReviewRate',
-            'recentPengajuans',
             'recentReports',
-            'topPrograms',
             'categoryDistribution'
         ));
     }

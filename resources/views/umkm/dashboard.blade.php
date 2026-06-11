@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Dashboard UMKM - Portal UMKM')
+
 @section('sidebar')
 <x-umkm-sidebar active="dashboard" />
 @endsection
@@ -8,7 +10,7 @@
 <header class="main-header">
     <div>
         <div class="page-title">Dashboard UMKM</div>
-        <div class="text-sm text-gray-500 mt-1">Ringkasan aktivitas dan status usaha</div>
+        <div class="page-subtitle">Pantau profil usaha, pendanaan, event, notifikasi, dan laporan berkala dalam satu halaman.</div>
     </div>
     <div class="user-profile">
         <div class="user-info">
@@ -16,197 +18,172 @@
             <div class="user-role" style="text-transform: none;">Pemilik Usaha</div>
         </div>
         <div class="user-avatar" style="background-color: transparent;">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
         </div>
     </div>
 </header>
 @endsection
 
 @section('content')
+@php
+    $profileStatus = Auth::user()->profile_status;
+    $profileStatusLabel = match ($profileStatus) {
+        'verified' => 'Terverifikasi',
+        'rejected' => 'Ditolak',
+        default => 'Menunggu Verifikasi',
+    };
+    $profileStatusClass = match ($profileStatus) {
+        'verified' => 'badge-success',
+        'rejected' => 'badge-danger',
+        default => 'badge-warning',
+    };
+@endphp
+
 <div class="flex flex-col gap-6">
     @if(session('success'))
-        <div style="background-color: var(--color-success-bg); border-left: 4px solid var(--color-success); padding: 1.25rem 1.5rem; border-radius: var(--radius-md); color: #166534; font-size: 0.875rem; font-weight: 500;">
-            {{ session('success') }}
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if($profileStatus === 'pending')
+        <div class="alert alert-warning">
+            <strong>Profil Anda menunggu verifikasi.</strong>
+            Lengkapi dan pastikan data usaha sudah benar agar proses verifikasi Dinas berjalan lancar.
+            <a href="{{ route('umkm.profile.show') }}" class="link-action" style="margin-left: 0.5rem;">Cek Profil</a>
+        </div>
+    @elseif($profileStatus === 'rejected')
+        <div class="alert alert-danger">
+            <strong>Verifikasi profil ditolak.</strong>
+            Perbarui data profil sesuai catatan petugas sebelum mengajukan kembali.
+            <a href="{{ route('umkm.profile.edit') }}" class="link-action" style="margin-left: 0.5rem;">Edit Profil</a>
         </div>
     @endif
 
-    @if(Auth::user()->profile_status === 'pending')
-        <div class="card p-0" style="background-color: #fefce8; border-color: transparent;">
-            <div class="flex items-center justify-between" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-warning);">
-                <div>
-                    <h3 class="text-base font-bold" style="color: #854d0e;">Profil Anda menunggu verifikasi</h3>
-                    <p class="text-sm" style="color: #a16207;">Lengkapi profil usaha agar petugas dapat memverifikasi data Anda.</p>
-                </div>
-                <a href="{{ route('umkm.profile.show') }}" style="font-size: var(--text-sm); font-weight: 600; color: #854d0e; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">Cek Profil</a>
-            </div>
-        </div>
-    @elseif(Auth::user()->profile_status === 'rejected')
-        <div class="card p-0" style="background-color: #fef2f2; border-color: transparent;">
-            <div class="flex items-center justify-between" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--color-danger);">
-                <div>
-                    <h3 class="text-base font-bold" style="color: #991b1b;">Verifikasi profil ditolak</h3>
-                    <p class="text-sm" style="color: #b91c1c;">Perbarui data profil agar bisa diajukan ulang untuk verifikasi.</p>
-                </div>
-                <a href="{{ route('umkm.profile.edit') }}" style="font-size: var(--text-sm); font-weight: 600; color: #991b1b; text-decoration: underline; white-space: nowrap; margin-left: 1rem;">Edit Profil</a>
-            </div>
-        </div>
-    @endif
-
-    <div class="grid grid-cols-2 gap-6" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
-            <div style="background-color: #f1f5f9; padding: 0.75rem; border-radius: var(--radius-md); color: var(--color-primary);">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 12"></polyline></svg>
-            </div>
+    <section class="soft-panel">
+        <div class="page-kicker">Portal UMKM Kabupaten Bandung</div>
+        <div class="stat-card-row" style="margin-top: var(--space-3); align-items: center;">
             <div>
-                <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">TOTAL PENGAJUAN</div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalPengajuan }}</div>
+                <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--color-gray-900); line-height: 1.25;">
+                    Selamat datang, {{ Auth::user()->name }}
+                </h1>
+                <p class="section-subtitle">
+                    {{ $profile?->business_name ? 'Kelola perkembangan '.$profile->business_name.' dari dashboard ini.' : 'Lengkapi profil usaha agar fitur layanan dapat digunakan optimal.' }}
+                </p>
             </div>
+            <span class="badge {{ $profileStatusClass }}">{{ $profileStatusLabel }}</span>
         </div>
+    </section>
 
-        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
-            <div style="background-color: var(--color-success-bg); padding: 0.75rem; border-radius: var(--radius-md); color: var(--color-success);">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
-            <div class="mt-8 grid grid-cols-4 gap-4">
-                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
-                    <div class="text-3xl font-bold">{{ $totalPengajuan }}</div>
-                    <div class="text-sm mt-1" style="color: #d1d5db;">Total Pengajuan</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
-                    <div class="text-3xl font-bold">{{ $approvedPengajuan }}</div>
-                    <div class="text-sm mt-1" style="color: #d1d5db;">Pengajuan Disetujui</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
-                    <div class="text-3xl font-bold">{{ $totalLaporan }}</div>
-                    <div class="text-sm mt-1" style="color: #d1d5db;">Laporan Terkirim</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 1rem;">
-                    <div class="text-3xl font-bold">{{ $totalPendanaan }}</div>
-                    <div class="text-sm mt-1" style="color: #d1d5db;">Total Pendanaan</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card p-6">
-            <div class="flex items-center justify-between mb-4">
+    <section class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-card-row">
                 <div>
-                    <div class="text-xs font-bold text-gray-500 uppercase">Kelengkapan Profil</div>
-                    <div class="text-4xl font-extrabold text-gray-900 mt-2">{{ $profileCompleteness }}%</div>
+                    <div class="stat-label">Kelengkapan Profil</div>
+                    <div class="stat-value">{{ $profileCompleteness ?? 0 }}%</div>
                 </div>
-                <a href="{{ route('umkm.profile.edit') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Edit</a>
+                <div class="icon-chip gold">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
             </div>
-            <div style="height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden;">
-                <div style="height: 100%; width: {{ $profileCompleteness }}%; background: #2563eb;"></div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">Lengkapi identitas, kategori, wilayah, dan skala agar proses verifikasi lebih cepat.</p>
+            <div class="progress-track"><div class="progress-fill" style="width: {{ $profileCompleteness ?? 0 }}%;"></div></div>
+            <a href="{{ route('umkm.profile.edit') }}" class="link-action">Lengkapi Profil</a>
         </div>
 
-        <div class="card p-6 flex gap-4 items-center" style="padding: var(--space-5);">
-            <div style="background-color: #ecfdf5; padding: 0.75rem; border-radius: var(--radius-md); color: #16a34a;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            </div>
-            <div>
-                <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">PENDANAAN</div>
-                <div class="text-3xl font-bold" style="color: #16a34a;">{{ $totalPendanaan }}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-4 gap-6">
-        <div class="card p-6">
-            <div class="text-xs font-bold text-gray-500 uppercase mb-2">Menunggu</div>
-            <div class="text-3xl font-extrabold" style="color: #d97706;">{{ $pendingPengajuan }}</div>
-            <div class="text-sm text-gray-500 mt-2">Pengajuan sedang direview</div>
-        </div>
-        <div class="card p-6">
-            <div class="text-xs font-bold text-gray-500 uppercase mb-2">Disetujui</div>
-            <div class="text-3xl font-extrabold" style="color: #16a34a;">{{ $approvedPengajuan }}</div>
-            <div class="text-sm text-gray-500 mt-2">Pengajuan berhasil</div>
-        </div>
-        <div class="card p-6">
-            <div class="text-xs font-bold text-gray-500 uppercase mb-2">Ditolak</div>
-            <div class="text-3xl font-extrabold" style="color: #dc2626;">{{ $rejectedPengajuan }}</div>
-            <div class="text-sm text-gray-500 mt-2">Perlu evaluasi ulang</div>
-        </div>
-        <div class="card p-6">
-            <div class="text-xs font-bold text-gray-500 uppercase mb-2">Laporan Direview</div>
-            <div class="text-3xl font-extrabold" style="color: #2563eb;">{{ $reviewedReports }}</div>
-            <div class="text-sm text-gray-500 mt-2">Sudah diberi catatan</div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-6">
-        <div class="card p-0 overflow-hidden">
-            <div class="flex justify-between items-center p-6 border-b border-border">
+        <div class="stat-card">
+            <div class="stat-card-row">
                 <div>
-                    <h3 class="font-bold text-gray-900 text-lg">Pengajuan Terbaru</h3>
-                    <p class="text-sm text-gray-500">Status program yang Anda ajukan</p>
+                    <div class="stat-label">Pengajuan Pendanaan</div>
+                    <div class="stat-value">{{ $totalPendanaan ?? 0 }}</div>
                 </div>
-                <a href="{{ route('umkm.pengajuan.index') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Lihat Semua</a>
+                <div class="icon-chip">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
             </div>
-            <div class="table-container p-6 pt-0">
-                <table class="table" style="margin-top: -1px;">
-                    <thead>
-                        <tr>
-                            <th style="padding-top: var(--space-4);">Program</th>
-                            <th style="padding-top: var(--space-4);">Tanggal</th>
-                            <th style="padding-top: var(--space-4); text-align: right;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($recentPengajuans as $pengajuan)
-                            <tr>
-                                <td class="font-bold text-gray-900">{{ $pengajuan->program?->name ?? '-' }}</td>
-                                <td class="text-gray-600">{{ $pengajuan->created_at->format('d M Y') }}</td>
-                                <td style="text-align: right;"><x-status-badge :status="$pengajuan->status" /></td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted); font-size: var(--text-sm);">
-                                    Belum ada pengajuan. <a href="{{ route('umkm.pengajuan.index') }}" style="color: var(--color-primary); font-weight: 600;">Ajukan sekarang</a>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="stat-note">Ajukan dan pantau rekomendasi pendanaan usaha.</div>
+            <a href="{{ route('umkm.pendanaan.index') }}" class="link-action">Kelola Pendanaan</a>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-row">
+                <div>
+                    <div class="stat-label">Laporan Berkala</div>
+                    <div class="stat-value">{{ $totalLaporan ?? 0 }}</div>
+                </div>
+                <div class="icon-chip">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </div>
+            </div>
+            <div class="stat-note">Kirim laporan berkala perkembangan usaha Anda.</div>
+            <a href="{{ route('umkm.laporan_berkala.index') }}" class="link-action">Kelola Laporan Berkala</a>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-row">
+                <div>
+                    <div class="stat-label">Event dan Pelatihan</div>
+                    <div class="stat-value" style="font-size: 1.45rem;">Aktif</div>
+                </div>
+                <div class="icon-chip gold">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+            </div>
+            <div class="stat-note">Ikuti event dan pelatihan dari Dinas.</div>
+            <a href="{{ route('umkm.event') }}" class="link-action">Lihat Event</a>
+        </div>
+    </section>
+
+    <section class="dashboard-section-grid">
+        <div class="content-card">
+            <div class="stat-card-row" style="margin-bottom: var(--space-4);">
+                <div>
+                    <h2 class="section-title">Alur Layanan Utama</h2>
+                    <p class="section-subtitle">Gunakan menu utama sesuai kebutuhan usaha Anda.</p>
+                </div>
+            </div>
+
+            <div class="section-list">
+                <div class="list-card">
+                    <div class="stat-label">Pendanaan Usaha</div>
+                    <div class="detail-value" style="margin-top: var(--space-2);">Ajukan dan pantau rekomendasi pendanaan usaha.</div>
+                    <a href="{{ route('umkm.pendanaan.index') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Buka Pengajuan Pendanaan</a>
+                </div>
+                <div class="list-card">
+                    <div class="stat-label">Event dan Pelatihan</div>
+                    <div class="detail-value" style="margin-top: var(--space-2);">Temukan kegiatan pelatihan, buka detail event, lalu daftar langsung.</div>
+                    <a href="{{ route('umkm.event') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Lihat Event</a>
+                </div>
+                <div class="list-card">
+                    <div class="stat-label">Laporan Berkala</div>
+                    <div class="detail-value" style="margin-top: var(--space-2);">Kirim laporan berkala perkembangan usaha Anda secara periodik.</div>
+                    <a href="{{ route('umkm.laporan_berkala.index') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Kelola Laporan Berkala</a>
+                </div>
             </div>
         </div>
 
-        <div class="card p-0 overflow-hidden">
-            <div class="flex justify-between items-center p-6 border-b border-border">
+        <div class="content-card">
+            <div class="stat-card-row" style="margin-bottom: var(--space-4);">
                 <div>
-                    <h3 class="font-bold text-gray-900 text-lg">Laporan Terbaru</h3>
-                    <p class="text-sm text-gray-500">Aktivitas pelaporan perkembangan usaha</p>
+                    <h2 class="section-title">Pembaruan dan Bantuan</h2>
+                    <p class="section-subtitle">Pantau informasi terbaru atau akses materi pendukung.</p>
                 </div>
-                <a href="{{ route('reports.index') }}" class="text-sm font-semibold" style="color: var(--color-secondary);">Lihat Semua</a>
             </div>
-            <div class="table-container p-6 pt-0">
-                <table class="table" style="margin-top: -1px;">
-                    <thead>
-                        <tr>
-                            <th style="padding-top: var(--space-4);">Judul</th>
-                            <th style="padding-top: var(--space-4);">Tanggal</th>
-                            <th style="padding-top: var(--space-4); text-align: right;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($recentReports as $report)
-                            <tr>
-                                <td class="font-bold text-gray-900">{{ $report->judul }}</td>
-                                <td class="text-gray-600">{{ $report->created_at->format('d M Y') }}</td>
-                                <td style="text-align: right;"><x-status-badge :status="$report->status" /></td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted); font-size: var(--text-sm);">
-                                    Belum ada laporan. <a href="{{ route('reports.create') }}" style="color: var(--color-primary); font-weight: 600;">Buat laporan</a>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="flex flex-col gap-3">
+                <div class="list-card">
+                    <div style="font-weight: 800; color: var(--color-gray-900);">Notifikasi</div>
+                    <div class="stat-note" style="margin-top: var(--space-1);">Pantau informasi terbaru melalui notifikasi.</div>
+                    <a href="{{ route('umkm.notifications.index') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Buka Notifikasi</a>
+                </div>
+                <div class="list-card">
+                    <div style="font-weight: 800; color: var(--color-gray-900);">Materi Edukasi</div>
+                    <div class="stat-note" style="margin-top: var(--space-1);">Pelajari materi pembinaan untuk mengembangkan usaha.</div>
+                    <a href="{{ route('umkm.materi-edukasi.index') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Lihat Materi</a>
+                </div>
+                <div class="list-card">
+                    <div style="font-weight: 800; color: var(--color-gray-900);">Panduan dan Bantuan</div>
+                    <div class="stat-note" style="margin-top: var(--space-1);">Baca panduan penggunaan portal atau FAQ layanan.</div>
+                    <a href="{{ route('umkm.panduan') }}" class="link-action" style="display: inline-block; margin-top: var(--space-3);">Buka Panduan</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 @endsection

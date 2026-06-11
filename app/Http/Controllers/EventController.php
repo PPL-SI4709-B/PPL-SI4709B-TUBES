@@ -50,7 +50,10 @@ class EventController extends Controller
 
     public function adminIndex()
     {
-        $events = Event::latest()->paginate(10);
+        $events = Event::with(['registrants.umkmProfile'])
+            ->withCount('registrants')
+            ->latest()
+            ->paginate(10);
 
         return view('dinas.event.index', compact('events'));
     }
@@ -99,6 +102,21 @@ class EventController extends Controller
 
         return redirect()->route('dinas.event.index')
             ->with('success', 'Event berhasil diperbarui.');
+    }
+
+    public function complete(Event $event)
+    {
+        if ($event->status !== 'active') {
+            return redirect()->route('dinas.event.index')
+                ->with('success', 'Event sudah ditandai selesai.');
+        }
+
+        $event->update([
+            'status' => 'inactive',
+        ]);
+
+        return redirect()->route('dinas.event.index')
+            ->with('success', 'Event berhasil ditandai selesai.');
     }
 
     public function destroy(Event $event)

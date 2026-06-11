@@ -2,12 +2,12 @@
 
 @section('content')
 <!-- Card Container -->
-<div class="card mb-6" style="max-width: 640px; width: 100%;">
+<div class="card auth-card mb-6">
 
     <!-- Header -->
     <div class="text-center mb-8">
-        <h1 class="text-xl font-bold text-dark tracking-tight mb-2">Konfirmasi Pendaftaran</h1>
-        <p class="text-sm text-muted m-0">Lengkapi data usaha Anda untuk melanjutkan pendaftaran.</p>
+        <h1 class="auth-title">Konfirmasi Pendaftaran</h1>
+        <p class="auth-subtitle">Periksa kembali data akun dan usaha sebelum menyelesaikan pendaftaran.</p>
     </div>
 
     <x-stepper current="3" />
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Confimation Checkbox Banner -->
-        <div class="flex items-start gap-4 p-4 mt-2" style="background-color: #eff6ff; border-radius: var(--radius-md);">
+        <div class="flex items-start gap-4 p-4 mt-2" style="background-color: var(--color-primary-soft); border-radius: var(--radius-md); border: 1px solid #BBF7D0;">
             <label class="custom-checkbox" style="margin-top: 2px;">
                 <input type="checkbox" id="assurance" name="assurance" value="1">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>

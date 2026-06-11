@@ -15,7 +15,7 @@
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>
@@ -23,62 +23,51 @@
 
 @section('content')
 <div class="flex flex-col gap-6" dusk="scale-index">
-
     @if(session('success'))
-        <div dusk="flash-success" style="background-color: var(--color-status-approve-bg); color: var(--color-status-approve-text); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; display: flex; align-items: center; gap: var(--space-2);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            {{ session('success') }}
-        </div>
+        <div dusk="flash-success" class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="flex justify-between items-center">
+    <div class="page-header">
         <div>
-            <h1 class="font-bold" style="font-size: var(--text-xl); color: var(--color-text-dark);">Kelola Skala Usaha</h1>
-            <p class="text-sm text-muted mt-1">Data skala usaha untuk profil UMKM</p>
+            <div class="page-kicker">Master Data</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Kelola Skala Usaha</h1>
+            <p class="page-subtitle">Data skala usaha yang digunakan pada profil UMKM.</p>
         </div>
-        <a href="{{ route('dinas.scale.create') }}" class="btn btn-brand" id="btn-tambah-skala" dusk="scale-create-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <a href="{{ route('dinas.scale.create') }}" class="btn btn-primary" id="btn-tambah-skala" dusk="scale-create-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Tambah Skala Usaha
         </a>
     </div>
 
-    <div class="card" style="padding: 0; overflow: hidden;">
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse;">
+    <section class="content-card">
+        <div class="table-container">
+            <table class="data-table">
                 <thead>
-                    <tr style="background-color: var(--color-input-bg); border-bottom: 1px solid var(--color-border);">
-                        <th style="padding: var(--space-3) var(--space-4); text-align: left; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; width: 50px;">No</th>
-                        <th style="padding: var(--space-3) var(--space-4); text-align: left; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Nama Skala</th>
-                        <th style="padding: var(--space-3) var(--space-4); text-align: left; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Deskripsi</th>
-                        <th style="padding: var(--space-3) var(--space-4); text-align: left; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Dibuat</th>
-                        <th style="padding: var(--space-3) var(--space-4); text-align: right; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Aksi</th>
+                    <tr>
+                        <th style="width: 4rem;">No</th>
+                        <th>Nama Skala</th>
+                        <th>Deskripsi</th>
+                        <th>Dibuat</th>
+                        <th style="text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($scales as $scale)
-                        <tr dusk="scale-row-{{ $scale->id }}" style="border-bottom: 1px solid var(--color-border);" onmouseover="this.style.backgroundColor='var(--color-input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
-                            <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted);">
-                                {{ ($scales->currentPage() - 1) * $scales->perPage() + $loop->iteration }}
-                            </td>
-                            <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); font-weight: 600; color: var(--color-text-dark);">
-                                {{ $scale->name }}
-                            </td>
-                            <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); color: var(--color-text-main); max-width: 300px;">
-                                {{ $scale->description ?? '-' }}
-                            </td>
-                            <td style="padding: var(--space-3) var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted);">
-                                {{ $scale->created_at->format('d M Y') }}
-                            </td>
-                            <td style="padding: var(--space-3) var(--space-4); text-align: right;">
-                                <div class="flex justify-end gap-2">
-                                    <a href="{{ route('dinas.scale.edit', $scale) }}" title="Edit" style="color: var(--color-primary); padding: 4px;" id="btn-edit-{{ $scale->id }}" dusk="scale-edit-{{ $scale->id }}">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <tr dusk="scale-row-{{ $scale->id }}">
+                            <td>{{ ($scales->currentPage() - 1) * $scales->perPage() + $loop->iteration }}</td>
+                            <td style="font-weight: 800; color: var(--color-gray-900);">{{ $scale->name }}</td>
+                            <td style="max-width: 24rem;">{{ $scale->description ?? 'Belum tersedia' }}</td>
+                            <td style="white-space: nowrap;">{{ $scale->created_at->format('d M Y') }}</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <a href="{{ route('dinas.scale.edit', $scale) }}" title="Edit" class="link-action" id="btn-edit-{{ $scale->id }}" dusk="scale-edit-{{ $scale->id }}">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </a>
                                     <form action="{{ route('dinas.scale.destroy', $scale) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus skala usaha ini?');" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" title="Hapus" style="color: var(--color-status-reject-text); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $scale->id }}" dusk="scale-delete-{{ $scale->id }}">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                        <button type="submit" title="Hapus" style="color: var(--color-danger); padding: 4px; cursor: pointer; background: none; border: none;" id="btn-delete-{{ $scale->id }}" dusk="scale-delete-{{ $scale->id }}">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </button>
                                     </form>
                                 </div>
@@ -86,11 +75,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" style="padding: var(--space-8); text-align: center; color: var(--color-text-muted); font-size: var(--text-sm);">
-                                <div class="flex flex-col items-center gap-3">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-light);"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                                    <span>Belum ada data skala usaha.</span>
-                                    <a href="{{ route('dinas.scale.create') }}" class="btn btn-brand" style="font-size: var(--text-sm);">Tambah Skala Usaha Pertama</a>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada data skala usaha</h3>
+                                    <p style="margin-bottom: var(--space-4);">Tambahkan skala usaha untuk melengkapi klasifikasi UMKM.</p>
+                                    <a href="{{ route('dinas.scale.create') }}" class="btn btn-primary">Tambah Skala Usaha Pertama</a>
                                 </div>
                             </td>
                         </tr>
@@ -100,33 +89,10 @@
         </div>
 
         @if($scales->hasPages())
-            <div style="padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: var(--text-sm); color: var(--color-text-muted);">
-                    Menampilkan {{ $scales->firstItem() }}–{{ $scales->lastItem() }} dari {{ $scales->total() }} data
-                </span>
-                <div class="flex gap-1">
-                    @if($scales->onFirstPage())
-                        <span style="padding: 6px 12px; font-size: var(--text-sm); color: var(--color-text-light); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">&laquo;</span>
-                    @else
-                        <a href="{{ $scales->previousPageUrl() }}" style="padding: 6px 12px; font-size: var(--text-sm); color: var(--color-primary); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">&laquo;</a>
-                    @endif
-
-                    @foreach($scales->getUrlRange(1, $scales->lastPage()) as $page => $url)
-                        @if($page == $scales->currentPage())
-                            <span style="padding: 6px 12px; font-size: var(--text-sm); color: white; background-color: var(--color-primary); border-radius: var(--radius-sm); font-weight: 600;">{{ $page }}</span>
-                        @else
-                            <a href="{{ $url }}" style="padding: 6px 12px; font-size: var(--text-sm); color: var(--color-text-main); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">{{ $page }}</a>
-                        @endif
-                    @endforeach
-
-                    @if($scales->hasMorePages())
-                        <a href="{{ $scales->nextPageUrl() }}" style="padding: 6px 12px; font-size: var(--text-sm); color: var(--color-primary); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">&raquo;</a>
-                    @else
-                        <span style="padding: 6px 12px; font-size: var(--text-sm); color: var(--color-text-light); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">&raquo;</span>
-                    @endif
-                </div>
+            <div style="margin-top: var(--space-4);">
+                {{ $scales->links() }}
             </div>
         @endif
-    </div>
+    </section>
 </div>
 @endsection

@@ -30,13 +30,6 @@
         </a>
         @endif
 
-        @if($hasRoute('umkm.pengajuan.index'))
-        <a href="{{ route('umkm.pengajuan.index') }}" class="nav-item {{ $active === 'pengajuan' ? 'active' : '' }}">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>
-            Pengajuan Program
-        </a>
-        @endif
-
         @if($hasRoute('umkm.pendanaan.index'))
         <a href="{{ route('umkm.pendanaan.index') }}" class="nav-item {{ $active === 'pendanaan' ? 'active' : '' }}">
             <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></span>
@@ -55,13 +48,6 @@
         <a href="{{ route('umkm.event.history') }}" class="nav-item {{ $active === 'event-history' ? 'active' : '' }}">
             <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path></svg></span>
             Riwayat Event
-        </a>
-        @endif
-
-        @if($hasRoute('reports.index'))
-        <a href="{{ route('reports.index') }}" class="nav-item {{ $active === 'reports' ? 'active' : '' }}">
-            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
-            Laporan Perkembangan
         </a>
         @endif
 

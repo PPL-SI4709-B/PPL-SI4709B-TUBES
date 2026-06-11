@@ -8,7 +8,7 @@
 
 @section('header')
 <header class="main-header">
-    <div class="page-title">Kelola Event</div>
+    <div class="page-title">Kelola Event dan Pelatihan</div>
     <div class="flex items-center gap-6">
         <div class="user-profile">
             <div class="user-info">
@@ -25,72 +25,135 @@
 
 @section('content')
 <div class="flex flex-col gap-6">
-
     @if (session('success'))
-        <div style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500;">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card" style="padding: var(--space-6);">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900);">Daftar Event</div>
-                <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">{{ $events->total() }} event terdaftar</div>
-            </div>
-            <a href="{{ route('dinas.event.create') }}" class="btn btn-primary">
-                + Tambah Event
-            </a>
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Event dan Pelatihan</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Daftar Event</h1>
+            <p class="page-subtitle">{{ $events->total() }} event terdaftar untuk publikasi kepada UMKM.</p>
         </div>
+        <a href="{{ route('dinas.event.create') }}" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Tambah Event
+        </a>
+    </div>
 
-        @forelse ($events as $event)
-            <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-5); margin-bottom: var(--space-3);">
-                <div class="flex justify-between items-start">
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600; font-size: var(--text-sm); color: var(--color-gray-900);">{{ $event->title }}</div>
+    <section class="content-card">
+        <div class="flex flex-col gap-3">
+            @forelse ($events as $event)
+                <div class="list-card">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                            <h2 style="font-weight: 800; font-size: var(--text-base); color: var(--color-gray-900); margin: 0;">{{ $event->title }}</h2>
+                            @php
+                                $eventStatusLabel = $event->status === 'active' ? 'Aktif' : 'Selesai';
+                                $eventStatusClass = $event->status === 'active' ? 'badge-success' : 'badge-secondary';
+                            @endphp
+                            <span class="badge {{ $eventStatusClass }}">
+                                {{ $eventStatusLabel }}
+                            </span>
+                        </div>
                         @if ($event->description)
-                            <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 4px;">{{ Str::limit($event->description, 100) }}</div>
+                            <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; line-height: 1.6;">{{ \Illuminate\Support\Str::limit($event->description, 120) }}</p>
                         @endif
-                        <div class="flex gap-4 mt-3" style="font-size: var(--text-xs); color: var(--color-text-muted);">
-                            <span>Tanggal: <strong>{{ $event->event_date?->format('d M Y, H:i') }}</strong></span>
-                            <span>Lokasi: <strong>{{ $event->location }}</strong></span>
-                            <span>Kuota: <strong>{{ $event->quota }}</strong></span>
+                        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted);">
+                            <span>Tanggal: <strong style="color: var(--color-gray-900);">{{ $event->event_date?->format('d M Y, H:i') ?? 'Belum tersedia' }}</strong></span>
+                            <span>Lokasi: <strong style="color: var(--color-gray-900);">{{ $event->location }}</strong></span>
+                            <span>Kuota: <strong style="color: var(--color-gray-900);">{{ $event->quota }}</strong></span>
+                            <span>Pendaftar: <strong style="color: var(--color-gray-900);">{{ $event->registrants_count }} / {{ $event->quota }}</strong></span>
+                        </div>
+
+                        <div style="margin-top: var(--space-4); border-top: 1px solid var(--color-border); padding-top: var(--space-4);">
+                            <div class="stat-card-row" style="margin-bottom: var(--space-3);">
+                                <div>
+                                    <div class="stat-label">Peserta Terdaftar</div>
+                                    <div class="stat-note">UMKM yang sudah mendaftar pada event ini.</div>
+                                </div>
+                                <span class="badge badge-info">{{ $event->registrants_count }} pendaftar</span>
+                            </div>
+
+                            @if($event->registrants->isNotEmpty())
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Pemilik/User</th>
+                                                <th>Nama UMKM</th>
+                                                <th>Email</th>
+                                                <th>Tanggal Daftar</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($event->registrants as $registrant)
+                                                <tr>
+                                                    <td style="font-weight: 700; color: var(--color-gray-900);">{{ $registrant->name }}</td>
+                                                    <td>{{ $registrant->umkmProfile?->business_name ?? 'Belum tersedia' }}</td>
+                                                    <td>{{ $registrant->email }}</td>
+                                                    <td>{{ $registrant->pivot?->created_at?->format('d M Y, H:i') ?? 'Belum tersedia' }}</td>
+                                                    <td>
+                                                        @php
+                                                            $participantStatus = $registrant->pivot?->status ?? 'registered';
+                                                            $participantLabel = match ($participantStatus) {
+                                                                'registered' => 'Terdaftar',
+                                                                'pending' => 'Menunggu Konfirmasi',
+                                                                'approved' => 'Terdaftar',
+                                                                'rejected' => 'Ditolak',
+                                                                'completed' => 'Selesai',
+                                                                'cancelled' => 'Dibatalkan',
+                                                                default => ucfirst($participantStatus),
+                                                            };
+                                                        @endphp
+                                                        <span class="badge badge-success">{{ $participantLabel }}</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <div class="support-empty-state" style="padding: var(--space-5);">
+                                    <h3 style="margin-top: 0;">Belum ada peserta</h3>
+                                    <p>Peserta akan muncul setelah UMKM mendaftar event ini.</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 ml-4">
-                        @php
-                            $statusBg = '#f1f5f9';
-                            $statusColor = 'var(--color-text-muted)';
-                            if ($event->status === 'active') {
-                                $statusBg = 'var(--color-success-bg)';
-                                $statusColor = 'var(--color-success)';
-                            }
-                        @endphp
-                        <span class="badge" style="background-color: {{ $statusBg }}; color: {{ $statusColor }};">
-                            {{ $event->status === 'active' ? 'Aktif' : 'Nonaktif' }}
-                        </span>
-                        <a href="{{ route('dinas.event.edit', $event) }}" style="font-size: var(--text-sm); color: var(--color-secondary); font-weight: 500;">Edit</a>
+                    <div class="action-group">
+                        @if ($event->status === 'active')
+                            <form action="{{ route('dinas.event.complete', $event) }}" method="POST" onsubmit="return confirm('Tandai event ini selesai?');" style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="link-action" style="background: none; border: none; cursor: pointer; padding: 0;">Tandai Selesai</button>
+                            </form>
+                        @else
+                            <span class="badge badge-secondary">Selesai</span>
+                        @endif
+                        <a href="{{ route('dinas.event.edit', $event) }}" class="link-action">Edit</a>
                         <form action="{{ route('dinas.event.destroy', $event) }}" method="POST" onsubmit="return confirm('Hapus event ini?');" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" style="font-size: var(--text-sm); color: var(--color-danger); font-weight: 500; background: none; border: none; cursor: pointer;">Hapus</button>
+                            <button type="submit" style="font-size: var(--text-sm); color: var(--color-danger); font-weight: 700; background: none; border: none; cursor: pointer;">Hapus</button>
                         </form>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div style="text-align: center; padding: var(--space-12) 0; color: var(--color-text-muted);">
-                <div style="font-size: var(--text-sm); margin-bottom: var(--space-3);">Belum ada event.</div>
-                <a href="{{ route('dinas.event.create') }}" class="btn btn-primary">Tambah Event Pertama</a>
-            </div>
-        @endforelse
+            @empty
+                <div class="empty-state">
+                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada event</h3>
+                    <p style="margin-bottom: var(--space-4);">Tambahkan event atau pelatihan agar UMKM dapat mendaftar.</p>
+                    <a href="{{ route('dinas.event.create') }}" class="btn btn-primary">Tambah Event Pertama</a>
+                </div>
+            @endforelse
+        </div>
 
         @if ($events->hasPages())
-            <div class="mt-4">
+            <div style="margin-top: var(--space-4);">
                 {{ $events->links() }}
             </div>
         @endif
-    </div>
-
+    </section>
 </div>
 @endsection

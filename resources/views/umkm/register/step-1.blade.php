@@ -2,12 +2,12 @@
 
 @section('content')
 <!-- Card Container -->
-<div class="card mb-6">
+<div class="card auth-card mb-6">
 
     <!-- Header -->
     <div class="text-center mb-8">
-        <h1 class="text-xl font-bold text-dark tracking-tight mb-2">Daftar sebagai Pelaku UMKM</h1>
-        <p class="text-sm text-muted m-0">Lengkapi data diri Anda untuk mulai mengelola usaha secara digital.</p>
+        <h1 class="auth-title">Daftar sebagai Pelaku UMKM</h1>
+        <p class="auth-subtitle">Lengkapi data diri Anda untuk mulai mengelola usaha secara digital.</p>
     </div>
 
     <x-stepper current="1" />
@@ -51,7 +51,7 @@
             <div class="flex-col gap-2">
                 <label class="input-label">PASSWORD</label>
                 <div class="relative">
-                    <input type="password" name="password" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
+                    <input type="password" name="password" class="input-field" placeholder="Masukkan password" style="padding-right: 40px;">
                     <span class="absolute text-light" style="right: 12px; top: 12px; cursor: pointer;" onclick="togglePassword(this)">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
                     </span>
@@ -76,7 +76,7 @@
             <div class="flex-col gap-2">
                 <label class="input-label">KONFIRMASI PASSWORD</label>
                 <div class="relative">
-                    <input type="password" name="password_confirmation" class="input-field" placeholder="••••••••" style="padding-right: 40px;">
+                    <input type="password" name="password_confirmation" class="input-field" placeholder="Ulangi password" style="padding-right: 40px;">
                     <span class="absolute text-light" style="right: 12px; top: 12px;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
                     </span>
@@ -91,7 +91,7 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </label>
             <label for="agree_terms" class="text-sm text-main" style="line-height: 1.5; padding-top: 1px; cursor: pointer;">
-                Saya menyetujui <a href="#" class="link-brand">syarat dan ketentuan</a> yang berlaku di portal SIP UMKM Kab. Bandung.
+                Saya menyetujui <a href="#" class="link-brand">syarat dan ketentuan</a> yang berlaku di Portal UMKM Kabupaten Bandung.
             </label>
         </div>
 

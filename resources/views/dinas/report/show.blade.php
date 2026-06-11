@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Laporan')
+@section('title', 'Detail Laporan Berkala')
 
 @section('sidebar')
 <x-dinas-sidebar active="report" />
@@ -8,7 +8,10 @@
 
 @section('header')
 <header class="main-header">
-    <div class="page-title">Detail Laporan</div>
+    <div>
+        <div class="page-title">Detail Laporan Berkala</div>
+        <div class="page-subtitle">Detail laporan periodik yang dikirim UMKM.</div>
+    </div>
     <div class="user-profile">
         <div class="user-info">
             <div class="user-name">{{ Auth::user()->name }}</div>
@@ -20,95 +23,81 @@
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6">
-
-    <div class="card" style="padding: var(--space-6);">
-        <div class="mb-4">
-            <a href="{{ route('dinas.report.index') }}" style="font-size: var(--text-sm); color: var(--color-secondary);">← Kembali</a>
+<div class="flex flex-col gap-6" style="max-width: 64rem; margin: 0 auto;">
+    <div class="page-header" style="margin-bottom: 0;">
+        <div>
+            <a href="{{ route('dinas.report.index') }}" class="link-action">Kembali ke Daftar Laporan Berkala</a>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-2);">Laporan {{ $report->kuartal }} {{ $report->tahun }}</h1>
+            <p class="page-subtitle">Laporan berkala perkembangan usaha yang dikirim oleh UMKM.</p>
         </div>
-
-        <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900); margin-bottom: var(--space-6);">{{ $report->judul }}</div>
-
-        <div class="flex flex-col gap-4" style="margin-bottom: var(--space-6);">
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Pelapor</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $report->user?->name }}</div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $report->user?->email }}</div>
-            </div>
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $report->created_at->format('d M Y, H:i') }}</div>
-            </div>
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Deskripsi</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px; line-height: 1.6;">{{ $report->deskripsi }}</div>
-            </div>
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Status</div>
-                @php
-                    $statusColor = match($report->status) {
-                        'approved' => ['bg' => 'var(--color-success-bg)', 'text' => 'var(--color-success)'],
-                        'rejected' => ['bg' => '#fef2f2', 'text' => 'var(--color-danger)'],
-                        default    => ['bg' => '#fffbeb', 'text' => '#b45309'],
-                    };
-                    $statusLabel = match($report->status) {
-                        'approved' => 'Disetujui',
-                        'rejected' => 'Ditolak',
-                        default    => 'Pending',
-                    };
-                @endphp
-                <div style="margin-top: 4px;">
-                    <span class="badge" style="background-color: {{ $statusColor['bg'] }}; color: {{ $statusColor['text'] }};">{{ $statusLabel }}</span>
-                </div>
-            </div>
-            @if ($report->lampiran)
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Lampiran</div>
-                <div style="margin-top: 4px;">
-                    <a href="{{ route('reports.lampiran', $report) }}" target="_blank" style="font-size: var(--text-sm); color: var(--color-secondary); text-decoration: underline;">Lihat Lampiran ↗</a>
-                </div>
-            </div>
-            @endif
-            @if ($report->reviewed_at)
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Riwayat Review</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">Ditinjau oleh <strong>{{ $report->reviewer?->name ?? 'Petugas' }}</strong> pada {{ $report->reviewed_at->format('d M Y, H:i') }}</div>
-            </div>
-            @endif
-        </div>
-
-        @if ($report->status === 'pending')
-            <form action="{{ route('dinas.report.update', $report) }}" method="POST" class="flex flex-col gap-4">
-                @csrf
-                @method('PUT')
-
-                <div>
-                    <label style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Keputusan</label>
-                    <select name="status" required style="padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
-                        <option value="approved">Setujui</option>
-                        <option value="rejected">Tolak</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Catatan Petugas (opsional)</label>
-                    <textarea name="catatan_petugas" rows="3" style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); resize: vertical;" placeholder="Tulis catatan..."></textarea>
-                </div>
-
-                <div>
-                    <button type="submit" class="btn btn-primary">Simpan Keputusan</button>
-                </div>
-            </form>
-        @else
-            @if($report->catatan_petugas)
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Catatan Petugas</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 4px; padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-border);">{{ $report->catatan_petugas }}</div>
-                </div>
-            @endif
-            <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4);">Laporan ini sudah diproses.</div>
-        @endif
+        <span class="badge badge-success">Terkirim</span>
     </div>
 
+    <section class="content-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap;">
+            <div>
+                <div class="page-kicker">Laporan Berkala UMKM</div>
+                <h2 class="section-title" style="margin-top: var(--space-1);">Ringkasan Laporan</h2>
+            </div>
+            <div class="soft-panel" style="padding: var(--space-3) var(--space-4);">
+                <span class="detail-label">Dikirim</span>
+                <div class="detail-value" style="font-weight: 800;">{{ $report->updated_at->format('d M Y, H:i') }}</div>
+            </div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-section">
+                <div class="detail-label">Nama Pemilik/User</div>
+                <div class="detail-value" style="font-weight: 700;">{{ $report->user?->name ?? 'Belum tersedia' }}</div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $report->user?->email ?? 'Belum tersedia' }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Nama UMKM</div>
+                <div class="detail-value" style="font-weight: 700;">{{ $report->user?->umkmProfile?->business_name ?? 'Belum tersedia' }}</div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $report->user?->umkmProfile?->business_address ?? 'Alamat belum tersedia' }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Kategori / Wilayah / Skala</div>
+                <div class="detail-value">
+                    {{ $report->user?->umkmProfile?->category?->name ?? 'Kategori belum tersedia' }} /
+                    {{ $report->user?->umkmProfile?->region?->name ?? 'Wilayah belum tersedia' }} /
+                    {{ $report->user?->umkmProfile?->scale?->name ?? 'Skala belum tersedia' }}
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Periode</div>
+                <div class="detail-value" style="font-weight: 700;">{{ $report->kuartal }} {{ $report->tahun }}</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-grid tight">
+        <div class="content-card">
+            <div class="stat-label">Omzet Kuartal Ini</div>
+            <div class="stat-value" style="font-size: 1.5rem;">{{ $report->omzet !== null ? 'Rp '.number_format($report->omzet, 0, ',', '.') : '-' }}</div>
+        </div>
+        <div class="content-card">
+            <div class="stat-label">Jumlah Karyawan</div>
+            <div class="stat-value" style="font-size: 1.5rem;">{{ $report->jumlah_karyawan !== null ? $report->jumlah_karyawan : '-' }}</div>
+            <div class="stat-note">Orang</div>
+        </div>
+    </section>
+
+    <section class="content-card">
+        <h2 class="section-title">Kendala yang Dihadapi</h2>
+        <p class="section-subtitle">Catatan kendala dari UMKM pada periode laporan.</p>
+        <div class="soft-panel" style="margin-top: var(--space-4); white-space: pre-line;">{{ $report->kendala ?: 'Belum ada kendala yang dicatat.' }}</div>
+    </section>
+
+    <section class="content-card">
+        <h2 class="section-title">Strategi ke Depan</h2>
+        <p class="section-subtitle">Rencana tindak lanjut usaha dari UMKM.</p>
+        <div class="soft-panel" style="margin-top: var(--space-4); white-space: pre-line;">{{ $report->strategi_kedepan ?: 'Belum ada strategi yang dicatat.' }}</div>
+    </section>
+
+    <section class="content-card">
+        <h2 class="section-title">Catatan Review</h2>
+        <p class="section-subtitle">Tabel laporan berkala saat ini belum memiliki kolom review/catatan Dinas. Halaman ini menampilkan data laporan berkala yang sudah dikirim agar Dinas dapat memantau laporan utama UMKM tanpa memakai data laporan legacy.</p>
+    </section>
 </div>
 @endsection

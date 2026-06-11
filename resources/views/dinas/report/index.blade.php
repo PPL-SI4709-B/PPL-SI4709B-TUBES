@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Review Laporan')
+@section('title', 'Review Laporan Berkala')
 
 @section('sidebar')
 <x-dinas-sidebar active="report" />
@@ -8,7 +8,10 @@
 
 @section('header')
 <header class="main-header">
-    <div class="page-title">Review Laporan UMKM</div>
+    <div>
+        <div class="page-title">Review Laporan Berkala</div>
+        <div class="page-subtitle">Tinjau laporan berkala yang dikirim UMKM melalui menu Laporan Berkala.</div>
+    </div>
     <div class="user-profile">
         <div class="user-info">
             <div class="user-name">{{ Auth::user()->name }}</div>
@@ -21,52 +24,80 @@
 
 @section('content')
 <div class="flex flex-col gap-6">
-
     @if (session('success'))
-        <div style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500;">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card" style="padding: var(--space-6);">
-        <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900); margin-bottom: var(--space-6);">
-            Daftar Laporan
-            <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted); margin-left: var(--space-2);">{{ $reports->total() }} laporan</span>
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Review Laporan Berkala</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Daftar UMKM Pelapor</h1>
+            <p class="page-subtitle">Pilih UMKM untuk melihat riwayat laporan berkala yang telah dikirim.</p>
         </div>
-
-        @forelse ($reports as $report)
-            @php
-                $statusColor = match($report->status) {
-                    'approved' => ['bg' => 'var(--color-success-bg)', 'text' => 'var(--color-success)'],
-                    'rejected' => ['bg' => '#fef2f2', 'text' => 'var(--color-danger)'],
-                    default    => ['bg' => '#fffbeb', 'text' => '#b45309'],
-                };
-                $statusLabel = match($report->status) {
-                    'approved' => 'Disetujui',
-                    'rejected' => 'Ditolak',
-                    default    => 'Pending',
-                };
-            @endphp
-            <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-weight: 600; font-size: var(--text-sm); color: var(--color-gray-900);">{{ $report->judul }}</div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $report->user?->name }} &bull; {{ $report->created_at->format('d M Y') }}</div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="badge" style="background-color: {{ $statusColor['bg'] }}; color: {{ $statusColor['text'] }};">{{ $statusLabel }}</span>
-                    <a href="{{ route('dinas.report.show', $report) }}" style="font-size: var(--text-sm); color: var(--color-secondary); font-weight: 500;">Review</a>
-                </div>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+            <div class="soft-panel" style="padding: var(--space-3) var(--space-4);">
+                <span class="detail-label">Total UMKM Pelapor</span>
+                <div class="detail-value" style="font-weight: 800;">{{ $umkmReports->count() }}</div>
             </div>
-        @empty
-            <div style="text-align: center; padding: var(--space-8) 0; color: var(--color-text-muted); font-size: var(--text-sm);">
-                Belum ada laporan masuk.
+            <div class="soft-panel" style="padding: var(--space-3) var(--space-4);">
+                <span class="detail-label">Total Laporan</span>
+                <div class="detail-value" style="font-weight: 800;">{{ $totalReports }}</div>
             </div>
-        @endforelse
-
-        @if ($reports->hasPages())
-            <div class="mt-4">{{ $reports->links() }}</div>
-        @endif
+        </div>
     </div>
 
+    <section class="content-card">
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nama UMKM/Toko</th>
+                        <th>Pemilik/Email</th>
+                        <th>Jumlah Laporan</th>
+                        <th>Periode Terbaru</th>
+                        <th>Terakhir Dikirim</th>
+                        <th style="text-align: right;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($umkmReports as $item)
+                        @php
+                            $user = $item->user;
+                            $latestReport = $item->latestReport;
+                        @endphp
+                        <tr>
+                            <td>
+                                <div style="font-weight: 800; color: var(--color-gray-900);">{{ $user?->umkmProfile?->business_name ?? $user?->name ?? 'Belum tersedia' }}</div>
+                                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $user?->umkmProfile?->business_address ?? 'Alamat belum tersedia' }}</div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 700; color: var(--color-gray-900);">{{ $user?->name ?? 'Belum tersedia' }}</div>
+                                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $user?->email ?? 'Belum tersedia' }}</div>
+                            </td>
+                            <td>{{ $item->reportsCount }}</td>
+                            <td style="white-space: nowrap;">{{ $latestReport?->kuartal }} {{ $latestReport?->tahun }}</td>
+                            <td style="white-space: nowrap;">{{ $latestReport?->updated_at?->format('d M Y') ?? '-' }}</td>
+                            <td style="text-align: right;">
+                                @if($user)
+                                    <a href="{{ route('dinas.report.umkm', $user->id) }}" class="link-action">Lihat Laporan</a>
+                                @else
+                                    <span class="stat-note">Data user tidak tersedia</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada laporan berkala masuk</h3>
+                                    <p>Laporan berkala akan muncul setelah UMKM mengirim laporan dari menu Laporan Berkala.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
 </div>
 @endsection

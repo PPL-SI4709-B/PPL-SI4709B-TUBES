@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Profil Usaha - Portal UMKM')
+
 @section('sidebar')
 <x-umkm-sidebar active="profile" />
 @endsection
@@ -15,121 +17,130 @@
             <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
         </div>
         <div class="user-avatar" style="background-color: transparent;">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
         </div>
     </div>
 </header>
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6" style="max-width: 48rem; margin: 0 auto;" dusk="profile-show">
+@php
+    $statusClass = match($user->profile_status) {
+        'verified' => 'badge-success',
+        'rejected' => 'badge-danger',
+        default => 'badge-warning',
+    };
+    $statusLabel = match($user->profile_status) {
+        'verified' => 'Terverifikasi',
+        'rejected' => 'Ditolak',
+        default => 'Menunggu Verifikasi',
+    };
+@endphp
 
+<div class="flex flex-col gap-6" style="max-width: 56rem; margin: 0 auto;" dusk="profile-show">
     @if(session('success'))
-        <div dusk="flash-success" style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500; border-left: 4px solid var(--color-success);">
-            {{ session('success') }}
-        </div>
+        <div dusk="flash-success" class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card" style="padding: var(--space-6);">
-        <div class="flex justify-between items-start" style="margin-bottom: var(--space-6);">
-            <div>
-                <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900);">Profil Usaha</div>
-                <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">Informasi usaha terdaftar Anda</div>
-            </div>
-            <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary" style="font-size: var(--text-sm);" dusk="profile-edit-link">
-                Edit Profil
-            </a>
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Profil UMKM</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Profil Usaha</h1>
+            <p class="page-subtitle">Informasi identitas pemilik dan data usaha yang digunakan untuk verifikasi.</p>
         </div>
-
-        <div class="flex flex-col gap-4">
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Nama Pemilik</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $user->name }}</div>
-            </div>
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Email</div>
-                <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $user->email }}</div>
-            </div>
-            <div>
-                <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Status Verifikasi</div>
-                <div style="margin-top: 4px;">
-                    @php
-                        $statusColors = match($user->profile_status) {
-                            'verified' => ['bg' => 'var(--color-success-bg)', 'text' => 'var(--color-success)'],
-                            'rejected' => ['bg' => '#fef2f2', 'text' => 'var(--color-danger)'],
-                            default    => ['bg' => '#fffbeb', 'text' => '#b45309'],
-                        };
-                        $statusLabel = match($user->profile_status) {
-                            'verified' => 'Terverifikasi',
-                            'rejected' => 'Ditolak',
-                            default    => 'Menunggu Verifikasi',
-                        };
-                    @endphp
-                    <span class="badge" style="background-color: {{ $statusColors['bg'] }}; color: {{ $statusColors['text'] }};">{{ $statusLabel }}</span>
-                </div>
-                {{-- PBI-19: riwayat verifikasi --}}
-                @if($user->verified_at)
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 4px;">Diproses pada {{ $user->verified_at->format('d M Y, H:i') }}</div>
-                @endif
-                @if($user->profile_status === 'rejected' && $user->verification_note)
-                    <div style="font-size: var(--text-sm); color: var(--color-danger); margin-top: 4px; padding: var(--space-2) var(--space-3); background: #fef2f2; border-radius: var(--radius-md);">Alasan: {{ $user->verification_note }}</div>
-                @endif
-            </div>
-        </div>
+        <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary" dusk="profile-edit-link">Edit Profil</a>
     </div>
 
-    @if($profile)
-        <div class="card" style="padding: var(--space-6);">
-            <div style="font-size: var(--text-base); font-weight: 700; color: var(--color-gray-900); margin-bottom: var(--space-4);">Data Usaha</div>
-            <div class="flex flex-col gap-4">
-                @if($profile->logo)
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Logo Usaha</div>
-                    <img src="{{ Storage::url($profile->logo) }}" alt="Logo {{ $profile->business_name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-top: 4px;">
-                </div>
-                @endif
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Nama Usaha</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->business_name }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Telepon</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->phone ?? '-' }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">NIB</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->nib ?? '-' }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Kategori Usaha</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->category?->name ?? '-' }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Wilayah</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->region?->name ?? '-' }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Skala Usaha</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->scale?->name ?? '-' }}</div>
-                </div>
-                <div>
-                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Alamat Usaha</div>
-                    <div style="font-size: var(--text-sm); color: var(--color-gray-900); margin-top: 2px;">{{ $profile->business_address }}</div>
-                </div>
+    <section class="content-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); flex-wrap: wrap;">
+            <div>
+                <h2 class="section-title">Identitas Pemilik</h2>
+                <p class="section-subtitle">Data akun dan status verifikasi profil usaha.</p>
             </div>
+            <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
         </div>
-    @else
-        <div class="card" style="padding: var(--space-8); text-align: center;">
-            <div style="color: var(--color-text-muted); margin-bottom: var(--space-2);">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display: inline-block;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
-            <div style="font-size: var(--text-base); font-weight: 600; color: var(--color-gray-900); margin-bottom: var(--space-1);">Data usaha belum diisi</div>
-            <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);">Lengkapi profil usaha Anda agar dapat mengajukan program.</p>
-            <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                Lengkapi Profil
-            </a>
-        </div>
-    @endif
 
+        <div class="detail-grid" style="margin-top: var(--space-5);">
+            <div class="detail-section">
+                <div class="detail-label">Nama Pemilik</div>
+                <div class="detail-value">{{ $user->name }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Email</div>
+                <div class="detail-value">{{ $user->email }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Status Verifikasi</div>
+                <div>
+                    <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                </div>
+                @if($user->verified_at)
+                    <div style="font-size: var(--text-xs); color: var(--color-text-muted);">Diproses pada {{ $user->verified_at->format('d M Y, H:i') }}</div>
+                @endif
+            </div>
+            @if($user->profile_status === 'rejected' && $user->verification_note)
+                <div class="detail-section">
+                    <div class="detail-label">Catatan Verifikasi</div>
+                    <div class="soft-panel" style="color: var(--color-danger);">{{ $user->verification_note }}</div>
+                </div>
+            @endif
+        </div>
+    </section>
+
+    @if($profile)
+        <section class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap;">
+                <div>
+                    <h2 class="section-title">Data Usaha</h2>
+                    <p class="section-subtitle">Informasi usaha yang akan ditinjau oleh petugas Dinas.</p>
+                </div>
+                @if($profile->logo)
+                    <img src="{{ Storage::url($profile->logo) }}" alt="Logo {{ $profile->business_name }}" style="width: 4.5rem; height: 4.5rem; object-fit: cover; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                @endif
+            </div>
+
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <div class="detail-label">Nama Usaha</div>
+                    <div class="detail-value">{{ $profile->business_name }}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Telepon</div>
+                    <div class="detail-value">{{ $profile->phone ?? 'Belum tersedia' }}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">NIB</div>
+                    <div class="detail-value">{{ $profile->nib ?? 'Belum tersedia' }}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Kategori Usaha</div>
+                    <div class="detail-value">{{ $profile->category?->name ?? 'Belum tersedia' }}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Wilayah</div>
+                    <div class="detail-value">{{ $profile->region?->name ?? 'Belum tersedia' }}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Skala Usaha</div>
+                    <div class="detail-value">{{ $profile->scale?->name ?? 'Belum tersedia' }}</div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: var(--space-5);">
+                <div class="detail-label">Alamat Usaha</div>
+                <div class="soft-panel">{{ $profile->business_address ?: 'Belum tersedia' }}</div>
+            </div>
+        </section>
+    @else
+        <section class="content-card">
+            <div class="empty-state">
+                <div class="icon-chip" style="margin: 0 auto var(--space-3);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Data usaha belum diisi</h3>
+                <p style="margin-bottom: var(--space-4);">Lengkapi profil usaha agar dapat mengajukan program dan pendanaan.</p>
+                <a href="{{ route('umkm.profile.edit') }}" class="btn btn-primary">Lengkapi Profil</a>
+            </div>
+        </section>
+    @endif
 </div>
 @endsection

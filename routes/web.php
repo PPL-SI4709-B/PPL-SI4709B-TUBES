@@ -10,6 +10,7 @@ use App\Http\Controllers\EventFeedbackController;
 use App\Http\Controllers\EventRegistrationController;
 use App\Http\Controllers\LaporanBerkalaController;
 use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\MateriEdukasiDinasController;
 use App\Http\Controllers\MateriEdukasiUmkmController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PengajuanController;
@@ -125,6 +126,16 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::resource('region', RegionController::class)->except(['show']);
     Route::resource('scale', ScaleController::class)->except(['show']);
     Route::resource('sumber-pendanaan', SumberPendanaanController::class)->except(['show']);
+
+    Route::get('materi-edukasi', [MateriEdukasiDinasController::class, 'index'])
+        ->name('materi-edukasi.index');
+    Route::get('materi-edukasi/create', [MateriEdukasiDinasController::class, 'create'])
+        ->name('materi-edukasi.create');
+    Route::post('materi-edukasi', [MateriEdukasiDinasController::class, 'store'])
+        ->name('materi-edukasi.store');
+    Route::get('materi-edukasi/{materiEdukasi}/download', [MateriEdukasiDinasController::class, 'download'])
+        ->name('materi-edukasi.download');
+
     Route::get('pendanaan-verifikasi', [DinasPendanaanVerifikasiController::class, 'index'])
         ->name('pendanaan-verifikasi.index');
     Route::get('pendanaan-verifikasi/{pengajuanPendanaan}', [DinasPendanaanVerifikasiController::class, 'show'])
@@ -138,6 +149,7 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::get('event', [EventController::class, 'adminIndex'])->name('event.index');
     Route::get('event/create', [EventController::class, 'create'])->name('event.create');
     Route::post('event', [EventController::class, 'store'])->name('event.store');
+    Route::patch('event/{event}/complete', [EventController::class, 'complete'])->name('event.complete');
     Route::get('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
     Route::put('event/{event}', [EventController::class, 'update'])->name('event.update');
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.destroy');
@@ -152,6 +164,7 @@ Route::prefix('dinas')->name('dinas.')->middleware(['auth', 'role:dinas'])->grou
     Route::put('verification/{user}/reject', [VerificationController::class, 'reject'])->name('verification.reject');
 
     Route::get('report', [ReportReviewController::class, 'index'])->name('report.index');
+    Route::get('report/umkm/{user}', [ReportReviewController::class, 'showUmkm'])->name('report.umkm');
     Route::get('report/{report}', [ReportReviewController::class, 'show'])->name('report.show');
     Route::put('report/{report}', [ReportReviewController::class, 'update'])->name('report.update');
 

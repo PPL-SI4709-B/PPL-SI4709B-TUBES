@@ -1,155 +1,115 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Laporan Perkembangan Usaha')
+@section('title', isset($laporan) ? 'Edit Laporan Berkala - Portal UMKM' : 'Buat Laporan Berkala - Portal UMKM')
 
 @section('sidebar')
-    <aside class="sidebar sidebar-light">
-        <div class="sidebar-brand">
-            <h1 class="brand-title">Portal UMKM</h1>
-            <p class="brand-subtitle">Kabupaten Bandung</p>
-        </div>
-        <nav class="nav-menu">
-            <a href="{{ route('umkm.dashboard') }}" class="nav-item">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                </div>
-                <span>Dashboard</span>
-            </a>
-            <a href="{{ route('umkm.pengajuan.index') }}" class="nav-item">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                </div>
-                <span>Pengajuan Pendanaan</span>
-            </a>
-            <a href="{{ route('umkm.laporan_berkala.index') }}" class="nav-item active">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
-                </div>
-                <span>Laporan Berkala</span>
-            </a>
-        </nav>
-        <div class="sidebar-bottom">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="logout-btn w-full justify-start" style="background: none; border: none; cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                    <span>Keluar</span>
-                </button>
-            </form>
-        </div>
-    </aside>
+<x-umkm-sidebar active="laporan-berkala" />
 @endsection
 
 @section('header')
-    <header class="main-header">
-        <h2 class="page-title">{{ isset($laporan) ? 'Edit Laporan Berkala' : 'Buat Laporan Berkala' }}</h2>
-        <div class="user-profile">
-            <div class="user-info">
-                <div class="user-name">{{ Auth::user()->name }}</div>
-                <div class="user-role">{{ Auth::user()->role }}</div>
-            </div>
-            <div class="user-avatar">
-                {{ substr(Auth::user()->name, 0, 1) }}
-            </div>
+<header class="main-header">
+    <div>
+        <div class="page-title">{{ isset($laporan) ? 'Edit Laporan Berkala' : 'Buat Laporan Berkala' }}</div>
+        <div class="page-subtitle">Isi perkembangan usaha Anda untuk periode laporan terpilih.</div>
+    </div>
+    <div class="user-profile">
+        <div class="user-info">
+            <div class="user-name">{{ Auth::user()->name }}</div>
+            <div class="user-role" style="text-transform: none;">Pemilik Usaha</div>
         </div>
-    </header>
+        <div class="user-avatar" style="background-color: transparent;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+        </div>
+    </div>
+</header>
 @endsection
 
 @section('content')
-    <div class="max-w-3xl mx-auto pb-10">
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden border border-gray-200">
-            <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ isset($laporan) ? 'Edit Laporan Perkembangan Usaha' : 'Form Laporan Perkembangan Usaha' }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">Silakan isi data laporan perkembangan usaha untuk kuartal ini.</p>
-            </div>
-            <div class="px-4 py-5 sm:p-6">
-                @php
-                    $isEdit = isset($laporan);
-                    $actionUrl = $isEdit ? route('umkm.laporan_berkala.update', $laporan->id) : route('umkm.laporan_berkala.store');
-                @endphp
-                <form action="{{ $actionUrl }}" method="POST">
-                    @csrf
-                    @if($isEdit)
-                        @method('PUT')
-                    @endif
-                    
-                    <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun Laporan</label>
-                            <input type="text" name="tahun" id="tahun" value="{{ old('tahun', $isEdit ? $laporan->tahun : date('Y')) }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" required>
-                            @error('tahun')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+@php
+    $isEdit = isset($laporan);
+    $actionUrl = $isEdit ? route('umkm.laporan_berkala.update', $laporan->id) : route('umkm.laporan_berkala.store');
+@endphp
 
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="kuartal" class="block text-sm font-medium text-gray-700">Kuartal</label>
-                            <select id="kuartal" name="kuartal" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
-                                <option value="Q1" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q1' ? 'selected' : '' }}>Q1 (Januari - Maret)</option>
-                                <option value="Q2" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q2' ? 'selected' : '' }}>Q2 (April - Juni)</option>
-                                <option value="Q3" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q3' ? 'selected' : '' }}>Q3 (Juli - September)</option>
-                                <option value="Q4" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q4' ? 'selected' : '' }}>Q4 (Oktober - Desember)</option>
-                            </select>
-                            @error('kuartal')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-6">
-                            <label for="omzet" class="block text-sm font-medium text-gray-700">Omzet Usaha (Kuartal Ini)</label>
-                            <div class="mt-1 relative rounded-md shadow-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 sm:text-sm">Rp</span>
-                                </div>
-                                <input type="number" name="omzet" id="omzet" value="{{ old('omzet', $isEdit ? $laporan->omzet : '') }}" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 px-3 border" placeholder="0" min="0">
-                            </div>
-                            @error('omzet')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="jumlah_karyawan" class="block text-sm font-medium text-gray-700">Jumlah Karyawan Saat Ini</label>
-                            <input type="number" name="jumlah_karyawan" id="jumlah_karyawan" value="{{ old('jumlah_karyawan', $isEdit ? $laporan->jumlah_karyawan : '') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" min="0">
-                            @error('jumlah_karyawan')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-6">
-                            <label for="kendala" class="block text-sm font-medium text-gray-700">Kendala yang Dihadapi (Opsional)</label>
-                            <div class="mt-1">
-                                <textarea id="kendala" name="kendala" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3">{{ old('kendala', $isEdit ? $laporan->kendala : '') }}</textarea>
-                            </div>
-                            @error('kendala')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-6">
-                            <label for="strategi_kedepan" class="block text-sm font-medium text-gray-700">Strategi ke Depan (Opsional)</label>
-                            <div class="mt-1">
-                                <textarea id="strategi_kedepan" name="strategi_kedepan" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border py-2 px-3">{{ old('strategi_kedepan', $isEdit ? $laporan->strategi_kedepan : '') }}</textarea>
-                            </div>
-                            @error('strategi_kedepan')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="mt-6 flex justify-end">
-                        <a href="{{ route('umkm.laporan_berkala.index') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-3">
-                            Batal
-                        </a>
-                        <button type="submit" name="action" value="draft" class="bg-yellow-500 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 mr-3">
-                            Simpan Draft
-                        </button>
-                        <button type="submit" name="action" value="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Kirim Laporan
-                        </button>
-                    </div>
-                </form>
-            </div>
+<div class="support-page narrow">
+    <div class="secondary-page-header">
+        <div>
+            <div class="page-kicker">Perkembangan Usaha</div>
+            <h1>{{ $isEdit ? 'Edit Laporan Perkembangan Usaha' : 'Form Laporan Perkembangan Usaha' }}</h1>
+            <p class="page-subtitle">Lengkapi data laporan kuartal. Anda dapat menyimpannya sebagai draft sebelum dikirim.</p>
         </div>
     </div>
+
+    <section class="form-card">
+        <form action="{{ $actionUrl }}" method="POST" class="flex flex-col gap-5">
+            @csrf
+            @if($isEdit)
+                @method('PUT')
+            @endif
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="tahun" class="form-label">Tahun Laporan <span style="color: var(--color-danger);">*</span></label>
+                    <input type="text" name="tahun" id="tahun" value="{{ old('tahun', $isEdit ? $laporan->tahun : date('Y')) }}" class="form-control" required>
+                    @error('tahun')
+                        <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="kuartal" class="form-label">Kuartal <span style="color: var(--color-danger);">*</span></label>
+                    <select id="kuartal" name="kuartal" class="form-control" required>
+                        <option value="Q1" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q1' ? 'selected' : '' }}>Q1 (Januari - Maret)</option>
+                        <option value="Q2" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q2' ? 'selected' : '' }}>Q2 (April - Juni)</option>
+                        <option value="Q3" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q3' ? 'selected' : '' }}>Q3 (Juli - September)</option>
+                        <option value="Q4" {{ old('kuartal', $isEdit ? $laporan->kuartal : '') == 'Q4' ? 'selected' : '' }}>Q4 (Oktober - Desember)</option>
+                    </select>
+                    @error('kuartal')
+                        <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="omzet" class="form-label">Omzet Usaha (Kuartal Ini)</label>
+                <div class="flex">
+                    <span class="input-prefix">Rp</span>
+                    <input type="number" name="omzet" id="omzet" value="{{ old('omzet', $isEdit ? $laporan->omzet : '') }}" class="input-field input-with-prefix" placeholder="0" min="0">
+                </div>
+                @error('omzet')
+                    <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="jumlah_karyawan" class="form-label">Jumlah Karyawan Saat Ini</label>
+                <input type="number" name="jumlah_karyawan" id="jumlah_karyawan" value="{{ old('jumlah_karyawan', $isEdit ? $laporan->jumlah_karyawan : '') }}" class="form-control" min="0">
+                @error('jumlah_karyawan')
+                    <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="kendala" class="form-label">Kendala yang Dihadapi (Opsional)</label>
+                <textarea id="kendala" name="kendala" rows="3" class="form-control" style="resize: vertical;">{{ old('kendala', $isEdit ? $laporan->kendala : '') }}</textarea>
+                @error('kendala')
+                    <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="strategi_kedepan" class="form-label">Strategi ke Depan (Opsional)</label>
+                <textarea id="strategi_kedepan" name="strategi_kedepan" rows="3" class="form-control" style="resize: vertical;">{{ old('strategi_kedepan', $isEdit ? $laporan->strategi_kedepan : '') }}</textarea>
+                @error('strategi_kedepan')
+                    <p style="color: var(--color-danger); font-size: var(--text-xs); margin: 0;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="action-group" style="padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
+                <a href="{{ route('umkm.laporan_berkala.index') }}" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="action" value="draft" class="btn btn-warning">Simpan Draft</button>
+                <button type="submit" name="action" value="submit" class="btn btn-primary">Kirim Laporan</button>
+            </div>
+        </form>
+    </section>
+</div>
 @endsection

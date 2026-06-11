@@ -25,78 +25,80 @@
 
 @section('content')
 <div class="flex flex-col gap-6">
-
     @if (session('success'))
-        <div style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500;">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if (session('error'))
-        <div style="background-color: #fef2f2; color: var(--color-danger); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500;">
-            {{ session('error') }}
-        </div>
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <div class="card" style="padding: var(--space-6);">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900);">Daftar Pengajuan Pendanaan</div>
-                <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">Verifikasi pengajuan pendanaan UMKM dan pemberian keputusan administratif.</div>
-            </div>
-            <form method="GET" action="{{ route('dinas.pendanaan-verifikasi.index') }}" class="flex items-center gap-2">
-                <label for="status" style="font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 600;">Status</label>
-                <select id="status" name="status" onchange="this.form.submit()" style="padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); background: white;">
-                    <option value="">Semua Status</option>
-                    @foreach ($allowedStatuses as $status)
-                        <option value="{{ $status }}" @selected($selectedStatus === $status)>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
-                    @endforeach
-                </select>
-            </form>
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Verifikasi Pendanaan</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Daftar Pengajuan Pendanaan</h1>
+            <p class="page-subtitle">Verifikasi pengajuan pendanaan UMKM dan berikan keputusan administratif.</p>
         </div>
+        <form method="GET" action="{{ route('dinas.pendanaan-verifikasi.index') }}" class="soft-panel" style="padding: var(--space-3) var(--space-4); min-width: 16rem;">
+            <label for="status" class="detail-label">Status</label>
+            <select id="status" name="status" onchange="this.form.submit()" class="form-control" style="margin-top: var(--space-2);">
+                <option value="">Semua Status</option>
+                @foreach ($allowedStatuses as $status)
+                    <option value="{{ $status }}" @selected($selectedStatus === $status)>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                @endforeach
+            </select>
+        </form>
+    </div>
 
-        <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);">
-            {{ $pengajuans->total() }} pengajuan ditemukan
+    <section class="content-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4); flex-wrap: wrap;">
+            <div>
+                <h2 class="section-title">Pengajuan Ditemukan</h2>
+                <p class="section-subtitle">{{ $pengajuans->total() }} pengajuan sesuai filter saat ini.</p>
+            </div>
         </div>
 
         <div class="table-container">
-            <table class="table w-full text-left">
+            <table class="data-table">
                 <thead>
-                    <tr class="border-b border-gray-200 text-xs font-bold text-gray-500 tracking-wider">
-                        <th class="pb-3">TANGGAL</th>
-                        <th class="pb-3">PEMOHON</th>
-                        <th class="pb-3">USAHA</th>
-                        <th class="pb-3">SUMBER PENDANAAN</th>
-                        <th class="pb-3 text-right">JUMLAH</th>
-                        <th class="pb-3 text-center">STATUS</th>
-                        <th class="pb-3 text-center">AKSI</th>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Pemohon</th>
+                        <th>Usaha</th>
+                        <th>Sumber Pendanaan</th>
+                        <th style="text-align: right;">Jumlah</th>
+                        <th style="text-align: center;">Status</th>
+                        <th style="text-align: center;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="text-sm divide-y divide-gray-100">
+                <tbody>
                     @forelse ($pengajuans as $pengajuan)
                         @php
                             $profile = $pengajuan->user?->umkmProfile;
                         @endphp
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-4 text-gray-600" style="white-space: nowrap;">{{ ($pengajuan->submitted_at ?? $pengajuan->created_at)->format('d M Y') }}</td>
-                            <td class="py-4">
-                                <div style="font-weight: 600; color: var(--color-gray-900);">{{ $pengajuan->user?->name ?? '-' }}</div>
-                                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $pengajuan->user?->email ?? '-' }}</div>
+                        <tr>
+                            <td style="white-space: nowrap;">{{ ($pengajuan->submitted_at ?? $pengajuan->created_at)->format('d M Y') }}</td>
+                            <td>
+                                <div style="font-weight: 700; color: var(--color-gray-900);">{{ $pengajuan->user?->name ?? 'Belum tersedia' }}</div>
+                                <div style="font-size: var(--text-xs); color: var(--color-text-muted);">{{ $pengajuan->user?->email ?? 'Belum tersedia' }}</div>
                             </td>
-                            <td class="py-4 text-gray-600">{{ $profile?->business_name ?? '-' }}</td>
-                            <td class="py-4 text-gray-600">{{ $pengajuan->sumberPendanaan?->nama_program ?? '-' }}</td>
-                            <td class="py-4 text-gray-900 text-right" style="white-space: nowrap;">Rp {{ number_format($pengajuan->jumlah_pengajuan, 0, ',', '.') }}</td>
-                            <td class="py-4 text-center">
+                            <td>{{ $profile?->business_name ?? 'Belum tersedia' }}</td>
+                            <td>{{ $pengajuan->sumberPendanaan?->nama_program ?? 'Belum tersedia' }}</td>
+                            <td style="text-align: right; white-space: nowrap; font-weight: 800; color: var(--color-gray-900);">Rp {{ number_format($pengajuan->jumlah_pengajuan, 0, ',', '.') }}</td>
+                            <td style="text-align: center;">
                                 <x-pendanaan-status-badge :status="$pengajuan->status" />
                             </td>
-                            <td class="py-4 text-center">
-                                <a href="{{ route('dinas.pendanaan-verifikasi.show', $pengajuan) }}" style="color: var(--color-secondary); font-weight: 600; font-size: var(--text-sm);">Detail</a>
+                            <td style="text-align: center;">
+                                <a href="{{ route('dinas.pendanaan-verifikasi.show', $pengajuan) }}" class="link-action">Detail</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-12 text-center">
-                                <div style="font-size: var(--text-sm); color: var(--color-text-muted);">Belum ada pengajuan pendanaan.</div>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada pengajuan pendanaan</h3>
+                                    <p>Data pengajuan akan muncul setelah UMKM mengirim formulir pendanaan.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
@@ -105,11 +107,10 @@
         </div>
 
         @if ($pengajuans->hasPages())
-            <div class="mt-4">
+            <div style="margin-top: var(--space-4);">
                 {{ $pengajuans->links() }}
             </div>
         @endif
-    </div>
-
+    </section>
 </div>
 @endsection

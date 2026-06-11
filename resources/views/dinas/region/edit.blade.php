@@ -15,7 +15,7 @@
             <div class="user-role">PETUGAS DINAS</div>
         </div>
         <div class="user-avatar">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2563eb&color=fff" alt="{{ Auth::user()->name }}">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff" alt="{{ Auth::user()->name }}">
         </div>
     </div>
 </header>
@@ -30,7 +30,7 @@
         <span>Edit</span>
     </div>
 
-    <div class="card" style="padding: var(--space-6);">
+    <div class="form-card">
         <h2 class="font-bold mb-6" style="font-size: var(--text-lg); color: var(--color-text-dark);">Edit Wilayah</h2>
 
         <form action="{{ route('dinas.region.update', $region) }}" method="POST" id="form-edit-region" dusk="region-form">

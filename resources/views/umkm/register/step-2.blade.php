@@ -2,12 +2,12 @@
 
 @section('content')
 <!-- Card Container -->
-<div class="card mb-6">
+<div class="card auth-card mb-6">
 
     <!-- Header -->
     <div class="text-center mb-8">
-        <h1 class="text-xl font-bold text-dark tracking-tight mb-2">Daftar sebagai Pelaku UMKM</h1>
-        <p class="text-sm text-muted m-0">Lengkapi data usaha Anda untuk melanjutkan pendaftaran.</p>
+        <h1 class="auth-title">Data Usaha UMKM</h1>
+        <p class="auth-subtitle">Lengkapi data usaha Anda untuk melanjutkan pendaftaran.</p>
     </div>
 
     <x-stepper current="2" />

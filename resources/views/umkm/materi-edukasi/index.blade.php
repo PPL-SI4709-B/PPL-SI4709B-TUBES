@@ -7,76 +7,79 @@
 @endsection
 
 @section('header')
-<header class="main-header" style="height: 4rem;">
-    <div class="page-title" style="color: var(--color-text-muted); font-size: 0.875rem; font-weight: 500;">
-        <span style="color: var(--color-primary); font-weight: 700;">Materi Edukasi</span>
+<header class="main-header">
+    <div>
+        <div class="page-title">Materi Edukasi</div>
+        <div class="page-subtitle">Baca dan unduh materi pembinaan untuk mendukung pengembangan usaha.</div>
     </div>
     <div class="user-profile">
         <div class="user-info">
             <div class="user-name">{{ Auth::user()->name }}</div>
-            <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
+            <div class="user-role" style="text-transform: none;">Pemilik Usaha</div>
         </div>
         <div class="user-avatar" style="background-color: transparent;">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
         </div>
     </div>
 </header>
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Materi Edukasi</h1>
+<div class="support-page">
+    <div class="secondary-page-header">
+        <div>
+            <div class="page-kicker">Pusat Edukasi</div>
+            <h1>Materi Edukasi</h1>
+            <p class="page-subtitle">Kumpulan materi dari Dinas untuk membantu UMKM belajar secara mandiri.</p>
+        </div>
     </div>
 
     @if(session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {{ session('error') }}
-        </div>
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="support-grid">
         @forelse ($materi as $item)
-            <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-                @if($item->thumbnail_path)
-                    <img src="{{ Storage::url($item->thumbnail_path) }}" alt="{{ $item->title }}" class="w-full h-48 object-cover">
-                @else
-                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            <article class="content-card education-card" style="padding: 0;">
+                <div class="education-card-media">
+                    @if($item->thumbnail_path)
+                        <img src="{{ Storage::url($item->thumbnail_path) }}" alt="{{ $item->title }}">
+                    @else
+                        <svg width="42" height="42" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                         </svg>
-                    </div>
-                @endif
-                
-                <div class="p-6 flex-1 flex flex-col">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $item->title }}</h3>
-                    <p class="text-gray-600 mb-4 flex-1">{{ Str::limit($item->description, 100) }}</p>
-                    
-                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                        <a href="{{ route('umkm.materi-edukasi.show', $item->id) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                            Baca Detail &rarr;
-                        </a>
-                        <a href="{{ route('umkm.materi-edukasi.download', $item->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                            Unduh
-                        </a>
+                    @endif
+                </div>
+
+                <div style="padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); flex: 1;">
+                    <h2 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); line-height: 1.35; margin: 0;">{{ $item->title }}</h2>
+                    <p class="stat-note" style="line-height: 1.6; flex: 1;">{{ \Illuminate\Support\Str::limit($item->description, 120) }}</p>
+
+                    <div class="action-group" style="justify-content: space-between; padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
+                        <a href="{{ route('umkm.materi-edukasi.show', $item->id) }}" class="link-action">Baca Detail</a>
+                        <a href="{{ route('umkm.materi-edukasi.download', $item->id) }}" class="btn btn-primary" style="padding: 8px 14px;">Unduh</a>
                     </div>
                 </div>
-            </div>
+            </article>
         @empty
-            <div class="col-span-full">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            <div class="support-empty-state" style="grid-column: 1 / -1;">
+                <span class="support-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                     </svg>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada materi edukasi</h3>
-                    <p class="text-gray-500">Materi edukasi akan ditambahkan oleh Petugas Dinas. Silakan kembali lagi nanti.</p>
-                </div>
+                </span>
+                <h3>Belum ada materi edukasi</h3>
+                <p>Materi edukasi akan ditambahkan oleh Petugas Dinas.</p>
             </div>
         @endforelse
     </div>
 
-    <div class="mt-8">
-        {{ $materi->links() }}
-    </div>
+    @if ($materi->hasPages())
+        <div>
+            {{ $materi->links() }}
+        </div>
+    @endif
 </div>
 @endsection

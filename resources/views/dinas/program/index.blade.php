@@ -25,69 +25,70 @@
 
 @section('content')
 <div class="flex flex-col gap-6">
-
     @if (session('success'))
-        <div style="background-color: var(--color-success-bg); color: var(--color-success); padding: var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500;">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card" style="padding: var(--space-6);">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-gray-900);">Daftar Program</div>
-                <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px;">{{ $programs->total() }} program terdaftar</div>
-            </div>
-            <a href="{{ route('dinas.program.create') }}" class="btn btn-primary">
-                + Tambah Program
-            </a>
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Master Program</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Daftar Program</h1>
+            <p class="page-subtitle">{{ $programs->total() }} program terdaftar untuk pengajuan UMKM.</p>
         </div>
+        <a href="{{ route('dinas.program.create') }}" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Tambah Program
+        </a>
+    </div>
 
-        @forelse ($programs as $program)
-            <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-5); margin-bottom: var(--space-3);">
-                <div class="flex justify-between items-start">
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600; font-size: var(--text-sm); color: var(--color-gray-900);">{{ $program->name }}</div>
+    <section class="content-card">
+        <div class="flex flex-col gap-3">
+            @forelse ($programs as $program)
+                <div class="list-card">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                            <h2 style="font-weight: 800; font-size: var(--text-base); color: var(--color-gray-900); margin: 0;">{{ $program->name }}</h2>
+                            <span class="badge {{ $program->status === 'active' ? 'badge-success' : 'badge-secondary' }}">
+                                {{ $program->status === 'active' ? 'Aktif' : 'Nonaktif' }}
+                            </span>
+                        </div>
                         @if ($program->description)
-                            <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 4px;">{{ Str::limit($program->description, 100) }}</div>
+                            <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; line-height: 1.6;">{{ \Illuminate\Support\Str::limit($program->description, 120) }}</p>
                         @endif
-                        <div class="flex gap-4 mt-3" style="font-size: var(--text-xs); color: var(--color-text-muted);">
-                            <span>Kuota: <strong>{{ $program->quota }}</strong></span>
+                        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted);">
+                            <span>Kuota: <strong style="color: var(--color-gray-900);">{{ $program->quota }}</strong></span>
                             @if ($program->start_date)
-                                <span>Mulai: <strong>{{ $program->start_date->format('d M Y') }}</strong></span>
+                                <span>Mulai: <strong style="color: var(--color-gray-900);">{{ $program->start_date->format('d M Y') }}</strong></span>
                             @endif
                             @if ($program->end_date)
-                                <span>Selesai: <strong>{{ $program->end_date->format('d M Y') }}</strong></span>
+                                <span>Selesai: <strong style="color: var(--color-gray-900);">{{ $program->end_date->format('d M Y') }}</strong></span>
                             @endif
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 ml-4">
-                        <span class="badge" style="background-color: {{ $program->status === 'active' ? 'var(--color-success-bg)' : '#f1f5f9' }}; color: {{ $program->status === 'active' ? 'var(--color-success)' : 'var(--color-text-muted)' }};">
-                            {{ $program->status === 'active' ? 'Aktif' : 'Nonaktif' }}
-                        </span>
-                        <a href="{{ route('dinas.program.show', $program) }}" style="font-size: var(--text-sm); color: var(--color-text-muted); font-weight: 500;">Detail</a>
-                        <a href="{{ route('dinas.program.edit', $program) }}" style="font-size: var(--text-sm); color: var(--color-secondary); font-weight: 500;">Edit</a>
+                    <div class="action-group">
+                        <a href="{{ route('dinas.program.show', $program) }}" class="link-action">Detail</a>
+                        <a href="{{ route('dinas.program.edit', $program) }}" class="link-action">Edit</a>
                         <form action="{{ route('dinas.program.destroy', $program) }}" method="POST" onsubmit="return confirm('Hapus program ini?');" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" style="font-size: var(--text-sm); color: var(--color-danger); font-weight: 500; background: none; border: none; cursor: pointer;">Hapus</button>
+                            <button type="submit" style="font-size: var(--text-sm); color: var(--color-danger); font-weight: 700; background: none; border: none; cursor: pointer;">Hapus</button>
                         </form>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div style="text-align: center; padding: var(--space-12) 0; color: var(--color-text-muted);">
-                <div style="font-size: var(--text-sm); margin-bottom: var(--space-3);">Belum ada program.</div>
-                <a href="{{ route('dinas.program.create') }}" class="btn btn-primary">Tambah Program Pertama</a>
-            </div>
-        @endforelse
+            @empty
+                <div class="empty-state">
+                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada program</h3>
+                    <p style="margin-bottom: var(--space-4);">Tambahkan program pertama agar UMKM dapat mengajukan partisipasi.</p>
+                    <a href="{{ route('dinas.program.create') }}" class="btn btn-primary">Tambah Program Pertama</a>
+                </div>
+            @endforelse
+        </div>
 
         @if ($programs->hasPages())
-            <div class="mt-4">
+            <div style="margin-top: var(--space-4);">
                 {{ $programs->links() }}
             </div>
         @endif
-    </div>
-
+    </section>
 </div>
 @endsection

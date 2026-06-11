@@ -9,7 +9,7 @@
 @section('header')
 <header class="main-header" style="height: 4rem;">
     <div class="page-title" style="color: var(--color-text-muted); font-size: 0.875rem; font-weight: 500;">
-        Beranda <span style="margin: 0 0.5rem;">&#8250;</span> <span style="color: var(--color-primary); font-weight: 700;">Laporan Perkembangan</span>
+        Beranda <span style="margin: 0 0.5rem;">&rsaquo;</span> <span style="color: var(--color-primary); font-weight: 700;">Laporan Perkembangan</span>
     </div>
     <div class="flex items-center gap-6">
         <div style="width: 1px; height: 32px; background-color: var(--color-border);"></div>
@@ -19,7 +19,7 @@
                 <div class="user-role" style="text-transform: none; font-weight: 500;">{{ ucfirst(Auth::user()->role) }}</div>
             </div>
             <div class="user-avatar" style="background-color: transparent;">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ef4444&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=064E3B&color=fff&rounded=true" alt="{{ Auth::user()->name }}" style="border-radius: 50%;">
             </div>
         </div>
     </div>
@@ -27,86 +27,90 @@
 @endsection
 
 @section('content')
-<div class="flex flex-col gap-6" style="max-width: 64rem; margin: 0 auto;">
-
-    {{-- Success / Error Flash --}}
+<div class="flex flex-col gap-6" style="max-width: 68rem; margin: 0 auto;">
     @if (session('success'))
-    <div style="background-color: var(--color-success-bg); border-left: 4px solid var(--color-success); padding: 1rem 1.25rem; border-radius: var(--radius-md); color: #166534; font-size: 0.875rem; font-weight: 500;">
-        {{ session('success') }}
-    </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    {{-- Page Header --}}
-    <div class="card p-0 overflow-hidden">
-        <div class="flex justify-between items-center p-6 border-b border-border">
+    <div class="page-header">
+        <div>
+            <div class="page-kicker">Laporan Usaha</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-gray-900); margin-top: var(--space-1);">Laporan Perkembangan Usaha</h1>
+            <p class="page-subtitle">Pantau status dan umpan balik Dinas atas laporan perkembangan yang Anda kirim.</p>
+        </div>
+        <a href="{{ route('reports.create') }}" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Buat Laporan Baru
+        </a>
+    </div>
+
+    <section class="content-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-4); flex-wrap: wrap;">
             <div>
-                <h1 class="font-bold text-gray-900 text-lg">Laporan Perkembangan Usaha</h1>
-                <p class="text-sm text-gray-500 mt-1">Pantau status dan umpan balik dari Dinas atas laporan yang Anda ajukan.</p>
+                <h2 class="section-title">Riwayat Laporan</h2>
+                <p class="section-subtitle">Catatan periode, kinerja keuangan, status, dan lampiran laporan.</p>
             </div>
-            <a href="{{ route('reports.create') }}" class="btn" style="background-color: var(--color-primary); color: white; display: flex; align-items: center; gap: 0.5rem; border-radius: var(--radius-md);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Buat Laporan Baru
-            </a>
+            <div class="soft-panel" style="padding: var(--space-3) var(--space-4);">
+                <span class="detail-label">Total Laporan</span>
+                <div class="detail-value" style="font-weight: 800;">{{ $reports->count() }}</div>
+            </div>
         </div>
 
-        <div class="table-container p-6 pt-0">
-            <table class="table" style="margin-top: -1px;">
+        <div class="table-container">
+            <table class="data-table">
                 <thead>
                     <tr>
-                        <th style="padding-top: var(--space-4);">JUDUL & PERIODE</th>
-                        <th style="padding-top: var(--space-4);">KEUANGAN</th>
-                        <th style="padding-top: var(--space-4);">STATUS</th>
-                        <th style="padding-top: var(--space-4);">CATATAN DINAS</th>
+                        <th>Judul & Periode</th>
+                        <th>Keuangan</th>
+                        <th>Status</th>
+                        <th>Catatan Dinas</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($reports as $report)
-                    <tr>
-                        <td>
-                            <div class="font-bold text-gray-900">{{ $report->judul }}</div>
-                            <div class="text-xs text-gray-500 mt-1">Periode: {{ $report->period ? \Carbon\Carbon::parse($report->period)->translatedFormat('F Y') : '-' }}</div>
-                        </td>
-                        <td class="text-gray-600" style="white-space: nowrap;">
-                            <div class="text-sm">Laba: <span class="font-bold {{ $report->profit >= 0 ? 'text-green-600' : 'text-red-600' }}">Rp {{ number_format($report->profit, 0, ',', '.') }}</span></div>
-                            <div class="text-xs text-gray-500 mt-1">Tgl Laporan: {{ $report->report_date ? $report->report_date->format('d M Y') : '-' }}</div>
-                        </td>
-                        <td>
-                            <x-status-badge :status="$report->status" />
-                        </td>
-                        <td>
-                            @if ($report->catatan_petugas)
-                                <p class="text-sm text-gray-700" style="max-width: 20rem;">{{ $report->catatan_petugas }}</p>
-                            @else
-                                <span class="text-xs text-gray-400 italic">Belum ada catatan</span>
-                            @endif
-                            @if ($report->reviewed_at)
-                                <div class="text-xs text-gray-400 mt-1">Ditinjau: {{ $report->reviewed_at->format('d M Y') }}</div>
-                            @endif
-                            @if ($report->lampiran)
-                                <a href="{{ route('reports.lampiran', $report) }}" target="_blank" class="text-xs" style="color: var(--color-primary); text-decoration: underline; display: inline-block; margin-top: 0.25rem;">Lihat Lampiran ↗</a>
-                            @endif
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 800; color: var(--color-gray-900);">{{ $report->judul }}</div>
+                                <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px;">Periode: {{ $report->period ? \Carbon\Carbon::parse($report->period)->translatedFormat('F Y') : 'Belum tersedia' }}</div>
+                            </td>
+                            <td style="white-space: nowrap;">
+                                <div>Laba: <span style="font-weight: 800; color: {{ $report->profit >= 0 ? 'var(--color-success)' : 'var(--color-danger)' }};">Rp {{ number_format($report->profit, 0, ',', '.') }}</span></div>
+                                <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px;">Tanggal: {{ $report->report_date ? $report->report_date->format('d M Y') : 'Belum tersedia' }}</div>
+                            </td>
+                            <td>
+                                <x-status-badge :status="$report->status" />
+                            </td>
+                            <td>
+                                @if ($report->catatan_petugas)
+                                    <p style="max-width: 22rem; color: var(--color-gray-900); margin: 0;">{{ $report->catatan_petugas }}</p>
+                                @else
+                                    <span style="font-size: var(--text-xs); color: var(--color-text-muted);">Belum ada catatan</span>
+                                @endif
+                                @if ($report->reviewed_at)
+                                    <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px;">Ditinjau: {{ $report->reviewed_at->format('d M Y') }}</div>
+                                @endif
+                                @if ($report->lampiran)
+                                    <a href="{{ route('reports.lampiran', $report) }}" target="_blank" class="link-action" style="font-size: var(--text-xs); margin-top: var(--space-1);">Lihat Lampiran</a>
+                                @endif
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 3rem 1rem;">
-                            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; color: var(--color-text-muted);">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #cbd5e1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                <div>
-                                    <p class="font-semibold text-gray-600" style="font-size: 0.9rem;">Belum ada laporan</p>
-                                    <p class="text-sm text-gray-400 mt-1">Mulai ajukan laporan perkembangan usaha Anda.</p>
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <div class="icon-chip" style="margin: 0 auto var(--space-3);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                    </div>
+                                    <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--color-gray-900); margin-bottom: var(--space-1);">Belum ada laporan</h3>
+                                    <p style="margin-bottom: var(--space-4);">Mulai kirim laporan perkembangan usaha agar Dinas dapat meninjau progres Anda.</p>
+                                    <a href="{{ route('reports.create') }}" class="btn btn-primary">Buat Laporan Sekarang</a>
                                 </div>
-                                <a href="{{ route('reports.create') }}" class="btn" style="background-color: var(--color-primary); color: white; margin-top: 0.5rem;">
-                                    Buat Laporan Sekarang
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
-
+    </section>
 </div>
 @endsection
